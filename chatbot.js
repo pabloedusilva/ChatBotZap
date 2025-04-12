@@ -4,6 +4,7 @@ const { Client, Buttons, List, MessageMedia } = require('whatsapp-web.js');
 const path = require('path');
 const http = require('http');
 const socketIo = require('socket.io');
+const fs = require('fs'); // Importar o módulo fs para manipulação de arquivos
 
 const app = express();
 const server = http.createServer(app);
@@ -23,44 +24,63 @@ const bots = {
     main: {
         client: mainClient,
         qrCodeData: '',
-        name: 'Principal'
+        name: 'Bot 1'
     },
     appointment: {
         client: appointmentClient,
         qrCodeData: '',
-        name: 'Agendamento'
+        name: 'Bot 2'
     },
     reschedule: {
         client: rescheduleClient,
         qrCodeData: '',
-        name: 'Reagendamento'
+        name: 'Bot 3'
     }
 };
 
 // Função de delay comum para todos os bots
 const delay = ms => new Promise(res => setTimeout(res, ms));
 
+// Função para registrar conexões no terminal e em um arquivo
+const logConnection = (botName) => {
+    const now = new Date();
+    const timestamp = now.toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
+    const logMessage = `Bot Conectado: ${botName} | Horário: ${timestamp}`;
+    const formattedLog = `---\n${logMessage}\n---\n`;
+
+    // Imprimir no terminal
+    console.log(logMessage);
+
+    // Salvar no arquivo de registro
+    fs.appendFileSync('connection_logs.txt', formattedLog, (err) => {
+        if (err) {
+            console.error('Erro ao salvar no arquivo de registro:', err);
+        }
+    });
+};
+
 // Configurar eventos para cada bot
 Object.keys(bots).forEach(botKey => {
     const bot = bots[botKey];
 
     bot.client.on('ready', () => {
-        console.log(`Um cliente se conectou ao ${botKey === 'main' ? 'Bot 1' : botKey === 'appointment' ? 'Bot 2' : 'Bot 3'}`); // Exibe qual bot foi conectado
+        const botName = bot.name;
+        logConnection(botName); // Registrar a conexão
         io.emit('connection-status', { bot: botKey, connected: true }); // Emitir status de conexão
     });
 
     bot.client.on('disconnected', () => {
-        console.log(`Um cliente se desconectou do ${botKey === 'main' ? 'Bot 1' : botKey === 'appointment' ? 'Bot 2' : 'Bot 3'}`); // Exibe qual bot foi desconectado
+        console.log(`Um cliente se desconectou do ${bot.name}`); // Exibe qual bot foi desconectado
         io.emit('connection-status', { bot: botKey, connected: false }); // Emitir status de desconexão
     });
 
     bot.client.on('qr', async (qr) => {
         try {
             bot.qrCodeData = await qrcode.toDataURL(qr);
-            console.log(`QR Code do ${botKey === 'main' ? 'Bot 1' : botKey === 'appointment' ? 'Bot 2' : 'Bot 3'} gerado com sucesso`);
+            console.log(`QR Code do ${bot.name} gerado com sucesso`);
             io.emit('qrcode', { bot: botKey, qrcode: bot.qrCodeData });
         } catch (err) {
-            console.error(`Erro ao gerar QR code para ${botKey === 'main' ? 'Bot 1' : botKey === 'appointment' ? 'Bot 2' : 'Bot 3'}:`, err);
+            console.error(`Erro ao gerar QR code para ${bot.name}:`, err);
         }
     });
 
