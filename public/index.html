@@ -1,0 +1,2346 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="icon" href="/icons/favicon.png" type="image/png">
+    <style>
+        :root {
+            --primary: #25D366;
+            --primary-dark: #128C7E;
+            --secondary: #075E54;
+            --text-primary: #333333;
+            --text-secondary: #666666;
+            --bg-primary: #f8f9fa;
+            --bg-secondary: #f5f5f5;
+            --input-bg: #f0f0f0;
+            --shadow: rgba(0, 0, 0, 0.1);
+            --card-bg: #ffffff;
+            --border: #e0e0e0;
+            --success: #4CAF50;
+            --error: #f44336;
+            --warning: #FF9800;
+            --offline: #f44336;
+            --online: #4CAF50;
+        }
+
+        [data-theme="dark"] {
+            --primary: #25D366;
+            --primary-dark: #128C7E;
+            --secondary: #075E54;
+            --text-primary: #f0f0f0;
+            --text-secondary: #cccccc;
+            --bg-primary: #121212;
+            --bg-secondary: #1e1e1e;
+            --input-bg: #2d2d2d;
+            --shadow: rgba(0, 0, 0, 0.3);
+            --card-bg: #1e1e1e;
+            --border: #333333;
+            --success: #4CAF50;
+            --error: #f44336;
+            --warning: #FF9800;
+            --offline: #f44336;
+            --online: #4CAF50;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow-x: hidden;
+            color: var(--text-primary);
+            padding: 20px;
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            background: var(--card-bg);
+            border-radius: 50px;
+            padding: 8px;
+            box-shadow: 0 4px 12px var(--shadow);
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px var(--shadow);
+        }
+
+        .theme-icon {
+            width: 30px;
+            height: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            color: var(--text-primary);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-top: 40px;
+        }
+
+        .header h1 {
+            color: var(--text-primary);
+            font-size: clamp(24px, 5vw, 32px);
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .header p {
+            color: var(--text-secondary);
+            font-size: clamp(14px, 3vw, 18px);
+        }
+
+        .brand-logo {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .logo-circle {
+            width: clamp(70px, 15vw, 90px);
+            height: clamp(70px, 15vw, 90px);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: transparent;
+            animation: pulse-border 2s infinite;
+        }
+
+        @keyframes pulse-border {
+            0% {
+                box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.6);
+            }
+
+            70% {
+                box-shadow: 0 0 0 15px rgba(37, 211, 102, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
+            }
+        }
+
+        .company-logo {
+            width: clamp(70px, 10vw, 80px);
+            height: clamp(70px, 10vw, 80px);
+            object-fit: contain;
+            border-radius: 50%;
+            background: none;
+            box-shadow: none;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        .bot-cards-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .bot-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px var(--shadow);
+            position: relative;
+            transition: all 0.3s ease;
+            transition: border-color 0.3s ease;
+            opacity: 0;
+            animation: slideUp 0.8s ease forwards;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            border: 2px solid transparent;
+        }
+
+        .bot-card:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .bot-card:nth-child(2) {
+            animation-delay: 0.3s;
+        }
+
+        .bot-card:nth-child(3) {
+            animation-delay: 0.5s;
+        }
+
+        .bot-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px var(--shadow);
+            border-color: rgb(168, 245, 168);
+        }
+
+        .bot-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 6px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--primary), var(--primary-dark));
+            border-radius: 4px 0 0 4px;
+        }
+
+        .bot-card-header {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid var(--border);
+            background: linear-gradient(145deg, var(--card-bg), var(--bg-secondary));
+        }
+
+        .bot-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: rgba(37, 211, 102, 0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 15px;
+            flex-shrink: 0;
+            color: var(--primary-dark);
+            box-shadow: 0 4px 10px rgba(18, 140, 126, 0.2);
+        }
+
+        .bot-icon svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .bot-info {
+            flex: 1;
+        }
+
+        .bot-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--text-primary);
+        }
+
+        .bot-description {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 5px;
+        }
+
+        .bot-card-body {
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .bot-statistics {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 25px;
+            flex-grow: 1;
+        }
+
+        .stat-item {
+            background-color: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            width: 100%;
+            box-shadow: 0 5px 15px var(--shadow);
+        }
+
+        .stat-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px var(--shadow);
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: var(--primary-dark);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .connect-btn {
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 16px 20px;
+            width: 100%;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(18, 140, 126, 0.3);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: auto;
+        }
+
+        .connect-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .connect-btn:hover::before {
+            left: 100%;
+        }
+
+        .connect-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(18, 140, 126, 0.4);
+        }
+
+        .connect-btn:active {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 10px rgba(18, 140, 126, 0.3);
+        }
+
+        .connect-btn svg {
+            width: 18px;
+            height: 18px;
+            margin-right: 8px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .action-btn {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: none;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+            box-shadow: 0 4px 10px var(--shadow);
+        }
+
+        .action-btn svg {
+            width: 16px;
+            height: 16px;
+            margin-right: 8px;
+        }
+
+        .action-btn:hover {
+            background-color: var(--border);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px var(--shadow);
+        }
+
+        .info-button {
+            position: fixed;
+            bottom: 50px;
+            right: 15px;
+            width: 40px;
+            height: 40px;
+            background-color: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 5px 15px rgba(18, 140, 126, 0.3);
+            cursor: pointer;
+            z-index: 99;
+            transition: all 0.3s ease;
+        }
+
+        .info-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(18, 140, 126, 0.4);
+        }
+
+        .info-button svg {
+            width: 24px;
+            height: 24px;
+            color: white;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            background-color: var(--card-bg);
+            border-radius: 20px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 10px 30px var(--shadow);
+            overflow: hidden;
+            transform: translateY(30px);
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.active .modal {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+            padding: 20px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .close-modal {
+            cursor: pointer;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .close-modal:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .modal-body h3 {
+            font-size: 16px;
+            margin-top: 15px;
+            margin-bottom: 8px;
+            color: var(--primary-dark);
+        }
+
+        .modal-body p {
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--text-primary);
+            margin-bottom: 15px;
+        }
+
+        .connection-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .step-item {
+            display: flex;
+            gap: 15px;
+            padding: 10px;
+            background-color: var(--bg-secondary);
+            border-radius: 10px;
+        }
+
+        .step-number {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: var(--primary);
+            color: white;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--text-primary);
+        }
+
+        .step-description {
+            font-size: 13px;
+            line-height: 1.5;
+            color: var(--text-secondary);
+        }
+
+        .modal {
+            max-height: 90vh;
+            /* Remove a rolagem do modal externo */
+        }
+
+        .modal-body {
+            overflow-y: auto;
+            max-height: calc(90vh - 60px);
+            /* Estilização da barra de rolagem consistente com o tema */
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary-dark) var(--bg-secondary);
+        }
+
+        /* Estilização para barras de rolagem no Chrome/Safari */
+        .modal-body::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .modal-body::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+            border-radius: 4px;
+        }
+
+        .modal-body::-webkit-scrollbar-thumb {
+            background-color: var(--primary-dark);
+            border-radius: 4px;
+        }
+
+        @media (max-height: 700px) {
+            .modal-body {
+                max-height: calc(85vh - 60px);
+            }
+        }
+
+        .exit-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 100;
+            background: var(--bg-primary);
+            border-radius: 50px;
+            padding: 8px 15px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .exit-button:hover {
+            transform: translateY(-3px);
+        }
+
+        .exit-button svg {
+            width: 18px;
+            height: 18px;
+            margin-right: 8px;
+            color: var(--text-primary);
+        }
+
+        .exit-button span {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        /* Estilos do Modal de Confirmação de Saída */
+        .exit-modal {
+            max-width: 400px;
+            transform: translateY(30px);
+            transition: all 0.3s ease;
+        }
+
+        .exit-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 25px;
+        }
+
+        .cancel-exit-btn,
+        .confirm-exit-btn {
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .cancel-exit-btn {
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        .cancel-exit-btn:hover {
+            background-color: var(--border);
+        }
+
+        .confirm-exit-btn {
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            box-shadow: 0 4px 10px rgba(18, 140, 126, 0.2);
+        }
+
+        .confirm-exit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(18, 140, 126, 0.3);
+        }
+
+        .success-message {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        .success-message p {
+            margin-top: 20px;
+            font-weight: 500;
+            color: var(--primary-dark);
+        }
+
+        .success-icon {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 80px;
+            height: 80px;
+        }
+
+        /* Animação do ícone de verificação */
+        .checkmark {
+            width: 80px;
+            height: 80px;
+        }
+
+        .checkmark-circle {
+            stroke-dasharray: 166;
+            stroke-dashoffset: 166;
+            stroke-width: 2;
+            stroke-miterlimit: 10;
+            stroke: var(--primary);
+            fill: none;
+            animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+        }
+
+        .checkmark-check {
+            transform-origin: 50% 50%;
+            stroke-dasharray: 48;
+            stroke-dashoffset: 48;
+            stroke-width: 3;
+            stroke: var(--primary);
+            animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
+        }
+
+        @keyframes stroke {
+            100% {
+                stroke-dashoffset: 0;
+            }
+        }
+
+        /* Estilos para os Modais do WhatsApp Bot */
+        .modal-overlay[id^="whatsappQrModalBot"] {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            perspective: 1000px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay[id^="whatsappQrModalBot"].active {
+            display: flex;
+            animation: modal-fade-in 0.4s forwards;
+        }
+
+        @keyframes modal-fade-in {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* WhatsApp QR Modal */
+        .whatsapp-modal {
+            width: 100%;
+            max-width: 500px;
+            padding: 2.5rem;
+            background-color: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: 0 10px 25px var(--shadow);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
+            transform: translateY(40px) rotateX(5deg);
+            animation: container-entry 0.8s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+            margin: 15px;
+        }
+
+        @keyframes container-entry {
+            0% {
+                transform: translateY(40px) rotateX(5deg);
+                box-shadow: 0 10px 25px var(--shadow);
+            }
+
+            60% {
+                transform: translateY(-10px) rotateX(-2deg);
+            }
+
+            100% {
+                transform: translateY(0) rotateX(0);
+                box-shadow: 0 10px 25px var(--shadow);
+            }
+        }
+
+        /* Close Button para WhatsApp Modal */
+        .whatsapp-modal .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-primary);
+            cursor: pointer;
+            z-index: 10;
+            transition: transform 0.3s ease;
+        }
+
+        .whatsapp-modal .modal-close:hover {
+            transform: rotate(90deg);
+        }
+
+        /* Logo para WhatsApp Modal */
+        .whatsapp-modal .logo {
+            margin-bottom: 1.5rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            animation: logo-entry 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s both;
+        }
+
+        @keyframes logo-entry {
+            0% {
+                opacity: 0;
+                transform: scale(0.8) translateY(-15px);
+            }
+
+            50% {
+                transform: scale(1.1) translateY(0);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .whatsapp-modal .logo i {
+            font-size: 2.5rem;
+            color: var(--primary);
+            filter: drop-shadow(0 2px 5px rgba(37, 211, 102, 0.3));
+            animation: logo-icon-entry 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.3s both;
+        }
+
+        @keyframes logo-icon-entry {
+            0% {
+                transform: rotate(-90deg) scale(0.5);
+                opacity: 0;
+            }
+
+            50% {
+                transform: rotate(20deg) scale(1.2);
+            }
+
+            100% {
+                transform: rotate(0) scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* Title para WhatsApp Modal */
+        .whatsapp-modal h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--primary-dark);
+            margin-bottom: 1.5rem;
+            position: relative;
+            display: inline-block;
+            transition: color 0.3s ease;
+            animation: title-entry 0.7s cubic-bezier(0.215, 0.61, 0.355, 1) 0.4s both;
+        }
+
+        @keyframes title-entry {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .whatsapp-modal h1::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 3px;
+            background: linear-gradient(90deg, rgba(37, 211, 102, 0), rgba(37, 211, 102, 1), rgba(37, 211, 102, 0));
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 10px;
+            animation: title-line-entry 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.6s forwards;
+        }
+
+        @keyframes title-line-entry {
+            0% {
+                width: 0;
+                opacity: 0;
+            }
+
+            100% {
+                width: 80%;
+                opacity: 1;
+            }
+        }
+
+        /* Connection Status para WhatsApp Modal */
+        .whatsapp-modal .connection-status {
+            margin-top: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: connection-entry 0.7s cubic-bezier(0.215, 0.61, 0.355, 1) 0.5s both;
+        }
+
+        @keyframes connection-entry {
+            0% {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+
+            60% {
+                transform: translateY(-5px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .whatsapp-modal .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #e74c3c;
+            /* Vermelho para "NÃO CONECTADO" */
+            margin-right: 10px;
+            box-shadow: 0 0 10px rgba(231, 76, 60, 0.5);
+            position: relative;
+            animation: pulse-status 1.8s infinite;
+        }
+
+        .whatsapp-modal .status-indicator::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background-color: rgba(231, 76, 60, 0.5);
+            top: 0;
+            left: 0;
+            z-index: -1;
+            animation: indicator-ripple 1.8s infinite;
+        }
+
+        @keyframes indicator-ripple {
+            0% {
+                transform: scale(1);
+                opacity: 0.5;
+            }
+
+            100% {
+                transform: scale(2);
+                opacity: 0;
+            }
+        }
+
+        .whatsapp-modal .status-indicator.connected {
+            background-color: #2ecc71;
+            /* Verde para "CONECTADO" */
+            box-shadow: 0 0 10px rgba(46, 204, 113, 0.5);
+        }
+
+        .whatsapp-modal .status-indicator.connected::after {
+            background-color: rgba(46, 204, 113, 0.5);
+        }
+
+        .whatsapp-modal .status-text {
+            color: var(--text-primary);
+            transition: color 0.3s ease;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        /* Animação de pulsação para o indicador */
+        @keyframes pulse-status {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            50% {
+                transform: scale(1.1);
+                opacity: 0.8;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* QR Code Container */
+        .whatsapp-modal #qrcode-container {
+            background-color: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin: 2rem auto;
+            position: relative;
+            width: 250px;
+            height: 250px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 5px 15px var(--shadow);
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+                background-color 0.5s ease,
+                box-shadow 0.5s ease;
+            animation: qr-container-entry 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) 0.5s both;
+        }
+
+        @keyframes qr-container-entry {
+            0% {
+                opacity: 0;
+                transform: translateY(30px) scale(0.95);
+            }
+
+            60% {
+                transform: translateY(-10px) scale(1.02);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* Efeito de borda do QR Code */
+        .whatsapp-modal #qrcode-container::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            border: 2px dashed var(--primary);
+            border-radius: 18px;
+            opacity: 0;
+            animation: border-entry 1s cubic-bezier(0.215, 0.61, 0.355, 1) 0.8s forwards;
+        }
+
+        @keyframes border-entry {
+            0% {
+                opacity: 0;
+                transform: scale(1.1);
+            }
+
+            100% {
+                opacity: 0.5;
+                transform: scale(1);
+            }
+        }
+
+        /* Scanner Effect */
+        .whatsapp-modal .scan-animation {
+            position: absolute;
+            width: 100%;
+            height: 8px;
+            background: linear-gradient(90deg,
+                    rgba(37, 211, 102, 0) 0%,
+                    rgba(37, 211, 102, 0.4) 50%,
+                    rgba(37, 211, 102, 0) 100%);
+            top: 0;
+            left: 0;
+            filter: blur(2px);
+            animation: scan 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+            opacity: 0.8;
+            z-index: 2;
+        }
+
+        @keyframes scan {
+            0% {
+                top: 0;
+                opacity: 0.8;
+            }
+
+            100% {
+                top: 100%;
+                opacity: 0.8;
+            }
+        }
+
+        /* QR Code Image */
+        .whatsapp-modal [id^="qrcodeBot"] {
+            max-width: 100%;
+            max-height: 100%;
+            border-radius: 8px;
+            opacity: 0;
+            transform: scale(0.85);
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            animation: qr-entry 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.7s forwards;
+            display: block;
+            filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.1));
+        }
+
+        @keyframes qr-entry {
+            0% {
+                opacity: 0;
+                transform: scale(0.85) rotate(-3deg);
+            }
+
+            50% {
+                transform: scale(1.05) rotate(1deg);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1) rotate(0);
+            }
+        }
+
+        /* Status Container */
+        .whatsapp-modal .status-container {
+            margin-top: 1.5rem;
+            position: relative;
+            animation: status-entry 0.7s cubic-bezier(0.215, 0.61, 0.355, 1) 0.8s both;
+        }
+
+        @keyframes status-entry {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .whatsapp-modal [id^="statusBot"] {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            background-color: var(--bg-secondary);
+            color: var(--primary-dark);
+            font-weight: 500;
+            box-shadow: 0 5px 15px var(--shadow);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: status-text-entry 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.9s both,
+                whatsapp-pulse 2s infinite 1.5s;
+        }
+
+        @keyframes status-text-entry {
+            0% {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+
+            60% {
+                transform: translateY(-5px);
+            }
+
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes whatsapp-pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.4);
+            }
+
+            70% {
+                box-shadow: 0 0 0 15px rgba(37, 211, 102, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
+            }
+        }
+
+        /* Loading Dots */
+        .whatsapp-modal .loading-dots {
+            display: inline-flex;
+            margin-left: 5px;
+            align-items: center;
+        }
+
+        .whatsapp-modal .loading-dots span {
+            width: 6px;
+            height: 6px;
+            margin: 0 3px;
+            background-color: var(--primary-dark);
+            border-radius: 50%;
+            display: inline-block;
+            opacity: 0;
+            animation: dots 1.5s infinite ease-in-out;
+            transform: translateY(0);
+        }
+
+        .whatsapp-modal .loading-dots span:nth-child(1) {
+            animation-delay: 0s;
+        }
+
+        .whatsapp-modal .loading-dots span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .whatsapp-modal .loading-dots span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        /* Close Button */
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-color);
+            cursor: pointer;
+            z-index: 10;
+            transition: transform 0.3s ease;
+        }
+
+        .modal-close:hover {
+            transform: rotate(90deg);
+        }
+
+        @keyframes dots {
+            0% {
+                transform: translateY(0);
+                opacity: 0.2;
+            }
+
+            40% {
+                transform: translateY(-8px);
+                opacity: 1;
+            }
+
+            80% {
+                transform: translateY(0);
+                opacity: 0.2;
+            }
+
+            100% {
+                transform: translateY(0);
+                opacity: 0.2;
+            }
+        }
+
+        /* Estilos para a imagem responsiva */
+        .image-container {
+            width: 100%;
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        .responsive-image {
+            max-width: 100%;
+            height: auto;
+            display: inline-block;
+            border: none;
+            background: transparent;
+        }
+
+        /* Info Text */
+        .whatsapp-modal .info-text {
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            animation: info-entry 0.7s cubic-bezier(0.215, 0.61, 0.355, 1) 1s both;
+            transition: color 0.3s ease;
+        }
+
+        @keyframes info-entry {
+            0% {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsividade para WhatsApp Modals */
+        @media (max-width: 768px) {
+            .whatsapp-modal {
+                padding: 2rem 1.5rem;
+                max-width: 450px;
+            }
+
+            .whatsapp-modal h1 {
+                font-size: 1.6rem;
+            }
+
+            .whatsapp-modal .logo i {
+                font-size: 2.2rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .whatsapp-modal {
+                padding: 1.5rem 1rem;
+                margin: 10px;
+                max-width: 100%;
+            }
+
+            .whatsapp-modal h1 {
+                font-size: 1.4rem;
+            }
+
+            .whatsapp-modal #qrcode-container {
+                width: 200px;
+                height: 200px;
+                padding: 1rem;
+            }
+
+            .whatsapp-modal .logo i {
+                font-size: 2rem;
+            }
+
+            .whatsapp-modal [id^="statusBot"] {
+                padding: 0.6rem 1.2rem;
+                font-size: 0.9rem;
+            }
+
+            .whatsapp-modal .info-text {
+                font-size: 0.8rem;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .whatsapp-modal {
+                padding: 1rem;
+            }
+
+            .whatsapp-modal h1 {
+                font-size: 1.2rem;
+            }
+
+            .whatsapp-modal #qrcode-container {
+                width: 180px;
+                height: 180px;
+                margin: 1.5rem auto;
+            }
+        }
+
+        /* Estilo para os indicadores de status nos cards */
+        .card-status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+
+        .card-status-indicator.connected {
+            background-color: #4CAF50;
+            /* Verde para conectado */
+            box-shadow: 0 0 5px #4CAF50;
+        }
+
+        .card-status-indicator.disconnected {
+            background-color: #FF5252;
+            /* Vermelho para desconectado */
+            box-shadow: 0 0 5px #FF5252;
+        }
+
+        /* Ajuste do estilo do título do bot para acomodar o indicador */
+        .bot-title {
+            display: flex;
+            align-items: center;
+            font-weight: 600;
+            font-size: 16px;
+            color: var(--text-color);
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            font-size: clamp(11px, 2.5vw, 13px);
+            color: var(--text-secondary);
+            background-color: var(--bg-primary);
+            padding: 10px;
+            text-align: center;
+            z-index: 10;
+            border-top: 1px solid var(--border);
+        }
+
+        @keyframes slideUp {
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* Responsividade */
+        @media (max-width: 992px) {
+            .bot-cards-container {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .bot-cards-container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header {
+                padding-top: 20px;
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Modal de Confirmação de Saída -->
+    <div class="modal-overlay" id="exitModalOverlay">
+        <div class="modal exit-modal">
+            <div class="modal-header">
+                <div class="modal-title">Sair</div>
+                <div class="close-modal" id="closeExitModal">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </div>
+            </div>
+            <div class="modal-body">
+                <p>Tem certeza que deseja sair do sistema?</p>
+
+                <div class="exit-buttons">
+                    <button class="cancel-exit-btn" id="cancelExitBtn">Cancelar</button>
+                    <button class="confirm-exit-btn" id="confirmExitBtn">Sim, Sair</button>
+                </div>
+
+                <div class="success-message" id="exitSuccess">
+                    <div class="success-icon">
+                        <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                            <circle class="checkmark-circle" cx="26" cy="26" r="25" fill="none" />
+                            <path class="checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
+                        </svg>
+                    </div>
+                    <p>Saída realizada com sucesso!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Botão de Sair -->
+    <div class="exit-button" id="exitButton">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+            <polyline points="16 17 21 12 16 7"></polyline>
+            <line x1="21" y1="12" x2="9" y2="12"></line>
+        </svg>
+        <span>Sair</span>
+    </div>
+
+    <div class="theme-toggle animate-fadeIn" id="themeToggle">
+        <div class="theme-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <div class="brand-logo">
+                <div class="logo-circle">
+                    <img src="/imagens/logo.png" alt="Logo da Empresa" class="company-logo">
+                </div>
+            </div>
+            <p>Olá, Admin</p><br>
+            <h1>Central de Bots</h1>
+            <p>Gerencie e conecte seus chatbots WhatsApp</p><br>
+        </div>
+
+        <!-- Modificação nos cards dos bots para incluir indicador de status -->
+        <div class="bot-cards-container">
+            <!-- Bot 1 -->
+            <div class="bot-card">
+                <div class="bot-card-header">
+                    <div class="bot-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path
+                                d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z">
+                            </path>
+                        </svg>
+                    </div>
+                    <div class="bot-info">
+                        <div class="bot-title">
+                            Bot 1
+                            <span class="card-status-indicator" id="card-indicator-main"></span>
+                        </div>
+                        <div class="bot-description">Bot principal para atendimento ao cliente</div>
+                    </div>
+                </div>
+                <div class="bot-card-body">
+                    <div class="bot-statistics">
+                        <div class="stat-item">
+                            <div class="stat-value">0</div>
+                            <div class="stat-label">Atendimentos</div>
+                        </div>
+                    </div>
+                    <button class="connect-btn" onclick="openModal('whatsappQrModalBot1')">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+                            <polyline points="10 17 15 12 10 7"></polyline>
+                            <line x1="15" y1="12" x2="3" y2="12"></line>
+                        </svg>
+                        Conectar Bot
+                    </button>
+                </div>
+            </div>
+
+            <!-- Bot 2 -->
+            <div class="bot-card">
+                <div class="bot-card-header">
+                    <div class="bot-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path
+                                d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z">
+                            </path>
+                        </svg>
+                    </div>
+                    <div class="bot-info">
+                        <div class="bot-title">
+                            Bot 2
+                            <span class="card-status-indicator" id="card-indicator-appointment"></span>
+                        </div>
+                        <div class="bot-description">Bot principal para atendimento ao cliente</div>
+                    </div>
+                </div>
+                <div class="bot-card-body">
+                    <div class="bot-statistics">
+                        <div class="stat-item">
+                            <div class="stat-value">0</div>
+                            <div class="stat-label">Atendimentos</div>
+                        </div>
+                    </div>
+                    <button class="connect-btn" onclick="openModal('whatsappQrModalBot2')">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+                            <polyline points="10 17 15 12 10 7"></polyline>
+                            <line x1="15" y1="12" x2="3" y2="12"></line>
+                        </svg>
+                        Conectar Bot
+                    </button>
+                </div>
+            </div>
+
+            <!-- Bot 3 -->
+            <div class="bot-card">
+                <div class="bot-card-header">
+                    <div class="bot-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path
+                                d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z">
+                            </path>
+                        </svg>
+                    </div>
+                    <div class="bot-info">
+                        <div class="bot-title">
+                            Bot 3
+                            <span class="card-status-indicator" id="card-indicator-reschedule"></span>
+                        </div>
+                        <div class="bot-description">Bot principal para atendimento ao cliente</div>
+                    </div>
+                </div>
+                <div class="bot-card-body">
+                    <div class="bot-statistics">
+                        <div class="stat-item">
+                            <div class="stat-value">0</div>
+                            <div class="stat-label">Atendimentos</div>
+                        </div>
+                    </div>
+                    <button class="connect-btn" onclick="openModal('whatsappQrModalBot3')">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+                            <polyline points="10 17 15 12 10 7"></polyline>
+                            <line x1="15" y1="12" x2="3" y2="12"></line>
+                        </svg>
+                        Conectar Bot
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal dos Bots -->
+        <!-- Modal Overlay para Bot 1 -->
+        <div class="modal-overlay" id="whatsappQrModalBot1">
+            <div class="whatsapp-modal">
+                <button class="modal-close" id="closeQrModalBot1">
+                    <i class="fas fa-times"></i>
+                </button>
+                <div class="logo">
+                    <i class="fab fa-whatsapp"></i>
+                    <h1>WhatsApp QR Code - Bot Principal</h1>
+                </div>
+                <div class="connection-status">
+                    <span class="status-indicator" id="indicator-main"></span>
+                    <span class="status-text" id="status-text-main">NÃO CONECTADO</span>
+                </div>
+                <div id="qrcode-container">
+                    <div class="scan-animation" id="scan-main"></div>
+                    <img id="qrcodeBot1" src="" alt="QR Code">
+                </div>
+                <div class="status-container">
+                    <p id="statusBot1">Aguardando QR Code<span
+                            class="loading-dots"><span></span><span></span><span></span></span></p>
+                </div>
+                <p class="info-text">Escaneie o código QR com seu WhatsApp para conectar sua conta</p>
+            </div>
+        </div>
+
+        <!-- Modal Overlay para Bot 2 -->
+        <div class="modal-overlay" id="whatsappQrModalBot2">
+            <div class="whatsapp-modal">
+                <button class="modal-close" id="closeQrModalBot2">
+                    <i class="fas fa-times"></i>
+                </button>
+                <div class="logo">
+                    <i class="fab fa-whatsapp"></i>
+                    <h1>WhatsApp QR Code - Bot de Agendamento</h1>
+                </div>
+                <div class="connection-status">
+                    <span class="status-indicator" id="indicator-appointment"></span>
+                    <span class="status-text" id="status-text-appointment">NÃO CONECTADO</span>
+                </div>
+                <div id="qrcode-container">
+                    <div class="scan-animation" id="scan-appointment"></div>
+                    <img id="qrcodeBot2" src="" alt="QR Code">
+                </div>
+                <div class="status-container">
+                    <p id="statusBot2">Aguardando QR Code<span
+                            class="loading-dots"><span></span><span></span><span></span></span></p>
+                </div>
+                <p class="info-text">Escaneie o código QR com seu WhatsApp para conectar sua conta</p>
+            </div>
+        </div>
+
+        <!-- Modal Overlay para Bot 3 -->
+        <div class="modal-overlay" id="whatsappQrModalBot3">
+            <div class="whatsapp-modal">
+                <button class="modal-close" id="closeQrModalBot3">
+                    <i class="fas fa-times"></i>
+                </button>
+                <div class="logo">
+                    <i class="fab fa-whatsapp"></i>
+                    <h1>WhatsApp QR Code - Bot de Reagendamento</h1>
+                </div>
+                <div class="connection-status">
+                    <span class="status-indicator" id="indicator-reschedule"></span>
+                    <span class="status-text" id="status-text-reschedule">NÃO CONECTADO</span>
+                </div>
+                <div id="qrcode-container">
+                    <div class="scan-animation" id="scan-reschedule"></div>
+                    <img id="qrcodeBot3" src="" alt="QR Code">
+                </div>
+                <div class="status-container">
+                    <p id="statusBot3">Aguardando QR Code<span
+                            class="loading-dots"><span></span><span></span><span></span></span></p>
+                </div>
+                <p class="info-text">Escaneie o código QR com seu WhatsApp para conectar sua conta</p>
+            </div>
+        </div>
+
+        <div class="info-button" id="infoButton">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="16" x2="12" y2="12"></line>
+                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+            </svg>
+        </div>
+
+        <div class="modal-overlay" id="modalOverlay">
+            <div class="modal">
+                <div class="modal-header">
+                    <div class="modal-title">Como conectar seu bot</div>
+                    <div class="close-modal" id="closeModal">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <p>Conectar seu bot ao WhatsApp é um processo simples e rápido. Siga os passos abaixo para
+                        estabelecer a conexão:</p>
+
+                    <div class="image-container">
+                        <img src="/imagens/instrucoes.png" alt="Como conectar o bot" class="responsive-image">
+                    </div>
+
+                    <div class="connection-steps">
+                        <div class="step-item">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <div class="step-title">Clique em "Conectar Bot"</div>
+                                <div class="step-description">Selecione o bot que deseja conectar e clique no botão
+                                    verde "Conectar Bot".</div>
+                            </div>
+                        </div>
+
+                        <div class="step-item">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <div class="step-title">Escaneie o QR Code</div>
+                                <div class="step-description">Na tela seguinte, você verá um QR Code. Abra o WhatsApp no
+                                    seu celular, vá em Configurações > Dispositivos conectados > Conectar um
+                                    dispositivo.</div>
+                            </div>
+                        </div>
+
+                        <div class="step-item">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <div class="step-title">Aguarde a conexão</div>
+                                <div class="step-description">Após escanear o QR Code, aguarde alguns segundos até que a
+                                    conexão seja estabelecida.</div>
+                            </div>
+                        </div>
+
+                        <div class="step-item">
+                            <div class="step-number">4</div>
+                            <div class="step-content">
+                                <div class="step-title">Pronto para usar!</div>
+                                <div class="step-description">O status do bot mudará para "Conectado" e ele estará
+                                    pronto para receber e responder mensagens.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3>Observações importantes:</h3>
+                    <p>- Mantenha o dispositivo conectado à internet para que o bot funcione corretamente.</p>
+                    <p>- A conexão permanecerá ativa mesmo após fechar o navegador, a menos que você desconecte
+                        manualmente o bot.</p>
+                    <p>- Para desconectar, use o botão "Desconectar" quando disponível ou desconecte o dispositivo
+                        diretamente pelo WhatsApp.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            By Pablo © 2025
+        </div>
+
+        <script src="/socket.io/socket.io.js"></script>
+        <script>
+            // Inicialização do socket.io
+            const socket = io.connect('http://localhost:3000'); // Altere para o URL do seu servidor
+            const botStatus = {
+                'main': false,
+                'appointment': false,
+                'reschedule': false
+            };
+
+
+            // Mapeamento de IDs de bot para elementos modais e cards
+            const botMap = {
+                'main': {
+                    qrcodeElement: 'qrcodeBot1',
+                    statusElement: 'statusBot1',
+                    modalId: 'whatsappQrModalBot1',
+                    indicator: 'indicator-main',
+                    statusText: 'status-text-main',
+                    scanAnimation: 'scan-main',
+                    dashboardStatus: 'status-main',
+                    cardIndicator: 'card-indicator-main'  // Indicador no card
+                },
+                'appointment': {
+                    qrcodeElement: 'qrcodeBot2',
+                    statusElement: 'statusBot2',
+                    modalId: 'whatsappQrModalBot2',
+                    indicator: 'indicator-appointment',
+                    statusText: 'status-text-appointment',
+                    scanAnimation: 'scan-appointment',
+                    dashboardStatus: 'status-appointment',
+                    cardIndicator: 'card-indicator-appointment'  // Indicador no card
+                },
+                'reschedule': {
+                    qrcodeElement: 'qrcodeBot3',
+                    statusElement: 'statusBot3',
+                    modalId: 'whatsappQrModalBot3',
+                    indicator: 'indicator-reschedule',
+                    statusText: 'status-text-reschedule',
+                    scanAnimation: 'scan-reschedule',
+                    dashboardStatus: 'status-reschedule',
+                    cardIndicator: 'card-indicator-reschedule'  // Indicador no card
+                }
+            };
+
+            // Função para alternar entre temas claro e escuro
+            const toggleTheme = () => {
+                const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+                const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+
+                const themeIcon = document.querySelector('.theme-icon');
+                if (newTheme === 'dark') {
+                    themeIcon.innerHTML = `
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="5"></circle>
+        <line x1="12" y1="1" x2="12" y2="3"></line>
+        <line x1="12" y1="21" x2="12" y2="23"></line>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+        <line x1="1" y1="12" x2="3" y2="12"></line>
+        <line x1="21" y1="12" x2="23" y2="12"></line>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+        <line x1="19.78" y1="4.22" x2="18.36" y2="5.64"></line>
+    </svg>
+`;
+                } else {
+                    themeIcon.innerHTML = `
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+    </svg>
+`;
+                }
+            };
+
+            // Função para verificar o status de um bot
+            const checkStatus = (botId) => {
+                // Simular uma chamada de API para verificar o status
+                setTimeout(() => {
+                    // Simulando uma resposta aleatória (50% de chance de estar online)
+                    botStatus[botId] = Math.random() > 0.5;
+                    updateBotStatus(botId);
+                }, 1000);
+            };
+
+            // Função para atualizar o status do bot na interface
+            const updateBotStatus = (botId) => {
+                const statusElement = document.getElementById(`status-${botId}`);
+                if (statusElement) {
+                    if (botStatus[botId]) {
+                        statusElement.textContent = "Conectado";
+                        statusElement.className = "status connected";
+                    } else {
+                        statusElement.textContent = "Desconectado";
+                        statusElement.className = "status disconnected";
+                    }
+                }
+            };
+
+            // Função para sincronizar o status entre modal, card e dashboard
+            function syncBotStatus(botId) {
+                const botKey = botId.replace('bot', '').toLowerCase();
+                const botConfig = botMap[botKey] || botMap[botId];
+
+                if (!botConfig) return;
+
+                const indicator = document.getElementById(botConfig.indicator);
+                const cardIndicator = document.getElementById(botConfig.cardIndicator);
+                const dashboardStatus = document.getElementById(botConfig.dashboardStatus);
+
+                if (indicator && cardIndicator) {
+                    // Verifica se o indicador no modal tem a classe 'connected'
+                    const isConnected = indicator.classList.contains('connected');
+
+                    // Atualiza o status no card
+                    if (isConnected) {
+                        cardIndicator.classList.add('connected');
+                        cardIndicator.classList.remove('disconnected');
+                    } else {
+                        cardIndicator.classList.add('disconnected');
+                        cardIndicator.classList.remove('connected');
+                    }
+                }
+
+                if (indicator && dashboardStatus) {
+                    // Verifica se o indicador no modal tem a classe 'connected'
+                    const isConnected = indicator.classList.contains('connected');
+
+                    // Atualiza o status na dashboard de acordo com o status do modal
+                    if (isConnected) {
+                        dashboardStatus.textContent = "Conectado";
+                        dashboardStatus.className = "status connected";
+                    } else {
+                        dashboardStatus.textContent = "Desconectado";
+                        dashboardStatus.className = "status disconnected";
+                    }
+                }
+            }
+
+            // Funções para abrir e fechar modais
+            function openModal(modalId) {
+                const modal = document.getElementById(modalId);
+                if (modal) {
+                    modal.classList.add('active');
+                    document.body.style.overflow = 'hidden'; // Impede rolagem da página
+                }
+            }
+
+            function closeModal(modalId) {
+                const modal = document.getElementById(modalId);
+                if (modal) {
+                    modal.classList.remove('active');
+                    document.body.style.overflow = ''; // Restaura rolagem da página
+                }
+            }
+
+            // Funções específicas para modais de QR code
+            function openQrModal(botId) {
+                const modalId = `whatsappQrModal${botId}`;
+                const modal = document.getElementById(modalId);
+                if (modal) {
+                    modal.style.display = 'flex';
+                }
+            }
+
+            function closeQrModal(botId) {
+                const modalId = `whatsappQrModal${botId}`;
+                const modal = document.getElementById(modalId);
+                if (modal) {
+                    modal.style.display = 'none';
+                }
+            }
+
+            document.addEventListener('DOMContentLoaded', () => {
+                // Verificar se há uma preferência de tema salva
+                const savedTheme = localStorage.getItem('theme');
+                if (savedTheme) {
+                    document.documentElement.setAttribute('data-theme', savedTheme);
+
+                    // Atualizar o ícone do tema
+                    const themeIcon = document.querySelector('.theme-icon');
+                    if (savedTheme === 'dark') {
+                        themeIcon.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="19.78" y1="4.22" x2="18.36" y2="5.64"></line>
+        </svg>
+    `;
+                    }
+                }
+
+                // Adicionar event listener para o botão de alternar tema
+                document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+
+                // Verificar o status inicial dos bots
+                checkStatus('bot1');
+                checkStatus('bot2');
+                checkStatus('bot3');
+
+                // Modal de informações
+                const infoButton = document.getElementById('infoButton');
+                const modalOverlay = document.getElementById('modalOverlay');
+                const closeModal = document.getElementById('closeModal');
+
+                if (infoButton) {
+                    infoButton.addEventListener('click', () => {
+                        modalOverlay.classList.add('active');
+                    });
+                }
+
+                if (closeModal) {
+                    closeModal.addEventListener('click', () => {
+                        modalOverlay.classList.remove('active');
+                    });
+                }
+
+                if (modalOverlay) {
+                    modalOverlay.addEventListener('click', (e) => {
+                        if (e.target === modalOverlay) {
+                            modalOverlay.classList.remove('active');
+                        }
+                    });
+                }
+
+                // Modal de Confirmação de Saída
+                const exitButton = document.getElementById('exitButton');
+                const exitModalOverlay = document.getElementById('exitModalOverlay');
+                const closeExitModal = document.getElementById('closeExitModal');
+                const cancelExitBtn = document.getElementById('cancelExitBtn');
+                const confirmExitBtn = document.getElementById('confirmExitBtn');
+                const exitSuccess = document.getElementById('exitSuccess');
+
+                // Modificar o event listener do botão de sair
+                if (exitButton) {
+                    exitButton.addEventListener('click', () => {
+                        exitModalOverlay.classList.add('active');
+                        exitSuccess.style.display = 'none';
+                        document.querySelector('.exit-buttons').style.display = 'flex';
+                    });
+                }
+
+                // Fechar o modal
+                if (closeExitModal) {
+                    closeExitModal.addEventListener('click', () => {
+                        exitModalOverlay.classList.remove('active');
+                    });
+                }
+
+                // Quando clicar fora do modal
+                if (exitModalOverlay) {
+                    exitModalOverlay.addEventListener('click', (e) => {
+                        if (e.target === exitModalOverlay) {
+                            exitModalOverlay.classList.remove('active');
+                        }
+                    });
+                }
+
+                // Cancelar saída
+                if (cancelExitBtn) {
+                    cancelExitBtn.addEventListener('click', () => {
+                        exitModalOverlay.classList.remove('active');
+                    });
+                }
+
+                // Confirmar saída
+                if (confirmExitBtn) {
+                    confirmExitBtn.addEventListener('click', () => {
+                        document.querySelector('.exit-buttons').style.display = 'none';
+                        exitSuccess.style.display = 'flex';
+
+                        // Redirecionar após mostrar o sucesso
+                        setTimeout(() => {
+                            window.location.href = 'login.html'; // Ajuste para a URL correta
+                        }, 2000);
+                    });
+                }
+
+                // Adicionar eventos para modais de QR code
+                if (document.getElementById('closeQrModalBot1')) {
+                    document.getElementById('closeQrModalBot1').addEventListener('click', () => closeQrModal('Bot1'));
+                }
+                if (document.getElementById('closeQrModalBot2')) {
+                    document.getElementById('closeQrModalBot2').addEventListener('click', () => closeQrModal('Bot2'));
+                }
+                if (document.getElementById('closeQrModalBot3')) {
+                    document.getElementById('closeQrModalBot3').addEventListener('click', () => closeQrModal('Bot3'));
+                }
+
+                // Adicionar eventos para os botões de conectar bot - ADICIONADO AQUI
+                const connectButtons = document.querySelectorAll('[id^="connect-bot"]');
+                connectButtons.forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const botId = button.id.replace('connect-bot', '');
+                        openQrModal(`Bot${botId}`);
+                    });
+                });
+
+                // Adicionar eventos para os botões na dashboard ou em cards - ADICIONADO AQUI
+                const connectMainBtn = document.getElementById('connect-main-btn');
+                const connectAppointmentBtn = document.getElementById('connect-appointment-btn');
+                const connectRescheduleBtn = document.getElementById('connect-reschedule-btn');
+
+                if (connectMainBtn) {
+                    connectMainBtn.addEventListener('click', () => openQrModal('Bot1'));
+                }
+                if (connectAppointmentBtn) {
+                    connectAppointmentBtn.addEventListener('click', () => openQrModal('Bot2'));
+                }
+                if (connectRescheduleBtn) {
+                    connectRescheduleBtn.addEventListener('click', () => openQrModal('Bot3'));
+                }
+
+                // Fechar modal ao clicar fora dele
+                document.querySelectorAll('.modal-overlay').forEach(overlay => {
+                    overlay.addEventListener('click', (e) => {
+                        if (e.target === overlay) {
+                            closeModal(overlay.id);
+                        }
+                    });
+                });
+
+                // Inicializar o status dos indicadores nos cards
+                Object.keys(botMap).forEach(botId => {
+                    const botConfig = botMap[botId];
+                    const cardIndicator = document.getElementById(botConfig.cardIndicator);
+                    const indicator = document.getElementById(botConfig.indicator);
+
+                    if (cardIndicator && indicator) {
+                        const isConnected = indicator.classList.contains('connected');
+                        if (isConnected) {
+                            cardIndicator.classList.add('connected');
+                            cardIndicator.classList.remove('disconnected');
+                        } else {
+                            cardIndicator.classList.add('disconnected');
+                            cardIndicator.classList.remove('connected');
+                        }
+                    }
+                });
+
+                // Configurando Socket.io se estiver disponível
+                if (typeof io !== 'undefined') {
+                    const socket = io();
+
+                    // Atualizar QR code
+                    socket.on('qrcode', function (data) {
+                        const botConfig = botMap[data.bot];
+                        if (botConfig) {
+                            // Atualizar o QR code no modal
+                            const qrElement = document.getElementById(botConfig.qrcodeElement);
+                            if (qrElement) {
+                                qrElement.src = data.qrcode;
+                            }
+
+                            // Atualizar o status
+                            const statusElement = document.getElementById(botConfig.statusElement);
+                            if (statusElement) {
+                                statusElement.innerHTML = 'Escaneie o código QR para conectar';
+                            }
+
+                            // Mostrar a animação de scan
+                            const scanAnimation = document.getElementById(botConfig.scanAnimation);
+                            if (scanAnimation) {
+                                scanAnimation.style.display = 'block';
+                            }
+
+                            // Atualizar o indicador no modal para offline
+                            const indicator = document.getElementById(botConfig.indicator);
+                            if (indicator) {
+                                indicator.classList.remove('connected');
+                                indicator.classList.add('offline');
+                            }
+
+                            // Atualizar o indicador no card
+                            const cardIndicator = document.getElementById(botConfig.cardIndicator);
+                            if (cardIndicator) {
+                                cardIndicator.classList.remove('connected');
+                                cardIndicator.classList.add('disconnected');
+                            }
+
+                            // Sincronizar dashboard com status do modal
+                            const dashboardStatus = document.getElementById(botConfig.dashboardStatus);
+                            if (dashboardStatus) {
+                                dashboardStatus.textContent = "Desconectado";
+                                dashboardStatus.className = "status disconnected";
+                            }
+                        }
+                    });
+
+                    socket.on('connection-status', function (data) {
+                        const botConfig = botMap[data.bot];
+                        if (botConfig) {
+                            const indicator = document.getElementById(botConfig.indicator);
+                            const statusText = document.getElementById(botConfig.statusText);
+                            const statusElement = document.getElementById(botConfig.statusElement);
+                            const scanAnimation = document.getElementById(botConfig.scanAnimation);
+                            const cardIndicator = document.getElementById(botConfig.cardIndicator);
+
+                            if (data.connected) {
+                                // Atualizar status no modal
+                                if (indicator) {
+                                    indicator.classList.add('connected');
+                                    indicator.classList.remove('offline');
+                                }
+                                if (statusText) statusText.textContent = "CONECTADO";
+                                if (statusElement) statusElement.textContent = "WhatsApp conectado com sucesso!";
+                                if (scanAnimation) scanAnimation.style.display = 'none';
+
+                                // Atualizar status no card
+                                if (cardIndicator) {
+                                    cardIndicator.classList.add('connected');
+                                    cardIndicator.classList.remove('disconnected');
+                                }
+                            } else {
+                                // Atualizar status no modal
+                                if (indicator) {
+                                    indicator.classList.remove('connected');
+                                    indicator.classList.add('offline');
+                                }
+                                if (statusText) statusText.textContent = "NÃO CONECTADO";
+
+                                // Atualizar status no card
+                                if (cardIndicator) {
+                                    cardIndicator.classList.remove('connected');
+                                    cardIndicator.classList.add('disconnected');
+                                }
+                            }
+                        }
+                    });
+
+                    // Atualizar status de todos os bots
+                    socket.on('all-connection-status', function (data) {
+                        Object.keys(data).forEach(bot => {
+                            const statusElement = document.getElementById(`status-${bot}`);
+                            const botConfig = botMap[bot];
+
+                            if (statusElement) {
+                                if (data[bot]) {
+                                    statusElement.textContent = "Conectado";
+                                    statusElement.className = "status connected";
+                                } else {
+                                    statusElement.textContent = "Desconectado";
+                                    statusElement.className = "status disconnected";
+                                }
+                            }
+
+                            if (botConfig) {
+                                // Atualizar indicador e texto de status no modal
+                                const indicator = document.getElementById(botConfig.indicator);
+                                const statusText = document.getElementById(botConfig.statusText);
+                                const statusElement = document.getElementById(botConfig.statusElement);
+                                const scanAnimation = document.getElementById(botConfig.scanAnimation);
+                                const cardIndicator = document.getElementById(botConfig.cardIndicator);
+
+                                if (indicator && statusText) {
+                                    if (data[bot]) {
+                                        indicator.classList.add('connected');
+                                        indicator.classList.remove('offline');
+                                        statusText.textContent = "CONECTADO";
+                                        if (statusElement) statusElement.textContent = "WhatsApp conectado com sucesso!";
+                                        if (scanAnimation) scanAnimation.style.display = 'none';
+                                        // Atualiza o status no card
+                                        if (cardIndicator) {
+                                            cardIndicator.classList.add('connected');
+                                            cardIndicator.classList.remove('disconnected');
+                                        }
+                                    } else {
+                                        indicator.classList.remove('connected');
+                                        indicator.classList.add('offline');
+                                        statusText.textContent = "NÃO CONECTADO";
+                                        // Atualiza o status no card
+                                        if (cardIndicator) {
+                                            cardIndicator.classList.remove('connected');
+                                            cardIndicator.classList.add('disconnected');
+                                        }
+                                    }
+                                }
+
+                                // Sincronizar o status na interface principal
+                                syncBotStatus(bot);
+                            }
+                        });
+                    });
+
+                    // Verificar status de conexão ao carregar
+                    fetch('/all-connection-status')
+                        .then(response => response.json())
+                        .then(data => {
+                            Object.keys(data).forEach(bot => {
+                                const statusElement = document.getElementById(`status-${bot}`);
+                                const botConfig = botMap[bot];
+
+                                if (botConfig) {
+                                    // Atualizar indicador e texto de status no modal
+                                    const indicator = document.getElementById(botConfig.indicator);
+                                    const statusText = document.getElementById(botConfig.statusText);
+                                    const statusElement = document.getElementById(botConfig.statusElement);
+                                    const scanAnimation = document.getElementById(botConfig.scanAnimation);
+                                    const cardIndicator = document.getElementById(botConfig.cardIndicator);
+
+                                    if (indicator && statusText && data[bot]) {
+                                        indicator.classList.add('connected');
+                                        indicator.classList.remove('offline');
+                                        statusText.textContent = "CONECTADO";
+                                        if (statusElement) statusElement.textContent = "WhatsApp conectado com sucesso!";
+                                        if (scanAnimation) scanAnimation.style.display = 'none';
+                                        // Atualiza o status no card
+                                        if (cardIndicator) {
+                                            cardIndicator.classList.add('connected');
+                                            cardIndicator.classList.remove('disconnected');
+                                        }
+                                    }
+
+                                    // Sincronizar o status na interface principal
+                                    syncBotStatus(bot);
+                                }
+                            });
+                        })
+                        .catch(error => console.error('Erro ao verificar status:', error));
+
+                    // Atualizar status de conexão ao carregar a página
+                    fetch('/all-connection-status')
+                        .then(response => response.json())
+                        .then(data => {
+                            Object.keys(data).forEach(bot => {
+                                const botConfig = botMap[bot];
+                                if (botConfig) {
+                                    const indicator = document.getElementById(botConfig.indicator);
+                                    const statusText = document.getElementById(botConfig.statusText);
+                                    const cardIndicator = document.getElementById(botConfig.cardIndicator);
+
+                                    if (data[bot]) {
+                                        // Atualizar para conectado
+                                        if (indicator) {
+                                            indicator.classList.add('connected');
+                                            indicator.classList.remove('offline');
+                                        }
+                                        if (statusText) statusText.textContent = "CONECTADO";
+                                        if (cardIndicator) {
+                                            cardIndicator.classList.add('connected');
+                                            cardIndicator.classList.remove('disconnected');
+                                        }
+                                    } else {
+                                        // Atualizar para desconectado
+                                        if (indicator) {
+                                            indicator.classList.remove('connected');
+                                            indicator.classList.add('offline');
+                                        }
+                                        if (statusText) statusText.textContent = "NÃO CONECTADO";
+                                        if (cardIndicator) {
+                                            cardIndicator.classList.remove('connected');
+                                            cardIndicator.classList.add('disconnected');
+                                        }
+                                    }
+                                }
+                            });
+                        })
+                        .catch(error => console.error('Erro ao verificar status:', error));
+                }
+
+                // Adicionar um MutationObserver para cada indicador de modal para detectar mudanças de estado
+                Object.keys(botMap).forEach(botId => {
+                    const indicator = document.getElementById(botMap[botId].indicator);
+                    if (indicator) {
+                        const observer = new MutationObserver(() => {
+                            syncBotStatus(botId);
+                        });
+
+                        observer.observe(indicator, {
+                            attributes: true,
+                            attributeFilter: ['class']
+                        });
+                    }
+                });
+            });
+        </script>
+</body>
+
+</html>
