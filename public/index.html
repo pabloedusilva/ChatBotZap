@@ -1410,7 +1410,7 @@
         /* Janela de Chat */
         .chat-window {
             position: fixed;
-            bottom: 130px;
+            bottom: 170px;
             /* Espaçamento acima do botão do WhatsApp */
             right: 15px;
             width: 90%;
@@ -1612,12 +1612,14 @@
         /* Botão de controle com "?" */
         .toggle-btn {
             position: fixed;
-            bottom: 140px; /* Acima dos outros botões */
+            bottom: 140px;
+            /* Acima dos outros botões */
             right: 15px;
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            background-color: #333; /* Cor mais escura */
+            background-color: #333;
+            /* Cor mais escura */
             display: flex;
             justify-content: center;
             align-items: center;
@@ -1656,12 +1658,14 @@
         /* Botão de controle com "?" */
         .toggle-btn {
             position: fixed;
-            bottom: 20px; /* Bem na parte inferior da página */
+            bottom: 20px;
+            /* Bem na parte inferior da página */
             right: 15px;
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            background-color: #333; /* Cor mais escura */
+            background-color: #333;
+            /* Cor mais escura */
             display: flex;
             justify-content: center;
             align-items: center;
@@ -1685,14 +1689,16 @@
         /* Botões de "i" e "WhatsApp" com animação */
         .hidden {
             opacity: 0;
-            transform: translateY(40px); /* Começam abaixo do botão de "?" */
+            transform: translateY(40px);
+            /* Começam abaixo do botão de "?" */
             pointer-events: none;
             transition: all 0.3s ease;
         }
 
         .visible {
             opacity: 1;
-            transform: translateY(0); /* Movem-se para a posição original */
+            transform: translateY(0);
+            /* Movem-se para a posição original */
             pointer-events: auto;
             transition: all 0.3s ease;
         }
@@ -1715,51 +1721,182 @@
         }
 
         .info-button {
-            bottom: 70px; /* Posição inicial acima do botão de "?" */
+            bottom: 70px;
+            /* Posição inicial acima do botão de "?" */
             background-color: var(--primary);
         }
 
         .whatsapp-btn {
-            bottom: 120px; /* Posição inicial acima do botão de "i" */
+            bottom: 120px;
+            /* Posição inicial acima do botão de "i" */
             background-color: #25D366;
+        }
+
+        /* Estilos para a janela de chat */
+        .chat-window {
+            position: fixed;
+            bottom: 170px;
+            right: 15px;
+            width: 90%;
+            max-width: 350px;
+            height: 400px;
+            background-color: var(--card-bg); /* Usar a variável do tema */
+            border-radius: 10px;
+            box-shadow: 0 5px 15px var(--shadow);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 999;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .chat-header {
+            background-color: var(--primary-dark); /* Usar a variável do tema */
+            color: white;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .chat-body {
+            flex-grow: 1;
+            padding: 15px;
+            overflow-y: auto;
+            background-color: var(--bg-secondary); /* Usar a variável do tema */
+            display: flex;
+            flex-direction: column;
+            transition: background-color 0.3s ease;
+        }
+
+        .chat-footer {
+            padding: 10px;
+            background-color: var(--input-bg); /* Usar a variável do tema */
+            display: flex;
+            align-items: center;
+            transition: background-color 0.3s ease;
+        }
+
+        .chat-input {
+            flex-grow: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 20px;
+            outline: none;
+            margin-right: 10px;
+            background-color: var(--input-bg); /* Usar a variável do tema */
+            color: var(--text-primary); /* Usar a variável do tema */
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .chat-input::placeholder {
+            color: var(--text-secondary); /* Usar a variável do tema */
+        }
+
+        .send-btn {
+            background-color: var(--primary-dark); /* Usar a variável do tema */
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .send-btn:hover {
+            background-color: var(--primary); /* Usar a variável do tema */
+        }
+
+        .chat-message {
+            position: relative;
+            max-width: 80%;
+            margin-bottom: 10px;
+            padding: 8px 15px;
+            border-radius: 7.5px;
+            box-shadow: 0 1px 0.5px rgba(0, 0, 0, 0.13);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .chat-message.assistant {
+            background-color: var(--card-bg); /* Usar a variável do tema */
+            color: var(--text-primary); /* Usar a variável do tema */
+            align-self: flex-start;
+            margin-right: auto;
+            border-radius: 0 7.5px 7.5px 7.5px;
+        }
+
+        .refresh-status-btn {
+            background: var(--online);
+            border: none;
+            cursor: pointer;
+            margin-left: auto;
+            padding: 8px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .refresh-status-btn:hover {
+            background: var(--primary);
+            transform: rotate(90deg);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .refresh-status-btn svg {
+            width: 18px;
+            height: 18px;
+            stroke: white;
+        }
+
+        .refresh-status-btn img.refresh-icon {
+            width: 20px;
+            height: 20px;
+            object-fit: contain;
         }
     </style>
 </head>
 
 <body>
-    <!-- Modal de Confirmação de Saída -->
-    <div class="modal-overlay" id="exitModalOverlay">
-        <div class="modal exit-modal">
-            <div class="modal-header">
-                <div class="modal-title">Sair</div>
-                <div class="close-modal" id="closeExitModal">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="18" y1="6" x2="6" y2="18"></line>
-                        <line x1="6" y1="6" x2="18" y2="18"></line>
+ <!-- Modal de Confirmação de Saída -->
+ <div class="modal-overlay" id="exitModalOverlay">
+    <div class="modal exit-modal">
+        <div class="modal-header">
+            <div class="modal-title">Sair</div>
+            <div class="close-modal" id="closeExitModal">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </div>
+        </div>
+        <div class="modal-body">
+            <p>Tem certeza que deseja sair do sistema?</p>
+
+            <div class="exit-buttons">
+                <button class="cancel-exit-btn" id="cancelExitBtn">Cancelar</button>
+                <button class="confirm-exit-btn" id="confirmExitBtn">Sim, Sair</button>
+            </div>
+
+            <div class="success-message" id="exitSuccess">
+                <div class="success-icon">
+                    <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                        <circle class="checkmark-circle" cx="26" cy="26" r="25" fill="none" />
+                        <path class="checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
                     </svg>
                 </div>
-            </div>
-            <div class="modal-body">
-                <p>Tem certeza que deseja sair do sistema?</p>
-
-                <div class="exit-buttons">
-                    <button class="cancel-exit-btn" id="cancelExitBtn">Cancelar</button>
-                    <button class="confirm-exit-btn" id="confirmExitBtn">Sim, Sair</button>
-                </div>
-
-                <div class="success-message" id="exitSuccess">
-                    <div class="success-icon">
-                        <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
-                            <circle class="checkmark-circle" cx="26" cy="26" r="25" fill="none" />
-                            <path class="checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
-                        </svg>
-                    </div>
-                    <p>Saída realizada com sucesso!</p>
-                </div>
+                <p>Saída realizada com sucesso!</p>
             </div>
         </div>
     </div>
+</div>
     <!-- Botão de Sair -->
     <div class="exit-button" id="exitButton">
         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
@@ -1812,6 +1949,10 @@
                         </div>
                         <div class="bot-description">Bot principal para atendimento ao cliente</div>
                     </div>
+                    <!-- Botão de atualizar status -->
+                    <button class="refresh-status-btn" onclick="refreshBotStatus('main')">
+                        <img src="icons/refresh.svg" alt="Atualizar Bot 1" class="refresh-icon">
+                    </button>
                 </div>
                 <div class="bot-card-body">
                     <div class="bot-statistics">
@@ -1848,8 +1989,12 @@
                             Bot 2
                             <span class="card-status-indicator" id="card-indicator-appointment"></span>
                         </div>
-                        <div class="bot-description">Bot principal para atendimento ao cliente</div>
+                        <div class="bot-description">Bot de Agendamento</div>
                     </div>
+                    <!-- Botão de atualizar status -->
+                    <button class="refresh-status-btn" onclick="refreshBotStatus('appointment')">
+                        <img src="icons/refresh.svg" alt="Atualizar Bot 2" class="refresh-icon">
+                    </button>
                 </div>
                 <div class="bot-card-body">
                     <div class="bot-statistics">
@@ -1886,8 +2031,12 @@
                             Bot 3
                             <span class="card-status-indicator" id="card-indicator-reschedule"></span>
                         </div>
-                        <div class="bot-description">Bot principal para atendimento ao cliente</div>
+                        <div class="bot-description">Bot de Reagendamento</div>
                     </div>
+                    <!-- Botão de atualizar status -->
+                    <button class="refresh-status-btn" onclick="refreshBotStatus('reschedule')">
+                        <img src="icons/refresh.svg" alt="Atualizar Bot 3" class="refresh-icon">
+                    </button>
                 </div>
                 <div class="bot-card-body">
                     <div class="bot-statistics">
@@ -2009,7 +2158,7 @@
             <div class="chat-header">
                 <div style="display: flex; align-items: center;">
                     <img src="icons/suporte.svg" alt="Suporte" class="profile-img">
-                    <span>Assistente Virtual</span>
+                    <span>Suporte</span>
                 </div>
                 <button class="close-chat" id="closeChat">&times;</button>
             </div>
@@ -2440,7 +2589,8 @@
                 document.querySelectorAll('.modal-overlay').forEach(overlay => {
                     overlay.addEventListener('click', (e) => {
                         if (e.target === overlay) {
-                            closeModal(overlay.id);
+                            overlay.classList.remove('active');
+                            document.body.style.overflow = ''; // Restaura a rolagem da página
                         }
                     });
                 });
@@ -2779,12 +2929,112 @@
                 infoButton.classList.add('hidden');
             });
         </script>
+        <script>
+            function refreshBotStatus(botKey) {
+                const botConfig = botMap[botKey];
+                if (!botConfig) return;
+
+                // Simular uma chamada de API para verificar o status do bot
+                fetch(`/check-status/${botKey}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const isConnected = data.connected;
+
+                        // Atualizar o indicador no card
+                        const cardIndicator = document.getElementById(botConfig.cardIndicator);
+                        if (cardIndicator) {
+                            if (isConnected) {
+                                cardIndicator.classList.add('connected');
+                                cardIndicator.classList.remove('disconnected');
+                            } else {
+                                cardIndicator.classList.add('disconnected');
+                                cardIndicator.classList.remove('connected');
+                            }
+                        }
+
+                        // Atualizar o indicador no modal
+                        const indicator = document.getElementById(botConfig.indicator);
+                        if (indicator) {
+                            if (isConnected) {
+                                indicator.classList.add('connected');
+                                indicator.classList.remove('offline');
+                            } else {
+                                indicator.classList.add('offline');
+                                indicator.classList.remove('connected');
+                            }
+                        }
+                    })
+                    .catch(error => console.error('Erro ao atualizar status do bot:', error));
+            }
+        </script>
+        <script>
+            // Modal de Confirmação de Saída
+            const exitButton = document.getElementById('exitButton');
+            const exitModalOverlay = document.getElementById('exitModalOverlay');
+            const closeExitModal = document.getElementById('closeExitModal');
+            const cancelExitBtn = document.getElementById('cancelExitBtn');
+            const confirmExitBtn = document.getElementById('confirmExitBtn');
+            const exitSuccess = document.getElementById('exitSuccess');
+
+            // Abrir o modal de saída ao clicar no botão de sair
+            if (exitButton) {
+                exitButton.addEventListener('click', () => {
+                    if (exitModalOverlay) {
+                        exitModalOverlay.classList.add('active');
+                        exitSuccess.style.display = 'none';
+                        document.querySelector('.exit-buttons').style.display = 'flex';
+                    }
+                });
+            }
+
+            // Fechar o modal ao clicar no botão de fechar
+            if (closeExitModal) {
+                closeExitModal.addEventListener('click', () => {
+                    if (exitModalOverlay) {
+                        exitModalOverlay.classList.remove('active');
+                    }
+                });
+            }
+
+            // Fechar o modal ao clicar fora dele
+            if (exitModalOverlay) {
+                exitModalOverlay.addEventListener('click', (e) => {
+                    if (e.target === exitModalOverlay) {
+                        exitModalOverlay.classList.remove('active');
+                    }
+                });
+            }
+
+            // Cancelar saída
+            if (cancelExitBtn) {
+                cancelExitBtn.addEventListener('click', () => {
+                    if (exitModalOverlay) {
+                        exitModalOverlay.classList.remove('active');
+                    }
+                });
+            }
+
+            // Confirmar saída
+            if (confirmExitBtn) {
+                confirmExitBtn.addEventListener('click', () => {
+                    document.querySelector('.exit-buttons').style.display = 'none';
+                    exitSuccess.style.display = 'flex';
+
+                    // Redirecionar após mostrar o sucesso
+                    setTimeout(() => {
+                        window.location.href = 'login.html'; // Ajuste para a URL correta
+                    }, 2000);
+                });
+            }
+        </script>
 </body>
 
 <!-- Botão de WhatsApp -->
 <div class="whatsapp-btn hidden" id="whatsappBtn">
     <svg class="whatsapp-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-        <path d="M16.988 15.936l-2.292-.49a.96.96 0 0 0-.91.248l-.728.744c-3.12-1.656-5.064-3.6-6.72-6.72l.744-.728a.96.96 0 0 0 .248-.91l-.49-2.292a.96.96 0 0 0-1.008-.744L4.008 5.064a.96.96 0 0 0-.744 1.008c.12 4.392 2.064 8.4 5.28 11.616 3.216 3.216 7.224 5.16 11.616 5.28a.96.96 0 0 0 1.008-.744l1.008-3.528a.96.96 0 0 0-.744-1.008z"></path>
+        <path
+            d="M16.988 15.936l-2.292-.49a.96.96 0 0 0-.91.248l-.728.744c-3.12-1.656-5.064-3.6-6.72-6.72l.744-.728a.96.96 0 0 0 .248-.91l-.49-2.292a.96.96 0 0 0-1.008-.744L4.008 5.064a.96.96 0 0 0-.744 1.008c.12 4.392 2.064 8.4 5.28 11.616 3.216 3.216 7.224 5.16 11.616 5.28a.96.96 0 0 0 1.008-.744l1.008-3.528a.96.96 0 0 0-.744-1.008z">
+        </path>
     </svg>
 </div>
 
@@ -2802,6 +3052,38 @@
         <circle cx="12" cy="12" r="10" stroke="white" stroke-width="2" fill="none"></circle>
         <text x="12" y="16" text-anchor="middle" font-size="14" fill="white" font-family="Arial">?</text>
     </svg>
+</div>
+
+<!-- Modal de Confirmação de Saída -->
+<div class="modal-overlay" id="exitModalOverlay">
+    <div class="modal exit-modal">
+        <div class="modal-header">
+            <div class="modal-title">Confirmar Saída</div>
+            <button class="close-modal" id="closeExitModal">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+        <div class="modal-body">
+            <p>Tem certeza de que deseja sair?</p>
+            <div class="exit-buttons">
+                <button class="cancel-exit-btn" id="cancelExitBtn">Cancelar</button>
+                <button class="confirm-exit-btn" id="confirmExitBtn">Sair</button>
+            </div>
+            <div class="success-message" id="exitSuccess">
+                <div class="success-icon">
+                    <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                        <circle class="checkmark-circle" cx="26" cy="26" r="25" fill="none" />
+                        <path class="checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
+                    </svg>
+                </div>
+                <p>Saída realizada com sucesso!</p>
+            </div>
+        </div>
+    </div>
 </div>
 
 </html>
