@@ -665,7 +665,7 @@
         .success-message p {
             margin-top: 20px;
             font-weight: 500;
-            color: var(--primary-dark);
+            color: var (--primary-dark);
         }
 
         .success-icon {
@@ -1566,6 +1566,14 @@
             border-color: transparent white transparent transparent;
         }
 
+        /* Ajuste para mensagens do assistente no tema escuro */
+        [data-theme="dark"] .chat-message.assistant {
+            background-color: white;
+            /* Cor de fundo contrastante */
+            color: black;
+            /* Cor do texto */
+        }
+
         .footer {
             position: fixed;
             bottom: 0;
@@ -1740,7 +1748,8 @@
             width: 90%;
             max-width: 350px;
             height: 400px;
-            background-color: var(--card-bg); /* Usar a variável do tema */
+            background-color: var(--card-bg);
+            /* Usar a variável do tema */
             border-radius: 10px;
             box-shadow: 0 5px 15px var(--shadow);
             display: none;
@@ -1751,7 +1760,8 @@
         }
 
         .chat-header {
-            background-color: var(--primary-dark); /* Usar a variável do tema */
+            background-color: var(--primary-dark);
+            /* Usar a variável do tema */
             color: white;
             padding: 15px;
             display: flex;
@@ -1763,7 +1773,8 @@
             flex-grow: 1;
             padding: 15px;
             overflow-y: auto;
-            background-color: var(--bg-secondary); /* Usar a variável do tema */
+            background-color: var(--bg-secondary);
+            /* Usar a variável do tema */
             display: flex;
             flex-direction: column;
             transition: background-color 0.3s ease;
@@ -1771,7 +1782,8 @@
 
         .chat-footer {
             padding: 10px;
-            background-color: var(--input-bg); /* Usar a variável do tema */
+            background-color: var(--input-bg);
+            /* Usar a variável do tema */
             display: flex;
             align-items: center;
             transition: background-color 0.3s ease;
@@ -1784,17 +1796,21 @@
             border-radius: 20px;
             outline: none;
             margin-right: 10px;
-            background-color: var(--input-bg); /* Usar a variável do tema */
-            color: var(--text-primary); /* Usar a variável do tema */
+            background-color: var(--input-bg);
+            /* Usar a variável do tema */
+            color: var(--text-primary);
+            /* Usar a variável do tema */
             transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         .chat-input::placeholder {
-            color: var(--text-secondary); /* Usar a variável do tema */
+            color: var(--text-secondary);
+            /* Usar a variável do tema */
         }
 
         .send-btn {
-            background-color: var(--primary-dark); /* Usar a variável do tema */
+            background-color: var(--primary-dark);
+            /* Usar a variável do tema */
             color: white;
             border: none;
             width: 40px;
@@ -1808,7 +1824,8 @@
         }
 
         .send-btn:hover {
-            background-color: var(--primary); /* Usar a variável do tema */
+            background-color: var(--primary);
+            /* Usar a variável do tema */
         }
 
         .chat-message {
@@ -1822,8 +1839,10 @@
         }
 
         .chat-message.assistant {
-            background-color: var(--card-bg); /* Usar a variável do tema */
-            color: var(--text-primary); /* Usar a variável do tema */
+            background-color: var(--card-bg);
+            /* Usar a variável do tema */
+            color: var(--text-primary);
+            /* Usar a variável do tema */
             align-self: flex-start;
             margin-right: auto;
             border-radius: 0 7.5px 7.5px 7.5px;
@@ -1845,7 +1864,6 @@
 
         .refresh-status-btn:hover {
             background: var(--primary);
-            transform: rotate(90deg);
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
         }
 
@@ -1860,43 +1878,57 @@
             height: 20px;
             object-fit: contain;
         }
+
+        /* Adicione esta animação ao seu CSS */
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .refresh-status-btn.spin {
+            animation: spin 0.5s ease-in-out;
+        }
     </style>
 </head>
 
 <body>
- <!-- Modal de Confirmação de Saída -->
- <div class="modal-overlay" id="exitModalOverlay">
-    <div class="modal exit-modal">
-        <div class="modal-header">
-            <div class="modal-title">Sair</div>
-            <div class="close-modal" id="closeExitModal">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="18" y1="6" x2="6" y2="18"></line>
-                    <line x1="6" y1="6" x2="18" y2="18"></line>
-                </svg>
-            </div>
-        </div>
-        <div class="modal-body">
-            <p>Tem certeza que deseja sair do sistema?</p>
-
-            <div class="exit-buttons">
-                <button class="cancel-exit-btn" id="cancelExitBtn">Cancelar</button>
-                <button class="confirm-exit-btn" id="confirmExitBtn">Sim, Sair</button>
-            </div>
-
-            <div class="success-message" id="exitSuccess">
-                <div class="success-icon">
-                    <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
-                        <circle class="checkmark-circle" cx="26" cy="26" r="25" fill="none" />
-                        <path class="checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
+    <!-- Modal de Confirmação de Saída -->
+    <div class="modal-overlay" id="exitModalOverlay">
+        <div class="modal exit-modal">
+            <div class="modal-header">
+                <div class="modal-title">Sair</div>
+                <div class="close-modal" id="closeExitModal">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
                     </svg>
                 </div>
-                <p>Saída realizada com sucesso!</p>
+            </div>
+            <div class="modal-body">
+                <p>Tem certeza que deseja sair do sistema?</p>
+
+                <div class="exit-buttons">
+                    <button class="cancel-exit-btn" id="cancelExitBtn">Cancelar</button>
+                    <button class="confirm-exit-btn" id="confirmExitBtn">Sim, Sair</button>
+                </div>
+
+                <div class="success-message" id="exitSuccess">
+                    <div class="success-icon">
+                        <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                            <circle class="checkmark-circle" cx="26" cy="26" r="25" fill="none" />
+                            <path class="checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
+                        </svg>
+                    </div>
+                    <p>Saída realizada com sucesso!</p>
+                </div>
             </div>
         </div>
     </div>
-</div>
     <!-- Botão de Sair -->
     <div class="exit-button" id="exitButton">
         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
@@ -2934,7 +2966,19 @@
                 const botConfig = botMap[botKey];
                 if (!botConfig) return;
 
-                // Simular uma chamada de API para verificar o status do bot
+                // Selecionar o botão de refresh
+                const refreshButton = document.querySelector(`.refresh-status-btn[onclick="refreshBotStatus('${botKey}')"]`);
+                if (refreshButton) {
+                    // Adicionar a classe de animação
+                    refreshButton.classList.add('spin');
+
+                    // Remover a classe de animação após a animação terminar
+                    setTimeout(() => {
+                        refreshButton.classList.remove('spin');
+                    }, 500); // Duração da animação (0.5s)
+                }
+
+                // Fazer uma requisição para verificar o status do bot
                 fetch(`/check-status/${botKey}`)
                     .then(response => response.json())
                     .then(data => {
@@ -2943,29 +2987,72 @@
                         // Atualizar o indicador no card
                         const cardIndicator = document.getElementById(botConfig.cardIndicator);
                         if (cardIndicator) {
-                            if (isConnected) {
-                                cardIndicator.classList.add('connected');
-                                cardIndicator.classList.remove('disconnected');
-                            } else {
-                                cardIndicator.classList.add('disconnected');
-                                cardIndicator.classList.remove('connected');
-                            }
+                            cardIndicator.classList.toggle('connected', isConnected);
+                            cardIndicator.classList.toggle('disconnected', !isConnected);
                         }
 
                         // Atualizar o indicador no modal
                         const indicator = document.getElementById(botConfig.indicator);
                         if (indicator) {
-                            if (isConnected) {
-                                indicator.classList.add('connected');
-                                indicator.classList.remove('offline');
-                            } else {
-                                indicator.classList.add('offline');
-                                indicator.classList.remove('connected');
-                            }
+                            indicator.classList.toggle('connected', isConnected);
+                            indicator.classList.toggle('offline', !isConnected);
+                        }
+
+                        // Atualizar o texto de status no modal
+                        const statusText = document.getElementById(botConfig.statusText);
+                        if (statusText) {
+                            statusText.textContent = isConnected ? "CONECTADO" : "NÃO CONECTADO";
                         }
                     })
-                    .catch(error => console.error('Erro ao atualizar status do bot:', error));
+                    .catch(error => {
+                        console.error('Erro ao atualizar status do bot:', error);
+
+                        // Atualizar para desconectado em caso de erro
+                        const cardIndicator = document.getElementById(botConfig.cardIndicator);
+                        const indicator = document.getElementById(botConfig.indicator);
+                        const statusText = document.getElementById(botConfig.statusText);
+
+                        if (cardIndicator) {
+                            cardIndicator.classList.add('disconnected');
+                            cardIndicator.classList.remove('connected');
+                        }
+                        if (indicator) {
+                            indicator.classList.add('offline');
+                            indicator.classList.remove('connected');
+                        }
+                        if (statusText) {
+                            statusText.textContent = "NÃO CONECTADO";
+                        }
+                    });
             }
+
+            // Listener para eventos de conexão/desconexão em tempo real
+            socket.on('connection-status', (data) => {
+                const botConfig = botMap[data.bot];
+                if (!botConfig) return;
+
+                const isConnected = data.connected;
+
+                // Atualizar o indicador no card
+                const cardIndicator = document.getElementById(botConfig.cardIndicator);
+                if (cardIndicator) {
+                    cardIndicator.classList.toggle('connected', isConnected);
+                    cardIndicator.classList.toggle('disconnected', !isConnected);
+                }
+
+                // Atualizar o indicador no modal
+                const indicator = document.getElementById(botConfig.indicator);
+                if (indicator) {
+                    indicator.classList.toggle('connected', isConnected);
+                    indicator.classList.toggle('offline', !isConnected);
+                }
+
+                // Atualizar o texto de status no modal
+                const statusText = document.getElementById(botConfig.statusText);
+                if (statusText) {
+                    statusText.textContent = isConnected ? "CONECTADO" : "NÃO CONECTADO";
+                }
+            });
         </script>
         <script>
             // Modal de Confirmação de Saída
@@ -3027,6 +3114,49 @@
                 });
             }
         </script>
+        <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Função para verificar o status de todos os bots
+        function checkAllBotsStatus() {
+            fetch('/all-connection-status')
+                .then(response => response.json())
+                .then(data => {
+                    Object.keys(data).forEach(botKey => {
+                        const isConnected = data[botKey];
+                        const botConfig = botMap[botKey];
+
+                        if (botConfig) {
+                            // Atualizar o indicador no card
+                            const cardIndicator = document.getElementById(botConfig.cardIndicator);
+                            if (cardIndicator) {
+                                cardIndicator.classList.toggle('connected', isConnected);
+                                cardIndicator.classList.toggle('disconnected', !isConnected);
+                            }
+
+                            // Atualizar o indicador no modal
+                            const indicator = document.getElementById(botConfig.indicator);
+                            if (indicator) {
+                                indicator.classList.toggle('connected', isConnected);
+                                indicator.classList.toggle('offline', !isConnected);
+                            }
+
+                            // Atualizar o texto de status no modal
+                            const statusText = document.getElementById(botConfig.statusText);
+                            if (statusText) {
+                                statusText.textContent = isConnected ? "CONECTADO" : "NÃO CONECTADO";
+                            }
+                        }
+                    });
+                })
+                .catch(error => {
+                    console.error('Erro ao verificar o status dos bots:', error);
+                });
+        }
+
+        // Verificar o status de todos os bots ao carregar a página
+        checkAllBotsStatus();
+    });
+</script>
 </body>
 
 <!-- Botão de WhatsApp -->

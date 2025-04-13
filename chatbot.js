@@ -106,9 +106,37 @@ app.get('/qrcode/:bot', (req, res) => {
 app.get('/all-connection-status', (req, res) => {
     const status = {};
     Object.keys(bots).forEach(botKey => {
-        status[botKey] = bots[botKey].client.info ? true : false; // Verifica se o cliente está conectado
+        const client = bots[botKey].client;
+        status[botKey] = client.info && client.info.wid ? true : false; // Verifica se o cliente está conectado
     });
     res.json(status);
+});
+
+// Rota para verificar o status de um bot específico
+app.get('/check-status/:bot', (req, res) => {
+    const botKey = req.params.bot;
+    if (bots[botKey]) {
+        const client = bots[botKey].client;
+        const isConnected = client.info && client.info.wid ? true : false; // Verifica se o cliente está conectado
+        res.json({ connected: isConnected });
+    } else {
+        res.status(404).json({ error: 'Bot não encontrado' });
+    }
+});
+
+// Emitir eventos de conexão/desconexão em tempo real
+Object.keys(bots).forEach(botKey => {
+    const bot = bots[botKey];
+
+    bot.client.on('ready', () => {
+        console.log(`Bot Conectado: ${bot.name}`);
+        io.emit('connection-status', { bot: botKey, connected: true }); // Emitir status de conexão
+    });
+
+    bot.client.on('disconnected', () => {
+        console.log(`Bot Desconectado: ${bot.name}`);
+        io.emit('connection-status', { bot: botKey, connected: false }); // Emitir status de desconexão
+    });
 });
 
 // BOT PRINCIPAL - Mantendo a lógica existente
