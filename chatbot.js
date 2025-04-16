@@ -59,6 +59,29 @@ const logConnection = (botName) => {
     });
 };
 
+// Contadores de atendimentos por bot
+const atendimentoCount = {
+    main: 0,
+    appointment: 0,
+    reschedule: 0
+};
+
+// Set para armazenar contatos já atendidos por bot (para não contar duplicado no mesmo atendimento)
+const atendidos = {
+    main: new Set(),
+    appointment: new Set(),
+    reschedule: new Set()
+};
+
+// Função para incrementar atendimento e emitir evento
+function registrarAtendimento(botKey, contato) {
+    if (!atendidos[botKey].has(contato)) {
+        atendimentoCount[botKey]++;
+        atendidos[botKey].add(contato);
+        io.emit('atendimento-update', { bot: botKey, count: atendimentoCount[botKey] });
+    }
+}
+
 // Configurar eventos para cada bot
 Object.keys(bots).forEach(botKey => {
     const bot = bots[botKey];
@@ -85,6 +108,21 @@ Object.keys(bots).forEach(botKey => {
     });
 
     bot.client.initialize();
+});
+
+Object.keys(bots).forEach(botKey => {
+    const bot = bots[botKey];
+
+    bot.client.on('ready', () => {
+        logConnection(bot.name);
+        io.emit('connection-status', { bot: botKey, connected: true });
+    });
+
+    bot.client.on('disconnected', () => {
+        // Limpar info para garantir que o status fique correto
+        if (bot.client.info) bot.client.info = null;
+        io.emit('connection-status', { bot: botKey, connected: false });
+    });
 });
 
 // Configuração das rotas
@@ -141,6 +179,9 @@ Object.keys(bots).forEach(botKey => {
 
 // BOT PRINCIPAL - Mantendo a lógica existente
 mainClient.on('message', async msg => {
+    if (msg.from.endsWith('@c.us')) {
+        registrarAtendimento('main', msg.from);
+    }
     if (msg.body.match(/(menu|Menu|dia|tarde|noite|oi|Oi|Olá|olá|ola|Ola|bom dia|Bom dia|boa tarde|Boa tarde|boa noite|Boa noite|alô|Alô|alo|Alo|ei|Ei|como vai|Como vai|tudo bem|Tudo bem|saudações|Saudações|eae|Eae|e aí|E aí|preciso de ajuda|Preciso de ajuda|atendimento|Atendimento|suporte|Suporte|começar|Começar|iniciar|Iniciar|start|Start|info|Info|ajuda|Ajuda|help|Help)/i) && msg.from.endsWith('@c.us')) {
 
         const chat = await msg.getChat();
@@ -229,6 +270,9 @@ mainClient.on('message', async msg => {
 
 // BOT DE AGENDAMENTO
 appointmentClient.on('message', async msg => {
+    if (msg.from.endsWith('@c.us')) {
+        registrarAtendimento('appointment', msg.from);
+    }
     if (msg.body.match(/(menu|Menu|dia|tarde|noite|oi|Oi|Olá|olá|ola|Ola|bom dia|Bom dia|boa tarde|Boa tarde|boa noite|Boa noite|alô|Alô|alo|Alo|ei|Ei|como vai|Como vai|tudo bem|Tudo bem|saudações|Saudações|eae|Eae|e aí|E aí|preciso de ajuda|Preciso de ajuda|atendimento|Atendimento|suporte|Suporte|começar|Começar|iniciar|Iniciar|start|Start|info|Info|ajuda|Ajuda|help|Help)/i) && msg.from.endsWith('@c.us')) {
 
         const chat = await msg.getChat();
@@ -319,6 +363,9 @@ appointmentClient.on('message', async msg => {
 
 // BOT DE CANCELAMENTO/REAGENDAMENTO
 rescheduleClient.on('message', async msg => {
+    if (msg.from.endsWith('@c.us')) {
+        registrarAtendimento('reschedule', msg.from);
+    }
     if (msg.body.match(/(menu|Menu|dia|tarde|noite|oi|Oi|Olá|olá|ola|Ola|bom dia|Bom dia|boa tarde|Boa tarde|boa noite|Boa noite|alô|Alô|alo|Alo|ei|Ei|como vai|Como vai|tudo bem|Tudo bem|saudações|Saudações|eae|Eae|e aí|E aí|preciso de ajuda|Preciso de ajuda|atendimento|Atendimento|suporte|Suporte|começar|Começar|iniciar|Iniciar|start|Start|info|Info|ajuda|Ajuda|help|Help)/i) && msg.from.endsWith('@c.us')) {
 
         const chat = await msg.getChat();
@@ -388,6 +435,11 @@ rescheduleClient.on('message', async msg => {
     }
 });
 
+// Nova rota para pegar os contadores atuais (opcional, para inicialização)
+app.get('/atendimentos', (req, res) => {
+    res.json(atendimentoCount);
+});
+
 // Socket.io para atualizações em tempo real
 io.on('connection', (socket) => {
     // Enviar QR codes existentes para o cliente
@@ -402,6 +454,72 @@ io.on('connection', (socket) => {
         // Nenhuma ação necessária aqui
     });
 });
+
+function refreshBotStatus(botKey) {
+    const botConfig = botMap[botKey];
+    if (!botConfig) return;
+
+    // Mostra "Verificando..." enquanto aguarda
+    const statusText = document.getElementById(botConfig.statusText);
+    if (statusText) statusText.textContent = "VERIFICANDO...";
+
+    // Animação do botão
+    const refreshButton = document.querySelector(`.refresh-status-btn[onclick="refreshBotStatus('${botKey}')"]`);
+    if (refreshButton) {
+        refreshButton.classList.add('spin');
+        setTimeout(() => refreshButton.classList.remove('spin'), 500);
+    }
+
+    // Delay para garantir atualização real do backend
+    setTimeout(() => {
+        fetch(`/check-status/${botKey}`)
+            .then(response => response.json())
+            .then(data => {
+                const isConnected = data.connected;
+
+                // Atualizar indicador no card
+                const cardIndicator = document.getElementById(botConfig.cardIndicator);
+                if (cardIndicator) {
+                    cardIndicator.classList.toggle('connected', isConnected);
+                    cardIndicator.classList.toggle('disconnected', !isConnected);
+                }
+
+                // Atualizar indicador no modal
+                const indicator = document.getElementById(botConfig.indicator);
+                if (indicator) {
+                    indicator.classList.toggle('connected', isConnected);
+                    indicator.classList.toggle('offline', !isConnected);
+                }
+
+                // Atualizar texto de status no modal
+                if (statusText) {
+                    statusText.textContent = isConnected ? "CONECTADO" : "NÃO CONECTADO";
+                }
+
+                // Imprimir no console
+                const botNumber = botKey === 'main' ? 1 : botKey === 'appointment' ? 2 : 3;
+                console.log(`Verificado status do Bot ${botNumber}: ${isConnected ? 'Conectado' : 'Desconectado'}`);
+            })
+            .catch(() => {
+                // Em caso de erro, marca como desconectado
+                const cardIndicator = document.getElementById(botConfig.cardIndicator);
+                const indicator = document.getElementById(botConfig.indicator);
+                if (cardIndicator) {
+                    cardIndicator.classList.add('disconnected');
+                    cardIndicator.classList.remove('connected');
+                }
+                if (indicator) {
+                    indicator.classList.add('offline');
+                    indicator.classList.remove('connected');
+                }
+                if (statusText) {
+                    statusText.textContent = "NÃO CONECTADO";
+                }
+                const botNumber = botKey === 'main' ? 1 : botKey === 'appointment' ? 2 : 3;
+                console.log(`Verificado status do Bot ${botNumber}: Desconectado`);
+            });
+    }, 1200); // 1.2s de delay para garantir atualização real
+}
 
 // Iniciar o servidor
 server.listen(port, () => {

@@ -1989,7 +1989,7 @@
                 <div class="bot-card-body">
                     <div class="bot-statistics">
                         <div class="stat-item">
-                            <div class="stat-value">0</div>
+                            <div class="stat-value" id="stat-main">0</div>
                             <div class="stat-label">Atendimentos</div>
                         </div>
                     </div>
@@ -2031,7 +2031,7 @@
                 <div class="bot-card-body">
                     <div class="bot-statistics">
                         <div class="stat-item">
-                            <div class="stat-value">0</div>
+                            <div class="stat-value" id="stat-appointment">0</div>
                             <div class="stat-label">Atendimentos</div>
                         </div>
                     </div>
@@ -2073,7 +2073,7 @@
                 <div class="bot-card-body">
                     <div class="bot-statistics">
                         <div class="stat-item">
-                            <div class="stat-value">0</div>
+                            <div class="stat-value" id="stat-reschedule">0</div>
                             <div class="stat-label">Atendimentos</div>
                         </div>
                     </div>
@@ -2966,93 +2966,67 @@
                 const botConfig = botMap[botKey];
                 if (!botConfig) return;
 
-                // Selecionar o botão de refresh
+                // Mostra "Verificando..." enquanto aguarda
+                const statusText = document.getElementById(botConfig.statusText);
+                if (statusText) statusText.textContent = "VERIFICANDO...";
+
+                // Animação do botão
                 const refreshButton = document.querySelector(`.refresh-status-btn[onclick="refreshBotStatus('${botKey}')"]`);
                 if (refreshButton) {
-                    // Adicionar a classe de animação
                     refreshButton.classList.add('spin');
-
-                    // Remover a classe de animação após a animação terminar
-                    setTimeout(() => {
-                        refreshButton.classList.remove('spin');
-                    }, 500); // Duração da animação (0.5s)
+                    setTimeout(() => refreshButton.classList.remove('spin'), 500);
                 }
 
-                // Fazer uma requisição para verificar o status do bot
-                fetch(`/check-status/${botKey}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        const isConnected = data.connected;
+                // Delay para garantir atualização real do backend
+                setTimeout(() => {
+                    fetch(`/check-status/${botKey}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            const isConnected = data.connected;
 
-                        // Atualizar o indicador no card
-                        const cardIndicator = document.getElementById(botConfig.cardIndicator);
-                        if (cardIndicator) {
-                            cardIndicator.classList.toggle('connected', isConnected);
-                            cardIndicator.classList.toggle('disconnected', !isConnected);
-                        }
+                            // Atualizar indicador no card
+                            const cardIndicator = document.getElementById(botConfig.cardIndicator);
+                            if (cardIndicator) {
+                                cardIndicator.classList.toggle('connected', isConnected);
+                                cardIndicator.classList.toggle('disconnected', !isConnected);
+                            }
 
-                        // Atualizar o indicador no modal
-                        const indicator = document.getElementById(botConfig.indicator);
-                        if (indicator) {
-                            indicator.classList.toggle('connected', isConnected);
-                            indicator.classList.toggle('offline', !isConnected);
-                        }
+                            // Atualizar indicador no modal
+                            const indicator = document.getElementById(botConfig.indicator);
+                            if (indicator) {
+                                indicator.classList.toggle('connected', isConnected);
+                                indicator.classList.toggle('offline', !isConnected);
+                            }
 
-                        // Atualizar o texto de status no modal
-                        const statusText = document.getElementById(botConfig.statusText);
-                        if (statusText) {
-                            statusText.textContent = isConnected ? "CONECTADO" : "NÃO CONECTADO";
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Erro ao atualizar status do bot:', error);
+                            // Atualizar texto de status no modal
+                            if (statusText) {
+                                statusText.textContent = isConnected ? "CONECTADO" : "NÃO CONECTADO";
+                            }
 
-                        // Atualizar para desconectado em caso de erro
-                        const cardIndicator = document.getElementById(botConfig.cardIndicator);
-                        const indicator = document.getElementById(botConfig.indicator);
-                        const statusText = document.getElementById(botConfig.statusText);
-
-                        if (cardIndicator) {
-                            cardIndicator.classList.add('disconnected');
-                            cardIndicator.classList.remove('connected');
-                        }
-                        if (indicator) {
-                            indicator.classList.add('offline');
-                            indicator.classList.remove('connected');
-                        }
-                        if (statusText) {
-                            statusText.textContent = "NÃO CONECTADO";
-                        }
-                    });
+                            // Imprimir no console
+                            const botNumber = botKey === 'main' ? 1 : botKey === 'appointment' ? 2 : 3;
+                            console.log(`Verificado status do Bot ${botNumber}: ${isConnected ? 'Conectado' : 'Desconectado'}`);
+                        })
+                        .catch(() => {
+                            // Em caso de erro, marca como desconectado
+                            const cardIndicator = document.getElementById(botConfig.cardIndicator);
+                            const indicator = document.getElementById(botConfig.indicator);
+                            if (cardIndicator) {
+                                cardIndicator.classList.add('disconnected');
+                                cardIndicator.classList.remove('connected');
+                            }
+                            if (indicator) {
+                                indicator.classList.add('offline');
+                                indicator.classList.remove('connected');
+                            }
+                            if (statusText) {
+                                statusText.textContent = "NÃO CONECTADO";
+                            }
+                            const botNumber = botKey === 'main' ? 1 : botKey === 'appointment' ? 2 : 3;
+                            console.log(`Verificado status do Bot ${botNumber}: Desconectado`);
+                        });
+                }, 1200); // 1.2s de delay para garantir atualização real
             }
-
-            // Listener para eventos de conexão/desconexão em tempo real
-            socket.on('connection-status', (data) => {
-                const botConfig = botMap[data.bot];
-                if (!botConfig) return;
-
-                const isConnected = data.connected;
-
-                // Atualizar o indicador no card
-                const cardIndicator = document.getElementById(botConfig.cardIndicator);
-                if (cardIndicator) {
-                    cardIndicator.classList.toggle('connected', isConnected);
-                    cardIndicator.classList.toggle('disconnected', !isConnected);
-                }
-
-                // Atualizar o indicador no modal
-                const indicator = document.getElementById(botConfig.indicator);
-                if (indicator) {
-                    indicator.classList.toggle('connected', isConnected);
-                    indicator.classList.toggle('offline', !isConnected);
-                }
-
-                // Atualizar o texto de status no modal
-                const statusText = document.getElementById(botConfig.statusText);
-                if (statusText) {
-                    statusText.textContent = isConnected ? "CONECTADO" : "NÃO CONECTADO";
-                }
-            });
         </script>
         <script>
             // Modal de Confirmação de Saída
@@ -3156,6 +3130,32 @@
         // Verificar o status de todos os bots ao carregar a página
         checkAllBotsStatus();
     });
+</script>
+<script>
+    // Atualizar contador de atendimentos em tempo real
+    const statMain = document.getElementById('stat-main');
+    const statAppointment = document.getElementById('stat-appointment');
+    const statReschedule = document.getElementById('stat-reschedule');
+
+    // Recebe atualizações do backend
+    if (typeof io !== 'undefined') {
+        const socket = io();
+
+        socket.on('atendimento-update', data => {
+            if (data.bot === 'main' && statMain) statMain.textContent = data.count;
+            if (data.bot === 'appointment' && statAppointment) statAppointment.textContent = data.count;
+            if (data.bot === 'reschedule' && statReschedule) statReschedule.textContent = data.count;
+        });
+
+        // Inicializa os contadores ao carregar a página
+        fetch('/atendimentos')
+            .then(res => res.json())
+            .then(data => {
+                if (statMain) statMain.textContent = data.main || 0;
+                if (statAppointment) statAppointment.textContent = data.appointment || 0;
+                if (statReschedule) statReschedule.textContent = data.reschedule || 0;
+            });
+    }
 </script>
 </body>
 
