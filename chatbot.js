@@ -1,25 +1,89 @@
+// chatbot.js (modificado)
 const qrcode = require('qrcode');
 const express = require('express');
 const { Client, Buttons, List, MessageMedia } = require('whatsapp-web.js');
 const path = require('path');
 const http = require('http');
 const socketIo = require('socket.io');
-const fs = require('fs'); // Importar o módulo fs para manipulação de arquivos
+const fs = require('fs');
+const session = require('express-session');
+const MySQLStore = require('express-mysql-session')(session);
+const bcrypt = require('bcrypt');
+const bodyParser = require('body-parser');
+
+// Importar configuração do banco de dados
+const { pool, testConnection } = require('./db/config');
+const authRoutes = require('./routes/auth');
+const { isAuthenticated } = require('./middleware/auth');
 
 const app = express();
 const server = http.createServer(app);
 const io = socketIo(server);
 const port = 3000;
 
-// Servir arquivos estáticos da pasta public
-app.use(express.static('public'));
+// Configuração do armazenamento de sessão MySQL
+const sessionStore = new MySQLStore({}, pool);
 
-// Configuração dos clientes WhatsApp
+app.use(session({
+    key: 'session_cookie_name',
+    secret: 'your_secret_key', // Substitua por uma chave secreta forte
+    store: sessionStore,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        secure: false, // Use `true` se estiver usando HTTPS
+        httpOnly: true,
+        maxAge: 1000 * 60 * 60 // 1 hora
+    }
+}));
+
+// Configuração do body-parser para lidar com formulários
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
+// Testar conexão com o banco de dados
+testConnection();
+
+// Rotas de autenticação
+app.use('/auth', authRoutes);
+
+// Rota protegida para o chatbot (index.html)
+app.get('/', isAuthenticated, (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+// Rota para o formulário de login
+app.get('/login', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'login.html'));
+});
+
+// Bloquear acesso direto a arquivos estáticos protegidos
+app.use('/public', isAuthenticated, express.static(path.join(__dirname, 'public')));
+
+// Middleware para proteger rotas
+app.use((req, res, next) => {
+    // Lista de rotas que não precisam de autenticação
+    const publicPaths = ['/login', '/auth/login', '/auth/logout'];
+
+    // Verificar se a rota é pública
+    if (publicPaths.includes(req.path) || req.path.startsWith('/css/') || req.path.startsWith('/js/')) {
+        return next();
+    }
+
+    // Verificar autenticação para outras rotas
+    if (req.session && req.session.userId) {
+        return next();
+    } else {
+        return res.redirect('/login');
+    }
+});
+
+// Configuração dos clientes WhatsApp (manter código original)
 const mainClient = new Client({ puppeteer: { headless: true }, name: 'main-bot' });
 const appointmentClient = new Client({ puppeteer: { headless: true }, name: 'appointment-bot' });
 const rescheduleClient = new Client({ puppeteer: { headless: true }, name: 'reschedule-bot' });
 
-// Objetos para armazenar estados dos bots
+// Objetos para armazenar estados dos bots (manter código original)
 const bots = {
     main: {
         client: mainClient,
@@ -38,10 +102,10 @@ const bots = {
     }
 };
 
-// Função de delay comum para todos os bots
+// Função de delay comum para todos os bots (manter código original)
 const delay = ms => new Promise(res => setTimeout(res, ms));
 
-// Função para registrar conexões no terminal e em um arquivo
+// Função para registrar conexões no terminal e em um arquivo (manter código original)
 const logConnection = (botName) => {
     const now = new Date();
     const timestamp = now.toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
@@ -59,21 +123,21 @@ const logConnection = (botName) => {
     });
 };
 
-// Contadores de atendimentos por bot
+// Contadores de atendimentos por bot (manter código original)
 const atendimentoCount = {
     main: 0,
     appointment: 0,
     reschedule: 0
 };
 
-// Set para armazenar contatos já atendidos por bot (para não contar duplicado no mesmo atendimento)
+// Set para armazenar contatos já atendidos por bot (manter código original)
 const atendidos = {
     main: new Set(),
     appointment: new Set(),
     reschedule: new Set()
 };
 
-// Função para incrementar atendimento e emitir evento
+// Função para incrementar atendimento e emitir evento (manter código original)
 function registrarAtendimento(botKey, contato) {
     if (!atendidos[botKey].has(contato)) {
         atendimentoCount[botKey]++;
@@ -82,7 +146,7 @@ function registrarAtendimento(botKey, contato) {
     }
 }
 
-// Configurar eventos para cada bot
+// Configurar eventos para cada bot (manter código original)
 Object.keys(bots).forEach(botKey => {
     const bot = bots[botKey];
 
@@ -97,7 +161,7 @@ Object.keys(bots).forEach(botKey => {
         io.emit('connection-status', { bot: botKey, connected: false }); // Emitir status de desconexão
     });
 
-    bot.client.on('qr', async (qr) => {
+    bot.client.on('qr', async(qr) => {
         try {
             bot.qrCodeData = await qrcode.toDataURL(qr);
             console.log(`QR Code do ${bot.name} gerado com sucesso`);
@@ -125,13 +189,8 @@ Object.keys(bots).forEach(botKey => {
     });
 });
 
-// Configuração das rotas
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
-
-// Rota para obter o QR code de um bot específico
-app.get('/qrcode/:bot', (req, res) => {
+// Rota para obter o QR code de um bot específico (protegida)
+app.get('/qrcode/:bot', isAuthenticated, (req, res) => {
     const botKey = req.params.bot;
     if (bots[botKey] && bots[botKey].qrCodeData) {
         res.json({ qrcode: bots[botKey].qrCodeData });
@@ -140,8 +199,8 @@ app.get('/qrcode/:bot', (req, res) => {
     }
 });
 
-// Rota para obter o status de conexão de todos os bots
-app.get('/all-connection-status', (req, res) => {
+// Rota para obter o status de conexão de todos os bots (protegida)
+app.get('/all-connection-status', isAuthenticated, (req, res) => {
     const status = {};
     Object.keys(bots).forEach(botKey => {
         const client = bots[botKey].client;
@@ -150,8 +209,8 @@ app.get('/all-connection-status', (req, res) => {
     res.json(status);
 });
 
-// Rota para verificar o status de um bot específico
-app.get('/check-status/:bot', (req, res) => {
+// Rota para verificar o status de um bot específico (protegida)
+app.get('/check-status/:bot', isAuthenticated, (req, res) => {
     const botKey = req.params.bot;
     if (bots[botKey]) {
         const client = bots[botKey].client;
@@ -162,19 +221,9 @@ app.get('/check-status/:bot', (req, res) => {
     }
 });
 
-// Emitir eventos de conexão/desconexão em tempo real
-Object.keys(bots).forEach(botKey => {
-    const bot = bots[botKey];
-
-    bot.client.on('ready', () => {
-        console.log(`Bot Conectado: ${bot.name}`);
-        io.emit('connection-status', { bot: botKey, connected: true }); // Emitir status de conexão
-    });
-
-    bot.client.on('disconnected', () => {
-        console.log(`Bot Desconectado: ${bot.name}`);
-        io.emit('connection-status', { bot: botKey, connected: false }); // Emitir status de desconexão
-    });
+// Nova rota para pegar os contadores atuais (protegida)
+app.get('/atendimentos', isAuthenticated, (req, res) => {
+    res.json(atendimentoCount);
 });
 
 // BOT PRINCIPAL - Mantendo a lógica existente
@@ -435,94 +484,33 @@ rescheduleClient.on('message', async msg => {
     }
 });
 
-// Nova rota para pegar os contadores atuais (opcional, para inicialização)
-app.get('/atendimentos', (req, res) => {
-    res.json(atendimentoCount);
-});
-
 // Socket.io para atualizações em tempo real
 io.on('connection', (socket) => {
-    // Enviar QR codes existentes para o cliente
-    Object.keys(bots).forEach(botKey => {
-        if (bots[botKey].qrCodeData) {
-            socket.emit('qrcode', { bot: botKey, qrcode: bots[botKey].qrCodeData });
-        }
-    });
+    // Verificar sessão do socket
+    const session = socket.request.session;
+    if (session && session.userId) {
+        // Enviar QR codes existentes para o cliente
+        Object.keys(bots).forEach(botKey => {
+            if (bots[botKey].qrCodeData) {
+                socket.emit('qrcode', { bot: botKey, qrcode: bots[botKey].qrCodeData });
+            }
+        });
 
-    // Não exibir "Um cliente se conectou/desconectou" ao abrir o site
-    socket.on('disconnect', () => {
-        // Nenhuma ação necessária aqui
-    });
-});
+        // Enviar status atual de conexão
+        Object.keys(bots).forEach(botKey => {
+            const client = bots[botKey].client;
+            const isConnected = client.info && client.info.wid ? true : false;
+            socket.emit('connection-status', { bot: botKey, connected: isConnected });
+        });
 
-function refreshBotStatus(botKey) {
-    const botConfig = botMap[botKey];
-    if (!botConfig) return;
-
-    // Mostra "Verificando..." enquanto aguarda
-    const statusText = document.getElementById(botConfig.statusText);
-    if (statusText) statusText.textContent = "VERIFICANDO...";
-
-    // Animação do botão
-    const refreshButton = document.querySelector(`.refresh-status-btn[onclick="refreshBotStatus('${botKey}')"]`);
-    if (refreshButton) {
-        refreshButton.classList.add('spin');
-        setTimeout(() => refreshButton.classList.remove('spin'), 500);
+        // Enviar contadores atuais
+        Object.keys(atendimentoCount).forEach(botKey => {
+            socket.emit('atendimento-update', { bot: botKey, count: atendimentoCount[botKey] });
+        });
     }
-
-    // Delay para garantir atualização real do backend
-    setTimeout(() => {
-        fetch(`/check-status/${botKey}`)
-            .then(response => response.json())
-            .then(data => {
-                const isConnected = data.connected;
-
-                // Atualizar indicador no card
-                const cardIndicator = document.getElementById(botConfig.cardIndicator);
-                if (cardIndicator) {
-                    cardIndicator.classList.toggle('connected', isConnected);
-                    cardIndicator.classList.toggle('disconnected', !isConnected);
-                }
-
-                // Atualizar indicador no modal
-                const indicator = document.getElementById(botConfig.indicator);
-                if (indicator) {
-                    indicator.classList.toggle('connected', isConnected);
-                    indicator.classList.toggle('offline', !isConnected);
-                }
-
-                // Atualizar texto de status no modal
-                if (statusText) {
-                    statusText.textContent = isConnected ? "CONECTADO" : "NÃO CONECTADO";
-                }
-
-                // Imprimir no console
-                const botNumber = botKey === 'main' ? 1 : botKey === 'appointment' ? 2 : 3;
-                console.log(`Verificado status do Bot ${botNumber}: ${isConnected ? 'Conectado' : 'Desconectado'}`);
-            })
-            .catch(() => {
-                // Em caso de erro, marca como desconectado
-                const cardIndicator = document.getElementById(botConfig.cardIndicator);
-                const indicator = document.getElementById(botConfig.indicator);
-                if (cardIndicator) {
-                    cardIndicator.classList.add('disconnected');
-                    cardIndicator.classList.remove('connected');
-                }
-                if (indicator) {
-                    indicator.classList.add('offline');
-                    indicator.classList.remove('connected');
-                }
-                if (statusText) {
-                    statusText.textContent = "NÃO CONECTADO";
-                }
-                const botNumber = botKey === 'main' ? 1 : botKey === 'appointment' ? 2 : 3;
-                console.log(`Verificado status do Bot ${botNumber}: Desconectado`);
-            });
-    }, 1200); // 1.2s de delay para garantir atualização real
-}
+});
 
 // Iniciar o servidor
 server.listen(port, () => {
     console.log(`Servidor rodando em http://localhost:${port}`);
 });
-
