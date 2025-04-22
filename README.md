@@ -168,7 +168,3 @@ O sistema gerencia três bots distintos, cada um com uma função específica:
 ## **Conclusão**
 
 O **WhatsApp Chatbot** é uma solução robusta e eficiente para gerenciar múltiplos bots de atendimento no WhatsApp. Ele combina funcionalidades avançadas, como autenticação segura, monitoramento em tempo real e integração com o WhatsApp, com uma interface amigável e responsiva. O sistema é ideal para empresas que desejam automatizar e otimizar seus processos de atendimento ao cliente.
-
-## Arquivos
-* **https://drive.google.com/file/d/1AgHaBFjVmDVw9-OpwZ5LK32tqCld3_n0/view?usp=drive_link**
-

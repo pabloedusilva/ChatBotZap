@@ -113,7 +113,6 @@
             display: flex;
             /* Utiliza flexbox para alinhar ícones */
             align-items: center;
-            /* Centraliza ícones verticalmente */
             cursor: pointer;
             /* Indica que é clicável */
             transition: all 0.3s ease;
@@ -1209,6 +1208,40 @@
             /* Torna visível o ícone de erro */
             color: var(--error);
         }
+        /* Mensagem de erro */
+        
+        .error-message {
+            color: var(--error);
+            /* Vermelho */
+            font-size: 14px;
+            margin-top: 10px;
+            text-align: center;
+            opacity: 0;
+            /* Inicialmente invisível */
+            transform: translateY(20px) scale(0.95);
+            /* Começa deslocada e levemente reduzida */
+            animation: fadeBounceUp 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+            /* Animação aprimorada */
+        }
+        /* Animação de entrada aprimorada */
+        
+        @keyframes fadeBounceUp {
+            0% {
+                opacity: 0;
+                transform: translateY(20px) scale(0.95);
+                /* Posição inicial */
+            }
+            60% {
+                opacity: 1;
+                transform: translateY(-5px) scale(1.02);
+                /* Leve "bounce" para cima */
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+                /* Posição final */
+            }
+        }
     </style>
 </head>
 
@@ -1459,12 +1492,18 @@
 
             if (error === 'missing') {
                 errorMessage.innerText = 'Preencha todos os campos.';
+                errorMessage.style.display = 'block'; // Torna visível
+                errorMessage.classList.add('error-message'); // Aplica a animação
                 errorMessage.classList.add('active');
             } else if (error === 'invalid') {
                 errorMessage.innerText = 'Usuário ou senha inválidos.';
+                errorMessage.style.display = 'block'; // Torna visível
+                errorMessage.classList.add('error-message'); // Aplica a animação
                 errorMessage.classList.add('active');
             } else if (error === 'server') {
                 errorMessage.innerText = 'Erro no servidor. Tente novamente.';
+                errorMessage.style.display = 'block'; // Torna visível
+                errorMessage.classList.add('error-message'); // Aplica a animação
                 errorMessage.classList.add('active');
             }
         };
@@ -1501,7 +1540,7 @@
                     toggle.innerHTML = `
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                            <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c-7 0-11 8-11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
                             <line x1="1" y1="1" x2="23" y2="23"></line>
                         </svg>
                     `;
@@ -1530,6 +1569,8 @@
                     // Mostra mensagem de erro
                     const errorMessage = document.getElementById('errorMessage');
                     errorMessage.innerText = 'Preencha os campos corretamente.';
+                    errorMessage.style.display = 'block'; // Torna visível
+                    errorMessage.classList.add('error-message'); // Aplica a animação
                     errorMessage.classList.add('active');
                 }
             });
