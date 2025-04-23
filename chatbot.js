@@ -166,7 +166,7 @@ Object.keys(bots).forEach(botKey => {
         io.emit('connection-status', { bot: botKey, connected: false }); // Emitir status de desconexão
     });
 
-    bot.client.on('qr', async (qr) => {
+    bot.client.on('qr', async(qr) => {
         try {
             // Gera o QR Code e armazena no cache
             bot.qrCodeData = await qrcode.toDataURL(qr);
@@ -176,7 +176,7 @@ Object.keys(bots).forEach(botKey => {
             io.emit('qrcode', { bot: botKey, qrcode: bot.qrCodeData });
 
             // Configura a geração contínua de QR Codes a cada 15 segundos
-            setInterval(async () => {
+            setInterval(async() => {
                 bot.qrCodeData = await qrcode.toDataURL(qr);
                 console.log(`Novo QR Code do ${bot.name} gerado`);
                 io.emit('qrcode', { bot: botKey, qrcode: bot.qrCodeData });
@@ -242,7 +242,7 @@ app.get('/atendimentos', isAuthenticated, (req, res) => {
 });
 
 // Rota para buscar o total de usuários
-app.get('/total-users', isAuthenticated, async (req, res) => {
+app.get('/total-users', isAuthenticated, async(req, res) => {
     try {
         const [rows] = await pool.execute('SELECT COUNT(*) AS total FROM users');
         const totalUsers = rows[0].total;
@@ -254,7 +254,7 @@ app.get('/total-users', isAuthenticated, async (req, res) => {
 });
 
 // Rota para buscar usuários do banco de dados
-app.get('/users', isAuthenticated, async (req, res) => {
+app.get('/users', isAuthenticated, async(req, res) => {
     try {
         const [rows] = await pool.execute('SELECT id, username, email, whatsapp FROM users');
         res.json(rows);
@@ -265,7 +265,7 @@ app.get('/users', isAuthenticated, async (req, res) => {
 });
 
 // Rota para adicionar um novo usuário
-app.post('/users', isAuthenticated, async (req, res) => {
+app.post('/users', isAuthenticated, async(req, res) => {
     const { username, email, whatsapp, password } = req.body;
 
     if (!username || !email || !whatsapp || !password) {
@@ -274,9 +274,13 @@ app.post('/users', isAuthenticated, async (req, res) => {
 
     try {
         const [result] = await pool.execute(
-            'INSERT INTO users (username, email, whatsapp, password) VALUES (?, ?, ?, ?)',
-            [username, email, whatsapp, password]
+            'INSERT INTO users (username, email, whatsapp, password) VALUES (?, ?, ?, ?)', [username, email, whatsapp, password]
         );
+
+        // Emitir evento para atualizar o total de usuários
+        const [rows] = await pool.execute('SELECT COUNT(*) AS total FROM users');
+        io.emit('user-added', { totalUsers: rows[0].total });
+
         res.status(201).json({ message: 'Usuário criado com sucesso!', userId: result.insertId });
     } catch (error) {
         console.error('Erro ao criar usuário:', error);
@@ -285,13 +289,17 @@ app.post('/users', isAuthenticated, async (req, res) => {
 });
 
 // Rota para excluir um usuário
-app.delete('/users/:id', isAuthenticated, async (req, res) => {
+app.delete('/users/:id', isAuthenticated, async(req, res) => {
     const userId = req.params.id;
 
     try {
         const [result] = await pool.execute('DELETE FROM users WHERE id = ?', [userId]);
 
         if (result.affectedRows > 0) {
+            // Emitir evento para atualizar o total de usuários
+            const [rows] = await pool.execute('SELECT COUNT(*) AS total FROM users');
+            io.emit('user-removed', { totalUsers: rows[0].total });
+
             res.status(200).json({ message: 'Usuário excluído com sucesso!' });
         } else {
             res.status(404).json({ error: 'Usuário não encontrado.' });
@@ -305,6 +313,17 @@ app.delete('/users/:id', isAuthenticated, async (req, res) => {
 // Rota para verificar o status do servidor
 app.get('/server-status', (req, res) => {
     res.json({ status: 'online' });
+});
+
+// Rota para obter o total de usuários (protegida)
+app.get('/users/count', isAuthenticated, async(req, res) => {
+    try {
+        const [rows] = await pool.execute('SELECT COUNT(*) AS total FROM users');
+        res.status(200).json({ totalUsers: rows[0].total });
+    } catch (error) {
+        console.error('Erro ao obter o total de usuários:', error);
+        res.status(500).json({ error: 'Erro ao obter o total de usuários.' });
+    }
 });
 
 // BOT PRINCIPAL - Mantendo a lógica existente
