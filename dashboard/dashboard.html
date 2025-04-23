@@ -1167,6 +1167,120 @@
                 gap: 15px;
             }
         }
+        /* Modal de Confirmação de Usuário Excluído */
+        
+        .modal-overlay-user-deleted {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            padding: 20px;
+        }
+        
+        .modal-overlay-user-deleted.active-user-deleted {
+            display: flex;
+            opacity: 1;
+        }
+        
+        .modal-user-deleted {
+            background-color: var(--card-bg);
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            /* Mesmo tamanho do modal de "Usuário Adicionado" */
+            padding: clamp(20px, 5vw, 30px);
+            /* Mesmo preenchimento */
+            box-shadow: 0 10px 30px var(--shadow);
+            transform: scale(0.8);
+            transition: transform 0.4s ease;
+            position: relative;
+            margin: 0 auto;
+            animation: modalFadeIn 0.4s ease forwards;
+        }
+        
+        .modal-user-deleted.active-user-deleted {
+            transform: scale(1);
+        }
+        
+        .modal-header-user-deleted {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 15px;
+        }
+        
+        .modal-header-user-deleted h2 {
+            font-size: clamp(20px, 5vw, 24px);
+            /* Mesmo tamanho da fonte */
+            color: var(--text-primary);
+        }
+        
+        .modal-close-user-deleted {
+            background: none;
+            border: none;
+            font-size: clamp(20px, 5vw, 24px);
+            /* Mesmo tamanho do botão de fechar */
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+        
+        .modal-body-user-deleted {
+            margin-bottom: 25px;
+            font-size: clamp(14px, 3vw, 16px);
+            /* Mesmo tamanho do texto */
+            color: var(--text-primary);
+        }
+        
+        .modal-footer-user-deleted {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+        
+        .modal-btn-user-deleted {
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            box-shadow: 0 5px 15px rgba(18, 140, 126, 0.3);
+        }
+        
+        .modal-btn-user-deleted:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(18, 140, 126, 0.4);
+        }
+        /* Estilo para os ícones nos títulos dos modais */
+        
+        .modal-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            /* Espaço entre o ícone e o texto */
+            vertical-align: middle;
+        }
+        
+        .modal-icon img {
+            width: 24px;
+            /* Ajuste o tamanho do ícone */
+            height: 24px;
+            object-fit: contain;
+        }
     </style>
 </head>
 
@@ -1378,7 +1492,11 @@
     <div class="modal-overlay" id="userAddedModal">
         <div class="modal">
             <div class="modal-header">
-                <h2>Usuário Adicionado</h2>
+                <h2>
+                    <span class="modal-icon">
+                        <img src="/public/icons/add-user.svg" alt="Ícone de sucesso">
+                    </span> Usuário Adicionado
+                </h2>
                 <button class="modal-close" id="userAddedModalClose">&times;</button>
             </div>
             <div class="modal-body">
@@ -1386,6 +1504,26 @@
             </div>
             <div class="modal-footer">
                 <button class="modal-btn save-btn" id="userAddedModalOk">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Confirmação de Usuário Excluído -->
+    <div class="modal-overlay-user-deleted" id="userDeletedModal">
+        <div class="modal-user-deleted">
+            <div class="modal-header-user-deleted">
+                <h2>
+                    <span class="modal-icon">
+                        <img src="/public/icons/delete-user.svg" alt="Ícone de erro">
+                    </span> Usuário Excluído
+                </h2>
+                <button class="modal-close-user-deleted" id="userDeletedModalClose">&times;</button>
+            </div>
+            <div class="modal-body-user-deleted">
+                <p>O usuário foi excluído com sucesso!</p>
+            </div>
+            <div class="modal-footer-user-deleted">
+                <button class="modal-btn-user-deleted" id="userDeletedModalOk">OK</button>
             </div>
         </div>
     </div>
@@ -1508,6 +1646,11 @@
         const userAddedModalClose = document.getElementById('userAddedModalClose');
         const userAddedModalOk = document.getElementById('userAddedModalOk');
 
+        // User deleted modal elements
+        const userDeletedModalClose = document.getElementById('userDeletedModalClose');
+        const userDeletedModalOk = document.getElementById('userDeletedModalOk');
+        const userDeletedModal = document.getElementById('userDeletedModal');
+
         // Form inputs
         const userName = document.getElementById('userName');
         const userEmail = document.getElementById('userEmail');
@@ -1605,12 +1748,19 @@
             confirmCancel.addEventListener('click', closeModals);
             userAddedModalClose.addEventListener('click', closeModals);
             userAddedModalOk.addEventListener('click', closeModals);
+            userDeletedModalClose.addEventListener('click', () => {
+                userDeletedModal.classList.remove('active-user-deleted');
+            });
+            userDeletedModalOk.addEventListener('click', () => {
+                userDeletedModal.classList.remove('active-user-deleted');
+            });
 
             // Close modal when clicking outside
             window.addEventListener('click', (e) => {
                 if (e.target === userModal) closeModals();
                 if (e.target === confirmModal) closeModals();
                 if (e.target === userAddedModal) closeModals();
+                if (e.target === userDeletedModal) closeModals();
             });
 
             // Save user
@@ -1714,6 +1864,7 @@
             userModal.classList.remove('active');
             confirmModal.classList.remove('active');
             userAddedModal.classList.remove('active');
+            userDeletedModal.classList.remove('active-user-deleted');
         };
 
         // Delete user
@@ -1737,18 +1888,21 @@
 
                 if (response.ok) {
                     const result = await response.json();
-                    alert(result.message);
-                    users = users.filter(user => user.id !== userToDelete); // Remove o usuário da lista local
+
+                    // Atualizar a lista de usuários localmente
+                    users = users.filter(user => user.id !== userToDelete);
                     renderUsers(); // Atualiza a lista de usuários na interface
                     closeModals(); // Fecha o modal de confirmação
-                    userToDelete = null;
+
+                    // Exibir o modal de "Usuário Excluído com Sucesso"
+                    const userDeletedModal = document.getElementById('userDeletedModal');
+                    userDeletedModal.classList.add('active-user-deleted');
                 } else {
                     const error = await response.json();
-                    alert(error.error || 'Erro ao excluir o usuário.');
+                    console.error('Erro ao excluir usuário:', error.error || 'Erro ao excluir o usuário.');
                 }
             } catch (error) {
                 console.error('Erro ao excluir usuário:', error);
-                alert('Erro ao excluir usuário.');
             }
         };
 
