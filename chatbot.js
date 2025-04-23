@@ -57,6 +57,11 @@ app.get('/login', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'login.html'));
 });
 
+// Rota para a Dashboard
+app.get('/dashboard', isAuthenticated, (req, res) => {
+    res.sendFile(path.join(__dirname, 'dashboard', 'dashboard.html'));
+});
+
 // Bloquear acesso direto a arquivos estáticos protegidos
 app.use('/public', isAuthenticated, express.static(path.join(__dirname, 'public')));
 
@@ -161,13 +166,23 @@ Object.keys(bots).forEach(botKey => {
         io.emit('connection-status', { bot: botKey, connected: false }); // Emitir status de desconexão
     });
 
-    bot.client.on('qr', async(qr) => {
+    bot.client.on('qr', async (qr) => {
         try {
+            // Gera o QR Code e armazena no cache
             bot.qrCodeData = await qrcode.toDataURL(qr);
             console.log(`QR Code do ${bot.name} gerado com sucesso`);
+
+            // Emite o QR Code para o frontend via Socket.IO
             io.emit('qrcode', { bot: botKey, qrcode: bot.qrCodeData });
+
+            // Configura a geração contínua de QR Codes a cada 15 segundos
+            setInterval(async () => {
+                bot.qrCodeData = await qrcode.toDataURL(qr);
+                console.log(`Novo QR Code do ${bot.name} gerado`);
+                io.emit('qrcode', { bot: botKey, qrcode: bot.qrCodeData });
+            }, 13000); // 13 segundos
         } catch (err) {
-            console.error(`Erro ao gerar QR code para ${bot.name}:`, err);
+            console.error(`Erro ao gerar QR Code para ${bot.name}:`, err);
         }
     });
 
@@ -224,6 +239,23 @@ app.get('/check-status/:bot', isAuthenticated, (req, res) => {
 // Nova rota para pegar os contadores atuais (protegida)
 app.get('/atendimentos', isAuthenticated, (req, res) => {
     res.json(atendimentoCount);
+});
+
+// Rota para buscar o total de usuários
+app.get('/total-users', isAuthenticated, async (req, res) => {
+    try {
+        const [rows] = await pool.execute('SELECT COUNT(*) AS total FROM users');
+        const totalUsers = rows[0].total;
+        res.json({ total: totalUsers });
+    } catch (error) {
+        console.error('Erro ao buscar o total de usuários:', error);
+        res.status(500).json({ error: 'Erro ao buscar o total de usuários' });
+    }
+});
+
+// Rota para verificar o status do servidor
+app.get('/server-status', (req, res) => {
+    res.json({ status: 'online' });
 });
 
 // BOT PRINCIPAL - Mantendo a lógica existente

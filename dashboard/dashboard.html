@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Usuários e Bots</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Dashboard - Usuários e Bots</title>
+        <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <style>
          :root {
             --primary: #25D366;
             --primary-dark: #128C7E;
@@ -136,17 +137,20 @@
         }
         
         .sidebar-logo {
-            width: 40px;
-            height: 40px;
-            background-color: var(--primary);
-            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
-            font-weight: bold;
-            font-size: 20px;
-            animation: pulse 2s infinite;
+            background-color: var(--primary);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            overflow: hidden; /* Garante que a imagem fique dentro do container */
+        }
+
+        .sidebar-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Ajusta a imagem para preencher o container */
         }
         
         @keyframes pulse {
@@ -218,10 +222,11 @@
             gap: 10px;
             padding: 15px;
             margin: 20px 15px;
-            background-color: var(--card-bg);
             border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
+        .user-profile .user-name {
+        color: white !important;
+    }
         
         .user-avatar {
             width: 40px;
@@ -1161,200 +1166,226 @@
             }
         }
     </style>
-</head>
+    </head>
 
-<body>
-    <!-- Sidebar Overlay -->
-    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <body>
+        <!-- Sidebar Overlay -->
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-    <!-- Sidebar Navigation -->
-    <aside class="sidebar" id="sidebar">
-        <div class="sidebar-header">
-            <div class="sidebar-logo-container">
-                <div class="sidebar-logo">D</div>
-                <div class="sidebar-title">Dashboard</div>
-            </div>
-            <button class="sidebar-close" id="sidebarClose">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-        <div class="sidebar-menu">
-            <a href="#" class="menu-item active" data-section="users-section">
-                <i class="fas fa-users"></i>
-                <span>Usuários</span>
-            </a>
-            <a href="#" class="menu-item" data-section="reports-section">
-                <i class="fas fa-robot"></i>
-                <span>Relatórios de Bots</span>
-            </a>
-        </div>
-        <!-- Perfil do Usuário -->
-        <div class="user-profile">
-            <div class="user-avatar">A</div>
-            <div class="user-info">
-                <div class="user-name">Admin</div>
-            </div>
-        </div>
-        <div class="sidebar-footer">
-            <!-- Botão de Sair -->
-            <div class="exit-button" id="exitButton">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-                    <polyline points="16 17 21 12 16 7"></polyline>
-                    <line x1="21" y1="12" x2="9" y2="12"></line>
-                </svg>
-                <span>Sair</span>
-            </div>
-        </div>
-    </aside>
-
-    <!-- Main Content -->
-    <main class="main-content">
-        <!-- Header -->
-        <header class="header">
-            <div class="header-left">
-                <button class="menu-toggle" id="menuToggle">
-                    <i class="fas fa-bars"></i>
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo-container">
+                    <div class="sidebar-logo">
+                        <img src="/public/imagens/logo.png" alt="Logo">
+                    </div>
+                    <div class="sidebar-title">Dashboard</div>
+                </div>
+                <button class="sidebar-close" id="sidebarClose">
+                    <i class="fas fa-times"></i>
                 </button>
-                <h1 class="page-title">Gerenciamento de Usuários</h1>
             </div>
-            <div class="header-right">
-                <div class="theme-toggle" id="themeToggle">
-                    <div class="theme-icon">
-                        <i class="fas fa-moon"></i>
-                    </div>
+            <div class="sidebar-menu">
+                <a href="#" class="menu-item active"
+                    data-section="users-section">
+                    <i class="fas fa-users"></i>
+                    <span>Usuários</span>
+                </a>
+                <a href="#" class="menu-item" data-section="reports-section">
+                    <i class="fas fa-robot"></i>
+                    <span>Relatórios de Bots</span>
+                </a>
+            </div>
+            <!-- Perfil do Usuário -->
+            <div class="user-profile">
+                <div class="user-avatar">A</div>
+                <div class="user-info">
+                    <div class="user-name">Admin</div>
                 </div>
             </div>
-        </header>
+            <div class="sidebar-footer">
+                <!-- Botão de Sair -->
+                <div class="exit-button" id="exitButton">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18"
+                        height="18" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path
+                            d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                        <polyline points="16 17 21 12 16 7"></polyline>
+                        <line x1="21" y1="12" x2="9" y2="12"></line>
+                    </svg>
+                    <span>Sair</span>
+                </div>
+            </div>
+        </aside>
 
-        <!-- Content -->
-        <div class="content">
-            <!-- Users Section -->
-            <div class="users-section active" id="users-section">
-                <!-- Dashboard Cards -->
-                <div class="dashboard-cards">
-                    <!-- Container de Total de Usuários -->
-                    <div class="card">
-                        <div class="card-header">
-                            <div>
-                                <div class="card-title">Total de Usuários</div>
-                                <div class="card-value" id="userCount">0</div>
-                            </div>
-                            <div class="card-icon">
-                                <i class="fas fa-users"></i>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Novo Container: Status do Servidor -->
-                    <div class="card">
-                        <div class="card-header">
-                            <div>
-                                <div class="card-title">Status do Servidor</div>
-                                <div class="card-value" id="serverStatus">Online</div>
-                            </div>
-                            <div class="card-icon">
-                                <i class="fas fa-wifi" id="serverIcon"></i>
-                            </div>
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-left">
+                    <button class="menu-toggle" id="menuToggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h1 class="page-title">Gerenciamento de Usuários</h1>
+                </div>
+                <div class="header-right">
+                    <div class="theme-toggle" id="themeToggle">
+                        <div class="theme-icon">
+                            <i class="fas fa-moon"></i>
                         </div>
                     </div>
                 </div>
+            </header>
 
-                <!-- Users Table -->
-                <div class="section-header">
-                    <h2 class="section-title">Lista de Usuários</h2>
-                    <div class="section-actions">
-                        <div class="search-bar">
-                            <i class="fas fa-search search-icon"></i>
-                            <input type="text" placeholder="Pesquisar por nome ou telefone..." id="searchInput">
-                        </div>
-                        <button class="add-user-btn" id="addUserBtn">
-                            <i class="fas fa-plus"></i>
-                            Adicionar Usuário
-                        </button>
-                    </div>
-                </div>
-                <div class="users-table">
-                    <div id="usersList">
-                        <!-- Users will be added here dynamically -->
-                        <div class="empty-state">
-                            <div class="empty-icon">
-                                <i class="fas fa-users"></i>
+            <!-- Content -->
+            <div class="content">
+                <!-- Users Section -->
+                <div class="users-section active" id="users-section">
+                    <!-- Dashboard Cards -->
+                    <div class="dashboard-cards">
+                        <!-- Container de Total de Usuários -->
+                        <div class="card">
+                            <div class="card-header">
+                                <div>
+                                    <div class="card-title">Total de
+                                        Usuários</div>
+                                    <div class="card-value"
+                                        id="userCount">0</div>
+                                    <!-- Certifique-se de que o ID é "userCount" -->
+                                </div>
+                                <div class="card-icon">
+                                    <i class="fas fa-users"></i>
+                                </div>
                             </div>
-                            <div class="empty-text">Nenhum usuário cadastrado</div>
-                            <button class="add-user-btn" id="addUserBtnEmpty">
+                        </div>
+
+                        <!-- Novo Container: Status do Servidor -->
+                        <div class="card">
+                            <div class="card-header">
+                                <div>
+                                    <div class="card-title">Status do
+                                        Servidor</div>
+                                    <div class="card-value"
+                                        id="serverStatus">offline</div>
+                                    <!-- Certifique-se de que o ID é "serverStatus" -->
+                                </div>
+                                <div class="card-icon">
+                                    <i class="fas fa-wifi"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Users Table -->
+                    <div class="section-header">
+                        <h2 class="section-title">Lista de Usuários</h2>
+                        <div class="section-actions">
+                            <div class="search-bar">
+                                <i class="fas fa-search search-icon"></i>
+                                <input type="text"
+                                    placeholder="Pesquisar por nome ou telefone..."
+                                    id="searchInput">
+                            </div>
+                            <button class="add-user-btn" id="addUserBtn">
                                 <i class="fas fa-plus"></i>
-                                Adicionar Primeiro Usuário
+                                Adicionar Usuário
                             </button>
                         </div>
                     </div>
+                    <div class="users-table">
+                        <div id="usersList">
+                            <!-- Users will be added here dynamically -->
+                            <div class="empty-state">
+                                <div class="empty-icon">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                                <div class="empty-text">Nenhum usuário
+                                    cadastrado</div>
+                                <button class="add-user-btn"
+                                    id="addUserBtnEmpty">
+                                    <i class="fas fa-plus"></i>
+                                    Adicionar Primeiro Usuário
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reports Section -->
+                <div class="reports-section" id="reports-section">
+                    <div class="section-header">
+                        <h2 class="section-title">Relatórios de Conexão dos
+                            Bots</h2>
+                    </div>
+
+                    <div class="bot-cards" id="botsList">
+                        <!-- Bot cards will be added here dynamically -->
+                    </div>
                 </div>
             </div>
+        </main>
 
-            <!-- Reports Section -->
-            <div class="reports-section" id="reports-section">
-                <div class="section-header">
-                    <h2 class="section-title">Relatórios de Conexão dos Bots</h2>
+        <!-- Add/Edit User Modal -->
+        <div class="modal-overlay" id="userModal">
+            <div class="modal">
+                <div class="modal-header">
+                    <h2 id="modalTitle">Adicionar Novo Usuário</h2>
+                    <button class="modal-close" id="modalClose">&times;</button>
                 </div>
-
-                <div class="bot-cards" id="botsList">
-                    <!-- Bot cards will be added here dynamically -->
+                <div class="modal-body">
+                    <div class="input-group">
+                        <i class="fas fa-user input-icon"></i>
+                        <input type="text" id="userName"
+                            placeholder="Nome de usuário">
+                        <label for="userName">Nome de usuário</label>
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-envelope input-icon"></i>
+                        <input type="email" id="userEmail" placeholder="E-mail">
+                        <label for="userEmail">E-mail</label>
+                    </div>
+                    <div class="input-group">
+                        <i class="fab fa-whatsapp input-icon"></i>
+                        <input type="tel" id="userWhatsApp"
+                            placeholder="WhatsApp">
+                        <label for="userWhatsApp">WhatsApp</label>
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-lock input-icon"></i>
+                        <input type="password" id="userPassword"
+                            placeholder="Senha">
+                        <label for="userPassword">Senha</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="modal-btn cancel-btn"
+                        id="cancelBtn">Cancelar</button>
+                    <button class="modal-btn save-btn"
+                        id="saveBtn">Salvar</button>
                 </div>
             </div>
         </div>
-    </main>
 
-    <!-- Add/Edit User Modal -->
-    <div class="modal-overlay" id="userModal">
-        <div class="modal">
-            <div class="modal-header">
-                <h2 id="modalTitle">Adicionar Novo Usuário</h2>
-                <button class="modal-close" id="modalClose">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="input-group">
-                    <i class="fas fa-user input-icon"></i>
-                    <input type="text" id="userName" placeholder="Nome de usuário">
-                    <label for="userName">Nome de usuário</label>
+        <!-- Confirmation Modal -->
+        <div class="modal-overlay" id="confirmModal">
+            <div class="confirm-modal">
+                <div class="confirm-icon">
+                    <i class="fas fa-exclamation"></i>
                 </div>
-                <div class="input-group">
-                    <i class="fas fa-envelope input-icon"></i>
-                    <input type="email" id="userEmail" placeholder="E-mail">
-                    <label for="userEmail">E-mail</label>
+                <p class="confirm-text">Tem certeza que deseja excluir este
+                    usuário? Esta ação não pode ser desfeita.</p>
+                <div class="modal-footer">
+                    <button class="modal-btn cancel-btn"
+                        id="confirmCancel">Cancelar</button>
+                    <button class="modal-btn save-btn" id="confirmDelete"
+                        style="background: linear-gradient(90deg, var(--error), #d32f2f);">Excluir</button>
                 </div>
-                <div class="input-group">
-                    <i class="fab fa-whatsapp input-icon"></i>
-                    <input type="tel" id="userWhatsApp" placeholder="WhatsApp">
-                    <label for="userWhatsApp">WhatsApp</label>
-                </div>
-                <div class="input-group">
-                    <i class="fas fa-lock input-icon"></i>
-                    <input type="password" id="userPassword" placeholder="Senha">
-                    <label for="userPassword">Senha</label>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="modal-btn cancel-btn" id="cancelBtn">Cancelar</button>
-                <button class="modal-btn save-btn" id="saveBtn">Salvar</button>
             </div>
         </div>
-    </div>
 
-    <!-- Confirmation Modal -->
-    <div class="modal-overlay" id="confirmModal">
-        <div class="confirm-modal">
-            <div class="confirm-icon">
-                <i class="fas fa-exclamation"></i>
-            </div>
-            <p class="confirm-text">Tem certeza que deseja excluir este usuário? Esta ação não pode ser desfeita.</p>
-            <div class="modal-footer">
-                <button class="modal-btn cancel-btn" id="confirmCancel">Cancelar</button>
-                <button class="modal-btn save-btn" id="confirmDelete" style="background: linear-gradient(90deg, var(--error), #d32f2f);">Excluir</button>
-            </div>
-        </div>
-    </div>
-
-    <script>
+        <script>
         // Sample data - in a real app, this would come from a database
         let users = [];
         let currentUserId = null;
@@ -1813,6 +1844,52 @@
         // Initialize the dashboard when the page loads
         document.addEventListener('DOMContentLoaded', initDashboard);
     </script>
-</body>
+        <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+        try {
+            // Fazer a requisição para obter o total de usuários
+            const response = await fetch('/total-users');
+            const data = await response.json();
+
+            // Atualizar o elemento com o total de usuários
+            const userCountElement = document.getElementById('userCount');
+            if (userCountElement) {
+                userCountElement.textContent = data.total;
+            }
+        } catch (error) {
+            console.error('Erro ao buscar o total de usuários:', error);
+        }
+    });
+    </script>
+        <script>
+    async function checkServerStatus() {
+        try {
+            // Fazer a requisição para verificar o status do servidor
+            const response = await fetch('/server-status');
+            const data = await response.json();
+
+            // Atualizar o elemento com o status do servidor
+            const serverStatusElement = document.getElementById('serverStatus');
+            if (serverStatusElement) {
+                serverStatusElement.textContent = data.status;
+                serverStatusElement.style.color = data.status === 'online' ? 'green' : 'red';
+            }
+        } catch (error) {
+            // Caso ocorra um erro, definir o status como offline
+            const serverStatusElement = document.getElementById('serverStatus');
+            if (serverStatusElement) {
+                serverStatusElement.textContent = 'offline';
+                serverStatusElement.style.color = 'red';
+            }
+        }
+    }
+
+    // Verificar o status do servidor a cada 5 segundos
+    setInterval(checkServerStatus, 5000);
+
+    // Verificar o status do servidor ao carregar a página
+    document.addEventListener('DOMContentLoaded', checkServerStatus);
+    </script>
+    </body>
 
 </html>

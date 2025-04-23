@@ -1302,6 +1302,13 @@
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
             /* Sombra ao clicar */
         }
+
+        /* Remove os ícones de validação padrão do navegador */
+        input[type="password"]::-webkit-validation-bubble,
+        input[type="password"]::-webkit-inner-spin-button,
+        input[type="password"]::-webkit-clear-button {
+            display: none;
+        }
     </style>
 </head>
 

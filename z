@@ -1,0 +1,9 @@
+quero que no meu index.html coloque uma rota para a dashboard no caso um botão que me redirecionapara lá funcionando com o servidor do node junto.
+
+na parte que mostra os usuarios cadastrados quero que apreça os usuarios presentes no meu banco de dados do mysql. então mude meu script do banco de dados do mysql para ele dropar o banco que tem disponivel lá e criar outro porém com as credenciais: o nome de usuario ainda será o mesmo, e a senha também (admin, admin123), ai você vai adiconar um email que será "admin@example.com" esse que ja está, e vai adicionar um numero de whatsapp, e tudo serpa conectado ou seja. aonde mostra os usuarios cadastrados irá puxar do meu banco de dados e exibir as informações da maneira que esta(no caso do estilo não é para alterar absolutamente nada)>
+
+nesses modais de adicionar Novo usuario quero que ele seja funcional então vou digitar o nome, email, whatsapp e a senha e irá adicionar mais um novo usuario e mostrar na parte de usuarios cadastrados.
+
+e o botão de excluir os usuarios especificos é para funcionar ou seja excluir tudo daquele usuario e remover o acesso.
+
+esse usuario vai funcionar igual está fncionando no banco de dados para entrar no formulário de login, então quero que seja tudo extrememente funcional como estou pedindo.
