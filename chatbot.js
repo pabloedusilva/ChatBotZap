@@ -253,6 +253,55 @@ app.get('/total-users', isAuthenticated, async (req, res) => {
     }
 });
 
+// Rota para buscar usuários do banco de dados
+app.get('/users', isAuthenticated, async (req, res) => {
+    try {
+        const [rows] = await pool.execute('SELECT id, username, email, whatsapp FROM users');
+        res.json(rows);
+    } catch (error) {
+        console.error('Erro ao buscar usuários:', error);
+        res.status(500).json({ error: 'Erro ao buscar usuários' });
+    }
+});
+
+// Rota para adicionar um novo usuário
+app.post('/users', isAuthenticated, async (req, res) => {
+    const { username, email, whatsapp, password } = req.body;
+
+    if (!username || !email || !whatsapp || !password) {
+        return res.status(400).json({ error: 'Todos os campos são obrigatórios.' });
+    }
+
+    try {
+        const [result] = await pool.execute(
+            'INSERT INTO users (username, email, whatsapp, password) VALUES (?, ?, ?, ?)',
+            [username, email, whatsapp, password]
+        );
+        res.status(201).json({ message: 'Usuário criado com sucesso!', userId: result.insertId });
+    } catch (error) {
+        console.error('Erro ao criar usuário:', error);
+        res.status(500).json({ error: 'Erro ao criar usuário.' });
+    }
+});
+
+// Rota para excluir um usuário
+app.delete('/users/:id', isAuthenticated, async (req, res) => {
+    const userId = req.params.id;
+
+    try {
+        const [result] = await pool.execute('DELETE FROM users WHERE id = ?', [userId]);
+
+        if (result.affectedRows > 0) {
+            res.status(200).json({ message: 'Usuário excluído com sucesso!' });
+        } else {
+            res.status(404).json({ error: 'Usuário não encontrado.' });
+        }
+    } catch (error) {
+        console.error('Erro ao excluir usuário:', error);
+        res.status(500).json({ error: 'Erro ao excluir usuário.' });
+    }
+});
+
 // Rota para verificar o status do servidor
 app.get('/server-status', (req, res) => {
     res.json({ status: 'online' });
