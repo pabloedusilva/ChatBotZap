@@ -1281,6 +1281,56 @@
             height: 24px;
             object-fit: contain;
         }
+        
+        .edit-profile-btn {
+            background: none;
+            border: none;
+            color: white;
+            margin-left: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+        
+        .edit-profile-btn:hover {
+            color: var(--primary);
+            transform: scale(1.1);
+        }
+        
+        .edit-profile-btn i {
+            pointer-events: none;
+        }
+        
+        .user-name {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .change-password-btn {
+            background: none;
+            border: none;
+            color: white;
+            margin-left: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: color 0.2s ease;
+        }
+        
+        .change-password-btn:hover {
+            color: #4CAF50;
+            /* Verde suave */
+        }
+        
+        .change-password-btn i {
+            pointer-events: none;
+        }
+        
+        .user-name {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
     </style>
 </head>
 
@@ -1315,7 +1365,12 @@
         <div class="user-profile">
             <div class="user-avatar">A</div>
             <div class="user-info">
-                <div class="user-name">Admin</div>
+                <div class="user-name">
+                    Admin
+                    <button class="change-password-btn" title="Alterar senha">
+                        <i class="fas fa-pencil-alt"></i>
+                    </button>
+                </div>
             </div>
         </div>
         <div class="sidebar-footer">
@@ -2005,10 +2060,10 @@
                             </div>
                         `).join('')}
                     `;
+                    }
+                } catch (error) {
+                    console.error('Erro ao renderizar usuários:', error);
                 }
-            } catch (error) {
-                console.error('Erro ao renderizar usuários:', error);
-            }
         };
 
         // Render bots list as cards
