@@ -1329,7 +1329,154 @@
         .user-name {
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 30px;
+        }
+        /* Modal de Alteração de Senha */
+        
+        .modal-overlay-password {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            padding: 20px;
+        }
+        
+        .modal-overlay-password.active {
+            display: flex;
+            opacity: 1;
+        }
+        
+        .modal-password {
+            background-color: var(--card-bg);
+            border-radius: 15px;
+            width: 90%;
+            max-width: 400px;
+            padding: clamp(20px, 5vw, 30px);
+            box-shadow: 0 10px 30px var(--shadow);
+            transform: scale(0.8);
+            transition: transform 0.4s ease;
+            position: relative;
+            animation: modalFadeIn 0.4s ease forwards;
+        }
+        
+        .modal-password.active {
+            transform: scale(1);
+        }
+        
+        .modal-header-password {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 15px;
+        }
+        
+        .modal-header-password h2 {
+            font-size: clamp(20px, 5vw, 24px);
+            color: var(--text-primary);
+        }
+        
+        .modal-close-password {
+            background: none;
+            border: none;
+            font-size: clamp(20px, 5vw, 24px);
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+        
+        .modal-body-password {
+            margin-bottom: 25px;
+        }
+        
+        .input-group-password {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        
+        .input-group-password label {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            pointer-events: none;
+            transition: all 0.3s ease;
+            font-size: clamp(13px, 3vw, 15px);
+        }
+        
+        .input-group-password input:focus+label,
+        .input-group-password input:not(:placeholder-shown)+label {
+            top: -10px;
+            left: 15px;
+            font-size: clamp(11px, 2.5vw, 12px);
+            background-color: var(--card-bg);
+            padding: 0 5px;
+            transform: translateY(0);
+        }
+        
+        .input-group-password input {
+            width: 100%;
+            padding: clamp(14px, 3vw, 16px) 15px clamp(14px, 3vw, 16px) 15px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background-color: var(--input-bg);
+            font-size: clamp(14px, 3vw, 16px);
+        }
+        
+        .input-group-password input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 211, 102, 0.2);
+        }
+        
+        .password-error {
+            display: none;
+            font-size: 12px;
+            color: var(--error);
+            margin-top: 5px;
+        }
+        
+        .password-error.active {
+            display: block;
+        }
+        
+        .modal-footer-password {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            padding-top: 15px;
+            border-top: 1px solid var(--border);
+        }
+        
+        .save-btn-password {
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-size: clamp(14px, 3vw, 16px);
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            box-shadow: 0 5px 15px rgba(18, 140, 126, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .save-btn-password:disabled {
+            background: var(--border);
+            cursor: not-allowed;
+        }
+        
+        .save-btn-password:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(18, 140, 126, 0.4);
         }
     </style>
 </head>
@@ -1579,6 +1726,30 @@
             </div>
             <div class="modal-footer-user-deleted">
                 <button class="modal-btn-user-deleted" id="userDeletedModalOk">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Alteração de Senha -->
+    <div class="modal-overlay-password" id="passwordChangeModal">
+        <div class="modal-password">
+            <div class="modal-header-password">
+                <h2>Alterar senha (Dashboard)</h2>
+                <button class="modal-close-password" id="closePasswordModal">&times;</button>
+            </div>
+            <div class="modal-body-password">
+                <div class="input-group-password">
+                    <input type="password" id="newPassword" placeholder=" " required>
+                    <label for="newPassword">Nova Senha</label>
+                </div>
+                <div class="input-group-password">
+                    <input type="password" id="confirmPassword" placeholder=" " required>
+                    <label for="confirmPassword">Confirmar Senha</label>
+                    <div class="password-error" id="passwordError">As senhas não coincidem</div>
+                </div>
+            </div>
+            <div class="modal-footer-password">
+                <button class="modal-btn-password save-btn-password" id="savePasswordBtn" disabled>Salvar</button>
             </div>
         </div>
     </div>
@@ -2244,6 +2415,53 @@
             }
         `;
         document.head.appendChild(style);
+
+        // Elementos do modal
+        const passwordChangeModal = document.getElementById('passwordChangeModal');
+        const closePasswordModal = document.getElementById('closePasswordModal');
+        const savePasswordBtn = document.getElementById('savePasswordBtn');
+        const newPassword = document.getElementById('newPassword');
+        const confirmPassword = document.getElementById('confirmPassword');
+        const passwordError = document.getElementById('passwordError');
+
+        // Abrir o modal ao clicar no ícone de lápis
+        const changePasswordBtn = document.querySelector('.change-password-btn');
+        changePasswordBtn.addEventListener('click', () => {
+            passwordChangeModal.classList.add('active');
+        });
+
+        // Fechar o modal
+        closePasswordModal.addEventListener('click', () => {
+            passwordChangeModal.classList.remove('active');
+            resetPasswordModal();
+        });
+
+        // Validar senhas
+        const validatePasswords = () => {
+            if (newPassword.value && confirmPassword.value) {
+                if (newPassword.value === confirmPassword.value) {
+                    passwordError.classList.remove('active');
+                    savePasswordBtn.disabled = false;
+                } else {
+                    passwordError.classList.add('active');
+                    savePasswordBtn.disabled = true;
+                }
+            } else {
+                savePasswordBtn.disabled = true;
+            }
+        };
+
+        // Resetar o modal
+        const resetPasswordModal = () => {
+            newPassword.value = '';
+            confirmPassword.value = '';
+            passwordError.classList.remove('active');
+            savePasswordBtn.disabled = true;
+        };
+
+        // Adicionar eventos de validação
+        newPassword.addEventListener('input', validatePasswords);
+        confirmPassword.addEventListener('input', validatePasswords);
     </script>
 </body>
 
