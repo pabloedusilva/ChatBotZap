@@ -264,6 +264,29 @@ app.get('/users', isAuthenticated, async(req, res) => {
     }
 });
 
+// Rota para buscar usuários do banco de dados com base em uma consulta
+app.get('/users/search', isAuthenticated, async(req, res) => {
+    const query = req.query.query;
+
+    if (!query) {
+        return res.status(400).json({ error: 'Parâmetro de busca não fornecido.' });
+    }
+
+    try {
+        // Buscar usuários no banco de dados com base no nome ou telefone
+        const [rows] = await pool.execute(
+            `SELECT id, username, email, whatsapp 
+             FROM users 
+             WHERE LOWER(username) LIKE ? OR whatsapp LIKE ?`, [`%${query.toLowerCase()}%`, `%${query}%`]
+        );
+
+        res.json(rows);
+    } catch (error) {
+        console.error('Erro ao buscar usuários:', error);
+        res.status(500).json({ error: 'Erro ao buscar usuários.' });
+    }
+});
+
 // Rota para adicionar um novo usuário
 app.post('/users', isAuthenticated, async(req, res) => {
     const { username, email, whatsapp, password } = req.body;

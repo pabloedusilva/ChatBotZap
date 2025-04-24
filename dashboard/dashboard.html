@@ -1907,15 +1907,60 @@
         };
 
         // Filter users by name or phone
-        const filterUsers = () => {
-            const searchTerm = searchInput.value.toLowerCase();
-            const filteredUsers = searchTerm ?
-                users.filter(user =>
-                    user.name.toLowerCase().includes(searchTerm) ||
-                    user.whatsapp.toLowerCase().includes(searchTerm)) :
-                users;
+        const filterUsers = async() => {
+                const searchTerm = searchInput.value.trim().toLowerCase();
 
-            renderUsers(filteredUsers);
+                if (searchTerm.length === 0) {
+                    renderUsers(); // Recarregar todos os usuários se o campo estiver vazio
+                    return;
+                }
+
+                try {
+                    // Fazer uma requisição ao backend para buscar usuários
+                    const response = await fetch(`/users/search?query=${encodeURIComponent(searchTerm)}`);
+                    const filteredUsers = await response.json();
+
+                    // Renderizar os usuários filtrados
+                    if (filteredUsers.length > 0) {
+                        usersList.innerHTML = `
+                        <div class="table-header">
+                            <div>Usuário</div>
+                            <div>E-mail</div>
+                            <div>WhatsApp</div>
+                            <div>Ações</div>
+                        </div>
+                        ${filteredUsers.map(user => `
+                            <div class="table-row" data-id="${user.id}">
+                                <div class="user-info">
+                                    <div class="user-avatar">${user.username.charAt(0).toUpperCase()}</div>
+                                    <div class="user-name">${user.username}</div>
+                                </div>
+                                <div class="user-email">${user.email}</div>
+                                <div class="user-phone">${user.whatsapp}</div>
+                                <div class="action-buttons">
+                                    <button class="edit-btn" onclick="openEditUserModal('${user.id}')">
+                                        <i class="fas fa-edit"></i> Editar
+                                    </button>
+                                    <button class="delete-btn" onclick="openDeleteConfirm('${user.id}')">
+                                        <i class="fas fa-trash"></i> Excluir
+                                    </button>
+                                </div>
+                            </div>
+                        `).join('')}
+                    `;
+                } else {
+                    usersList.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="empty-text">Nenhum usuário encontrado</div>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Erro ao buscar usuários:', error);
+            }
         };
 
         // Render users list
