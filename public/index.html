@@ -1842,12 +1842,12 @@
         .refresh-status-btn.spin {
             animation: spin 0.5s ease-in-out;
         }
-
+        
         .dashboard-button-container {
             text-align: center;
             margin-top: 20px;
         }
-
+        
         .dashboard-button {
             display: inline-block;
             padding: 10px 20px;
@@ -1859,7 +1859,7 @@
             font-weight: bold;
             transition: background-color 0.3s ease;
         }
-
+        
         .dashboard-button:hover {
             background-color: var(--primary-dark);
         }
@@ -2265,6 +2265,12 @@
 
         <script src="/socket.io/socket.io.js"></script>
         <script>
+            (function() {
+                var savedTheme = localStorage.getItem('theme');
+                if (savedTheme === 'dark' || savedTheme === 'light') {
+                    document.documentElement.setAttribute('data-theme', savedTheme);
+                }
+            })();
             // Inicialização do socket.io
             const socket = io.connect('http://localhost:3000'); // Altere para o URL do seu servidor
             const botStatus = {

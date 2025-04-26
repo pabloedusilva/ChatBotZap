@@ -745,6 +745,7 @@
         
         .modal-body {
             margin-bottom: 25px;
+            padding: 10px;
         }
         
         .input-group {
@@ -1243,6 +1244,7 @@
             font-size: clamp(14px, 3vw, 16px);
             /* Mesmo tamanho do texto */
             color: var(--text-primary);
+            padding: 10px;
         }
         
         .modal-footer-user-deleted {
@@ -1399,6 +1401,7 @@
         
         .modal-body-password {
             margin-bottom: 25px;
+            padding: 10px;
         }
         
         .input-group-password {
@@ -1580,6 +1583,7 @@
             color: var(--text-primary, #222);
             margin-bottom: 18px;
             margin-top: 0;
+            padding: 10px;
         }
         /* Botões do modal de saída */
         
@@ -1676,6 +1680,36 @@
                 stroke-dashoffset: 0;
             }
         }
+        
+        @media (max-width: 576px) {
+            #exitModalOverlay .exit-modal {
+                max-width: 98vw;
+                padding: 0;
+            }
+            #exitModalOverlay .modal-header,
+            #exitModalOverlay .modal-body {
+                padding: 15px;
+            }
+            #exitModalOverlay .exit-buttons {
+                flex-direction: column;
+                gap: 8px;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            #exitModalOverlay .exit-buttons {
+                flex-direction: row !important;
+                gap: 10px !important;
+                justify-content: flex-end !important;
+                align-items: center;
+            }
+            #exitModalOverlay .exit-buttons button {
+                min-width: 80px;
+                font-size: 14px;
+                padding: 8px 12px;
+            }
+        }
+        /* 
         /* Responsivo apenas para o modal de saída */
         
         @media (max-width: 576px) {
@@ -1748,7 +1782,7 @@
             box-shadow: 0 8px 32px var(--shadow, rgba(0, 0, 0, 0.15));
             max-width: 480px;
             width: 100%;
-            padding: 0;
+            padding: 10px;
             display: flex;
             flex-direction: column;
             animation: fadeInUp 0.3s;
@@ -1787,7 +1821,7 @@
         }
         
         .modal-body-edit-user {
-            padding: 24px 32px 8px 32px;
+            padding: 10px;
             display: flex;
             flex-direction: column;
             gap: 20px;
@@ -1860,6 +1894,34 @@
         
         .modal-btn-edit-user.save:hover {
             filter: brightness(0.95);
+        }
+        
+        @media (max-width: 576px) {
+            #EditUserModal {
+                padding: 10px !important;
+                box-sizing: border-box;
+            }
+            #EditUserModal>div,
+            #EditUserModal .modal-content,
+            #EditUserModal .modal-edit-user {
+                width: 100% !important;
+                max-width: 100% !important;
+                min-width: 0 !important;
+                box-sizing: border-box !important;
+                margin: 0 auto !important;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            #userAddedModal {
+                padding: 10px !important;
+                box-sizing: border-box;
+            }
+            #userAddedModal>div {
+                max-width: 100% !important;
+                width: 100% !important;
+                box-sizing: border-box;
+            }
         }
         
         .footer {
@@ -2004,6 +2066,7 @@
             margin-bottom: 25px;
             font-size: clamp(14px, 3vw, 16px);
             color: var(--text-primary);
+            padding: 10px;
         }
         
         .modal-footer-user-updated {
@@ -3052,16 +3115,38 @@ userUpdatedModalOk.addEventListener('click', closeUserUpdatedModal);
 
                 // Atualizar o elemento com o status do servidor
                 const serverStatusElement = document.getElementById('serverStatus');
+                // Corrigido: busca o ícone de wifi corretamente dentro do card
+                let wifiIcon = null;
+                if (serverStatusElement) {
+                    const cardHeader = serverStatusElement.closest('.card-header');
+                    if (cardHeader) {
+                        wifiIcon = cardHeader.querySelector('.fa-wifi');
+                    }
+                }
                 if (serverStatusElement) {
                     serverStatusElement.textContent = data.status;
-                    serverStatusElement.style.color = data.status === 'online' ? 'green' : 'red';
+                    if (data.status === 'online') {
+                        serverStatusElement.style.color = 'green';
+                        if (wifiIcon) wifiIcon.style.color = 'var(--primary)';
+                    } else {
+                        serverStatusElement.style.color = 'red';
+                        if (wifiIcon) wifiIcon.style.color = 'red';
+                    }
                 }
             } catch (error) {
                 // Caso ocorra um erro, definir o status como offline
                 const serverStatusElement = document.getElementById('serverStatus');
+                let wifiIcon = null;
+                if (serverStatusElement) {
+                    const cardHeader = serverStatusElement.closest('.card-header');
+                    if (cardHeader) {
+                        wifiIcon = cardHeader.querySelector('.fa-wifi');
+                    }
+                }
                 if (serverStatusElement) {
                     serverStatusElement.textContent = 'offline';
                     serverStatusElement.style.color = 'red';
+                    if (wifiIcon) wifiIcon.style.color = 'red';
                 }
             }
         }
