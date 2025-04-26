@@ -349,6 +349,22 @@ app.get('/users/count', isAuthenticated, async(req, res) => {
     }
 });
 
+// Rota para buscar um usuário específico (incluindo a senha)
+app.get('/users/:id', isAuthenticated, async(req, res) => {
+    const userId = req.params.id;
+    try {
+        const [rows] = await pool.execute('SELECT id, username, email, whatsapp, password FROM users WHERE id = ?', [userId]);
+        if (rows.length > 0) {
+            res.json(rows[0]);
+        } else {
+            res.status(404).json({ error: 'Usuário não encontrado.' });
+        }
+    } catch (error) {
+        console.error('Erro ao buscar usuário:', error);
+        res.status(500).json({ error: 'Erro ao buscar usuário.' });
+    }
+});
+
 // BOT PRINCIPAL - Mantendo a lógica existente
 mainClient.on('message', async msg => {
     if (msg.from.endsWith('@c.us')) {

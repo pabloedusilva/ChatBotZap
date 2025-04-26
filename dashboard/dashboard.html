@@ -1722,6 +1722,145 @@
             font-weight: 500;
             color: #fff !important;
         }
+        /* Modal de Edição de Usuário - Padronizado com o de Adicionar Usuário */
+        
+        .modal-overlay-edit-user {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.5);
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.3s;
+        }
+        
+        .modal-overlay-edit-user.active {
+            display: flex;
+        }
+        
+        .modal-edit-user {
+            background: var(--card-bg, #fff);
+            border-radius: 10px;
+            box-shadow: 0 8px 32px var(--shadow, rgba(0, 0, 0, 0.15));
+            max-width: 480px;
+            width: 100%;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            animation: fadeInUp 0.3s;
+        }
+        
+        .modal-header-edit-user {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 28px 10px 28px;
+            border-bottom: 1px solid var(--border, #e0e0e0);
+        }
+        
+        .modal-header-edit-user h2 {
+            font-size: 21px;
+            color: var(--text-primary, #333);
+            margin: 0;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+        
+        .modal-close-edit-user {
+            background: none;
+            border: none;
+            font-size: 26px;
+            color: var(--text-secondary, #666);
+            cursor: pointer;
+            transition: color 0.2s;
+            padding: 0 4px;
+            border-radius: 50%;
+        }
+        
+        .modal-close-edit-user:hover {
+            color: var(--text-primary, #333);
+            background: var(--bg-secondary, #f5f5f5);
+        }
+        
+        .modal-body-edit-user {
+            padding: 24px 32px 8px 32px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .input-group-edit-user {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        
+        .input-group-edit-user label {
+            font-size: 14px;
+            color: var(--text-secondary, #666);
+            margin-bottom: 2px;
+        }
+        
+        .input-group-edit-user input {
+            border: 1px solid var(--border, #e0e0e0);
+            border-radius: 6px;
+            background: var(--input-bg, #f0f0f0);
+            color: var(--text-primary, #333);
+            outline: none;
+            transition: border-color 0.2s;
+            height: 44px;
+            font-size: 16px;
+            padding: 0 14px;
+        }
+        
+        .input-group-edit-user input:focus {
+            border-color: var(--primary, #25D366);
+        }
+        
+        .modal-footer-edit-user {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            padding: 18px 32px 24px 32px;
+            border-top: 1px solid var(--border, #e0e0e0);
+        }
+        
+        .modal-btn-edit-user {
+            padding: 0 22px;
+            border-radius: 8px;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background 0.2s, color 0.2s;
+            height: 44px;
+            min-width: 120px;
+        }
+        
+        .modal-btn-edit-user.cancel {
+            background: var(--bg-secondary, #f5f5f5);
+            color: var(--text-secondary, #666);
+            border: 0.1px solid var(--border) !important;
+        }
+        
+        .modal-btn-edit-user.cancel:hover {
+            background: var(--border, #e0e0e0);
+        }
+        
+        .modal-btn-edit-user.save {
+            background: linear-gradient(90deg, var(--primary, #25D366) 0%, var(--primary-dark, #128C7E) 100%);
+            color: #fff;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(37, 211, 102, 0.08);
+        }
+        
+        .modal-btn-edit-user.save:hover {
+            filter: brightness(0.95);
+        }
         
         .footer {
             position: fixed;
@@ -1744,6 +1883,59 @@
                 margin-left: var(--sidebar-width);
                 width: calc(100% - var(--sidebar-width));
             }
+        }
+        
+        .input-group-edit-user {
+            position: relative;
+        }
+        
+        .input-edit-user-senha {
+            width: 100%;
+            height: 44px;
+            padding-right: 44px;
+            box-sizing: border-box;
+            border-radius: 6px;
+            border: 1px solid #e0e0e0;
+            background: #f6f6f6;
+            color: #222;
+            font-size: 16px;
+            display: block;
+        }
+        
+        .btn-visualizar-senha {
+            position: absolute;
+            right: 12px;
+            top: calc(30px);
+            height: 36px;
+            width: 36px;
+            background: none;
+            border: none;
+            padding: 0;
+            margin: 0;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #888;
+            border-radius: 50%;
+            transition: background 0.18s, color 0.18s;
+            z-index: 2;
+        }
+        
+        .btn-visualizar-senha:hover,
+        .btn-visualizar-senha:focus {
+            color: #25D366;
+        }
+        
+        #editUserPasswordIcon {
+            font-size: 1.15em;
+            transition: color 0.2s, transform 0.2s;
+        }
+        
+        .btn-visualizar-senha:hover #editUserPasswordIcon,
+        .btn-visualizar-senha:focus #editUserPasswordIcon {
+            color: #25D366;
+            transform: scale(1.1);
         }
     </style>
 </head>
@@ -2049,6 +2241,41 @@
         </div>
     </div>
 
+    <!-- Modal de Edição de Usuário -->
+    <div class="modal-overlay-edit-user" id="EditUserModal">
+        <div class="modal-edit-user">
+            <div class="modal-header-edit-user">
+                <h2><i class="fa fa-edit"></i> Editar Usuário</h2>
+                <button class="modal-close-edit-user" onclick="closeEditUserModal()">&times;</button>
+            </div>
+            <div class="modal-body-edit-user">
+                <div class="input-group-edit-user">
+                    <label for="editUserName">Nome</label>
+                    <input type="text" id="editUserName" placeholder="Nome do usuário">
+                </div>
+                <div class="input-group-edit-user">
+                    <label for="editUserEmail">E-mail</label>
+                    <input type="email" id="editUserEmail" placeholder="E-mail">
+                </div>
+                <div class="input-group-edit-user">
+                    <label for="editUserWhatsApp">WhatsApp</label>
+                    <input type="text" id="editUserWhatsApp" placeholder="WhatsApp">
+                </div>
+                <div class="input-group-edit-user">
+                    <label for="editUserPassword">Senha</label>
+                    <input type="password" id="editUserPassword" class="input-edit-user-senha" placeholder="Senha" autocomplete="off">
+                    <button type="button" class="btn-visualizar-senha" id="toggleEditUserPassword">
+                        <i class="fa fa-eye" id="editUserPasswordIcon"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="modal-footer-edit-user">
+                <button class="modal-btn-edit-user cancel" onclick="closeEditUserModal()">Cancelar</button>
+                <button class="modal-btn-edit-user save" onclick="saveEditUser()">Salvar</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Footer -->
     <div class="footer">
         By Pablo © 2025
@@ -2319,18 +2546,42 @@
         };
 
         // Open edit user modal
-        const openEditUserModal = (userId) => {
-            const user = users.find(u => u.id === userId);
-            if (user) {
-                currentUserId = user.id;
-                modalTitle.textContent = 'Editar Usuário';
-                userName.value = user.name;
-                userEmail.value = user.email;
-                userWhatsApp.value = user.whatsapp;
-                userPassword.value = '';
-                userModal.classList.add('active');
+        const openEditUserModal = async(userId) => {
+            try {
+                const response = await fetch(`/users/${userId}`);
+                if (!response.ok) throw new Error('Erro ao buscar usuário');
+                const user = await response.json();
+
+                document.getElementById('editUserName').value = user.username || '';
+                document.getElementById('editUserEmail').value = user.email || '';
+                document.getElementById('editUserWhatsApp').value = user.whatsapp || '';
+                document.getElementById('editUserPassword').value = user.password || '';
+                document.getElementById('editUserPassword').type = 'password';
+                document.getElementById('editUserPasswordIcon').className = 'fa fa-eye';
+                window.currentEditUserId = userId;
+
+                document.getElementById('EditUserModal').classList.add('active');
+            } catch (error) {
+                alert('Erro ao buscar dados do usuário.');
+                console.error(error);
             }
         };
+
+        function closeEditUserModal() {
+            document.getElementById('EditUserModal').classList.remove('active');
+        }
+
+        function saveEditUser() {
+            // Exemplo de como salvar (você pode adaptar para sua lógica)
+            const id = window.currentEditUserId;
+            const name = document.getElementById('editUserName').value;
+            const email = document.getElementById('editUserEmail').value;
+            const whatsapp = document.getElementById('editUserWhatsApp').value;
+            // Faça a requisição para salvar (AJAX/fetch)
+            // Depois feche o modal:
+            closeEditUserModal();
+            // Atualize a lista de usuários se necessário
+        }
 
         // Salvar usuário
         const saveUser = async() => {
@@ -2484,10 +2735,10 @@
         };
 
         // Render users list
-        const renderUsers = async() => {
-                try {
-                    const response = await fetch('/users');
-                    const users = await response.json();
+        const renderUsers = async () => {
+    try {
+        const response = await fetch('/users');
+        users = await response.json(); // <-- Atualiza o array global!
 
                     if (users.length === 0) {
                         usersList.innerHTML = `
@@ -2498,6 +2749,7 @@
                             <div class="empty-text">Nenhum usuário cadastrado</div>
                         </div>
                     `;
+
                     } else {
                         usersList.innerHTML = `
                         <div class="table-header">
@@ -2596,6 +2848,24 @@
         document.addEventListener('DOMContentLoaded', () => {
             initDashboard();
             renderUsers(); // Chamar a função para carregar os usuários
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const passwordInput = document.getElementById('editUserPassword');
+            const toggleBtn = document.getElementById('toggleEditUserPassword');
+            const icon = document.getElementById('editUserPasswordIcon');
+
+            if (toggleBtn && passwordInput && icon) {
+                toggleBtn.addEventListener('click', () => {
+                    if (passwordInput.type === 'password') {
+                        passwordInput.type = 'text';
+                        icon.className = 'fa fa-eye-slash';
+                    } else {
+                        passwordInput.type = 'password';
+                        icon.className = 'fa fa-eye';
+                    }
+                });
+            }
         });
     </script>
     <script>
