@@ -1979,7 +1979,7 @@
                 <p class="confirm-text">Tem certeza que deseja excluir este usuário? Esta ação não pode ser desfeita.</p>
             </div>
             <div class="modal-footer">
-                <button class="modal-btn cancel-btn" id="confirmCancel">Cancelar</button>
+                <button class="modal-btn cancel-btn" id="confirmCancelBtn">Cancelar</button>
                 <button class="modal-btn save-btn" id="confirmDelete" style="background: linear-gradient(90deg, var(--error), #d32f2f);">Excluir</button>
             </div>
         </div>
@@ -2165,7 +2165,7 @@
         // Confirmation modal elements
         const confirmModal = document.getElementById('confirmModal');
         const confirmCancel = document.getElementById('confirmCancel');
-        const confirmDelete = document.getElementById('confirmDelete');
+        const confirmCancelBtn = document.getElementById('confirmCancelBtn');
 
         // User added modal elements
         const userAddedModal = document.getElementById('userAddedModal');
@@ -2237,6 +2237,7 @@
             menuToggle.addEventListener('click', toggleSidebar);
             sidebarClose.addEventListener('click', closeSidebar);
             sidebarOverlay.addEventListener('click', closeSidebar);
+            confirmCancelBtn.addEventListener('click', closeModals);
 
             // Theme toggle
             themeToggle.addEventListener('click', () => {
