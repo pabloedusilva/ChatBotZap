@@ -1722,6 +1722,29 @@
             font-weight: 500;
             color: #fff !important;
         }
+        
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            font-size: clamp(11px, 2.5vw, 13px);
+            color: var(--text-secondary);
+            background-color: var(--bg-primary);
+            padding: 10px;
+            text-align: center;
+            z-index: 10;
+            border-top: 1px solid var(--border);
+            transition: margin-left 0.4s cubic-bezier(0.4, 0, 0.2, 1), width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        @media (min-width: 992px) {
+            .sidebar.active~.main-content~.footer,
+            .sidebar~.main-content~.footer {
+                margin-left: var(--sidebar-width);
+                width: calc(100% - var(--sidebar-width));
+            }
+        }
     </style>
 </head>
 
@@ -2024,6 +2047,11 @@
                 <button class="modal-btn-password save-btn-password" id="savePasswordBtn" disabled>Salvar</button>
             </div>
         </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        By Pablo © 2025
     </div>
 
     <script>
