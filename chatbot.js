@@ -365,6 +365,38 @@ app.get('/users/:id', isAuthenticated, async(req, res) => {
     }
 });
 
+// Rota para atualizar um usuário
+app.put('/users/:id', isAuthenticated, async(req, res) => {
+    const userId = req.params.id;
+    const { username, email, whatsapp, password } = req.body;
+
+    if (!username || !email || !whatsapp) {
+        return res.status(400).json({ error: 'Todos os campos obrigatórios devem ser preenchidos.' });
+    }
+
+    try {
+        let query, params;
+        if (password && password.trim() !== '') {
+            query = 'UPDATE users SET username = ?, email = ?, whatsapp = ?, password = ? WHERE id = ?';
+            params = [username, email, whatsapp, password, userId];
+        } else {
+            query = 'UPDATE users SET username = ?, email = ?, whatsapp = ? WHERE id = ?';
+            params = [username, email, whatsapp, userId];
+        }
+
+        const [result] = await pool.execute(query, params);
+
+        if (result.affectedRows > 0) {
+            res.status(200).json({ message: 'Usuário atualizado com sucesso!' });
+        } else {
+            res.status(404).json({ error: 'Usuário não encontrado.' });
+        }
+    } catch (error) {
+        console.error('Erro ao atualizar usuário:', error);
+        res.status(500).json({ error: 'Erro ao atualizar usuário.' });
+    }
+});
+
 // BOT PRINCIPAL - Mantendo a lógica existente
 mainClient.on('message', async msg => {
     if (msg.from.endsWith('@c.us')) {

@@ -1937,6 +1937,98 @@
             color: #25D366;
             transform: scale(1.1);
         }
+        /* Modal de Usuário Atualizado com sucesso */
+        
+        .modal-overlay-user-updated {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            padding: 20px;
+        }
+        
+        .modal-overlay-user-updated.active-user-updated {
+            display: flex;
+            opacity: 1;
+        }
+        
+        .modal-user-updated {
+            background-color: var(--card-bg);
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            padding: clamp(20px, 5vw, 30px);
+            box-shadow: 0 10px 30px var(--shadow);
+            transform: scale(0.8);
+            transition: transform 0.4s ease;
+            position: relative;
+            margin: 0 auto;
+            animation: modalFadeIn 0.4s ease forwards;
+        }
+        
+        .modal-user-updated.active-user-updated {
+            transform: scale(1);
+        }
+        
+        .modal-header-user-updated {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 15px;
+        }
+        
+        .modal-header-user-updated h2 {
+            font-size: clamp(20px, 5vw, 24px);
+            color: var(--text-primary);
+        }
+        
+        .modal-close-user-updated {
+            background: none;
+            border: none;
+            font-size: clamp(20px, 5vw, 24px);
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+        
+        .modal-body-user-updated {
+            margin-bottom: 25px;
+            font-size: clamp(14px, 3vw, 16px);
+            color: var(--text-primary);
+        }
+        
+        .modal-footer-user-updated {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+        
+        .modal-btn-user-updated {
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            box-shadow: 0 5px 15px rgba(18, 140, 126, 0.3);
+        }
+        
+        .modal-btn-user-updated:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(18, 140, 126, 0.4);
+        }
     </style>
 </head>
 
@@ -2276,6 +2368,26 @@
         </div>
     </div>
 
+    <!-- Modal de Confirmação de Usuário Atualizado -->
+    <div class="modal-overlay-user-updated" id="userUpdatedModal">
+        <div class="modal-user-updated">
+            <div class="modal-header-user-updated">
+                <h2>
+                    <span class="modal-icon">
+                    <img src="/public/icons/update.svg" alt="Ícone de sucesso">
+                </span> Usuário Atualizado
+                </h2>
+                <button class="modal-close-user-updated" id="userUpdatedModalClose">&times;</button>
+            </div>
+            <div class="modal-body-user-updated">
+                <p>O usuário foi atualizado com sucesso!</p>
+            </div>
+            <div class="modal-footer-user-updated">
+                <button class="modal-btn-user-updated" id="userUpdatedModalOk">OK</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Footer -->
     <div class="footer">
         By Pablo © 2025
@@ -2572,15 +2684,46 @@
         }
 
         function saveEditUser() {
-            // Exemplo de como salvar (você pode adaptar para sua lógica)
             const id = window.currentEditUserId;
-            const name = document.getElementById('editUserName').value;
-            const email = document.getElementById('editUserEmail').value;
-            const whatsapp = document.getElementById('editUserWhatsApp').value;
-            // Faça a requisição para salvar (AJAX/fetch)
-            // Depois feche o modal:
-            closeEditUserModal();
-            // Atualize a lista de usuários se necessário
+            const username = document.getElementById('editUserName').value.trim();
+            const email = document.getElementById('editUserEmail').value.trim();
+            const whatsapp = document.getElementById('editUserWhatsApp').value.trim();
+            const password = document.getElementById('editUserPassword').value;
+
+            if (!username || !email || !whatsapp) {
+                alert('Por favor, preencha todos os campos obrigatórios.');
+                return;
+            }
+
+            const updatedUser = {
+                username,
+                email,
+                whatsapp
+            };
+            if (password && password.trim() !== '') {
+                updatedUser.password = password;
+            }
+
+            fetch(`/users/${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(updatedUser)
+                })
+                .then(async response => {
+                    if (response.ok) {
+                        await renderUsers();
+                        closeEditUserModal();
+                        showUserUpdatedModal();
+                    } else {
+                        const error = await response.json();
+                        alert(error.error || 'Erro ao atualizar usuário.');
+                    }
+                })
+                .catch(() => {
+                    alert('Erro ao atualizar usuário.');
+                });
         }
 
         // Salvar usuário
@@ -2867,6 +3010,21 @@
                 });
             }
         });
+
+        // Referências do novo modal
+const userUpdatedModal = document.getElementById('userUpdatedModal');
+const userUpdatedModalClose = document.getElementById('userUpdatedModalClose');
+const userUpdatedModalOk = document.getElementById('userUpdatedModalOk');
+
+// Funções para abrir/fechar o modal de usuário atualizado
+function showUserUpdatedModal() {
+    userUpdatedModal.classList.add('active-user-updated');
+}
+function closeUserUpdatedModal() {
+    userUpdatedModal.classList.remove('active-user-updated');
+}
+userUpdatedModalClose.addEventListener('click', closeUserUpdatedModal);
+userUpdatedModalOk.addEventListener('click', closeUserUpdatedModal);
     </script>
     <script>
         document.addEventListener('DOMContentLoaded', async() => {
