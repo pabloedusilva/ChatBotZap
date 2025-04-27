@@ -1,0 +1,7 @@
+preste atenção!
+
+eu agora separei a dashboard do index ou seja:
+
+agora irei remover esse botão do index que me redireciona para dashboard-login(botão "ir para a dashboard), e ao invés disso esse botão agora se tornou o "icon-container" que possui nos dois formulários de login. então a dashboard eu terei acesso a ela se eu fizer login pelo dashboard-login, com isso eu não precisaria está autenticado no login principal que me redireciona para o index, para mim poder ir para o dashboard. Então agora eu somente terei acesso a dashboard se eu estiver autenticado no dashboard-login(não no login principal), entendeu, pois agora eu tipo que dividi o site, porém quero que seja muito importante que você não altere nenhuma das minhas funcionalidades.
+
+olha o que está me ocorrendo, quando eu fazia login e ia para o index, apertava o bootão de "ir para a dashbpard, fazia o login na dashboard-login, ele acessava a dashboard normalamente e ftodas as funcionalidades funcionavam perfeitamente, ou seja o banco de dados carregava os usuarios, o servidor etc, ai quando eu acesso a dashboard pelo icon-container e faço o login, as funcionalidades não funcionam, pois eu teria que está autenticado no login principal para funcionar, então por isso que eu quero fazer isso, me entregue tudo perfeito e funcionando da maneira que está.

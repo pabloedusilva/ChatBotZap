@@ -1325,13 +1325,13 @@
     </div>
 
     <div class="login-container">
-        <div class="icon-container">
-            <img src="icons/admin.svg" alt="Ícone Superior Esquerdo">
+        <div class="icon-container" id="dashboardIcon">
+            <img src="/public/icons/admin.svg" alt="Ícone Superior Esquerdo">
         </div>
         <div class="login-header">
             <div class="brand-logo">
                 <div class="logo-circle">
-                    <img src="/imagens/logo.png" alt="Logo da Empresa" class="company-logo">
+                    <img src="/public/imagens/logo.png" alt="Logo da Empresa" class="company-logo">
                 </div>
             </div>
             <h1 class="animate-slideIn">ChatBot</h1>
@@ -1655,6 +1655,14 @@
                     closeModal(); // Fecha o modal
                 }
             });
+
+            // Adiciona funcionalidade ao ícone
+            const dashboardIcon = document.getElementById('dashboardIcon');
+            if (dashboardIcon) {
+                dashboardIcon.addEventListener('click', () => {
+                    window.location.href = '/dashboard-login';
+                });
+            }
         });
     </script>
 </body>

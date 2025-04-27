@@ -19,3 +19,7 @@ CREATE TABLE users (
 -- Inserir o usuário admin com as credenciais fornecidas
 INSERT INTO users (username, password, email, whatsapp) VALUES 
 ('admin', 'admin123', 'admin@example.com', '+5511999999999');
+
+-- Usuário exclusivo para dashboard
+INSERT INTO users (username, password, email, whatsapp) VALUES 
+('pabloAdmin', 'administrador', 'dashboard@example.com', '+5511999999998');

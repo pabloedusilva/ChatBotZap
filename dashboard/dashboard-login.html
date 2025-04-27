@@ -1324,8 +1324,8 @@
     </div>
 
     <div class="login-container">
-        <div class="icon-container">
-            <img src="icons/admin.svg" alt="Ícone Superior Esquerdo">
+        <div class="icon-container" id="dashboardIcon">
+            <img src="/public/icons/home.svg" alt="Ícone Superior Esquerdo">
         </div>
         <div class="login-header">
             <div class="brand-logo">
@@ -1589,6 +1589,17 @@
                     errorMessage.classList.add('active');
                 }
             });
+        });
+
+        // Redirecionar para /login ao clicar no icon-container
+        document.addEventListener('DOMContentLoaded', () => {
+
+            const dashboardIcon = document.getElementById('dashboardIcon');
+            if (dashboardIcon) {
+                dashboardIcon.addEventListener('click', () => {
+                    window.location.href = '/login';
+                });
+            }
         });
     </script>
 </body>

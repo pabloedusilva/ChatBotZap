@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const UserModel = require('../db/users');
+const { pool } = require('../db/config');
 
 // Rota de login
 router.post('/login', async(req, res) => {
@@ -22,6 +23,31 @@ router.post('/login', async(req, res) => {
     } catch (error) {
         console.error('Erro ao fazer login:', error);
         return res.redirect('/login?error=server');
+    }
+});
+
+// Login exclusivo para dashboard
+router.post('/owner-login', async(req, res) => {
+    const { username, password } = req.body;
+    if (!username || !password) {
+        return res.redirect('/dashboard-login?error=missing');
+    }
+    try {
+        const [rows] = await pool.execute('SELECT * FROM users WHERE username = ?', [username]);
+        if (rows.length === 0) {
+            return res.redirect('/dashboard-login?error=invalid');
+        }
+        const user = rows[0];
+        // Login só é válido para o usuário pabloAdmin
+        if (user.username !== 'pabloAdmin' || user.password !== password) {
+            return res.redirect('/dashboard-login?error=invalid');
+        }
+        // Cria uma sessão exclusiva para dashboard
+        req.session.dashboardUserId = user.id;
+        res.redirect('/dashboard');
+    } catch (error) {
+        console.error(error);
+        res.redirect('/dashboard-login?error=server');
     }
 });
 

@@ -14,7 +14,8 @@ const bodyParser = require('body-parser');
 // Importar configuração do banco de dados
 const { pool, testConnection } = require('./db/config');
 const authRoutes = require('./routes/auth');
-const { isAuthenticated } = require('./middleware/auth');
+const { isAuthenticated, isDashboardAuthenticated } = require('./middleware/auth');
+
 
 const app = express();
 const server = http.createServer(app);
@@ -56,9 +57,13 @@ app.get('/', isAuthenticated, (req, res) => {
 app.get('/login', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'login.html'));
 });
+// Página de login da dashboard
+app.get('/dashboard-login', (req, res) => {
+    res.sendFile(path.join(__dirname, 'dashboard', 'dashboard-login.html'));
+});
 
-// Rota para a Dashboard
-app.get('/dashboard', isAuthenticated, (req, res) => {
+// Rota protegida para a Dashboard
+app.get('/dashboard', isDashboardAuthenticated, (req, res) => {
     res.sendFile(path.join(__dirname, 'dashboard', 'dashboard.html'));
 });
 
