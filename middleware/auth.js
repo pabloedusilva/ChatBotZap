@@ -6,11 +6,6 @@ function isAuthenticated(req, res, next) {
     return res.redirect('/login');
 }
 
-module.exports = {
-    isAuthenticated
-};
-
-// Middleware para autenticação da dashboard
 function isDashboardAuthenticated(req, res, next) {
     if (req.session && req.session.dashboardUserId) {
         return next();

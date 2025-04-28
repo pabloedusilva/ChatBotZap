@@ -26,7 +26,7 @@ router.post('/login', async(req, res) => {
     }
 });
 
-// Login exclusivo para dashboard
+// Login exclusivo para a dashboard
 router.post('/owner-login', async(req, res) => {
     const { username, password } = req.body;
     if (!username || !password) {
@@ -38,12 +38,10 @@ router.post('/owner-login', async(req, res) => {
             return res.redirect('/dashboard-login?error=invalid');
         }
         const user = rows[0];
-        // Login só é válido para o usuário pabloAdmin
         if (user.username !== 'pabloAdmin' || user.password !== password) {
             return res.redirect('/dashboard-login?error=invalid');
         }
-        // Cria uma sessão exclusiva para dashboard
-        req.session.dashboardUserId = user.id;
+        req.session.dashboardUserId = user.id; // Sessão exclusiva para a dashboard
         res.redirect('/dashboard');
     } catch (error) {
         console.error(error);

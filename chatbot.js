@@ -210,7 +210,7 @@ Object.keys(bots).forEach(botKey => {
 });
 
 // Rota para obter o QR code de um bot específico (protegida)
-app.get('/qrcode/:bot', isAuthenticated, (req, res) => {
+app.get('/qrcode/:bot', isDashboardAuthenticated, (req, res) => {
     const botKey = req.params.bot;
     if (bots[botKey] && bots[botKey].qrCodeData) {
         res.json({ qrcode: bots[botKey].qrCodeData });
@@ -220,7 +220,7 @@ app.get('/qrcode/:bot', isAuthenticated, (req, res) => {
 });
 
 // Rota para obter o status de conexão de todos os bots (protegida)
-app.get('/all-connection-status', isAuthenticated, (req, res) => {
+app.get('/all-connection-status', isDashboardAuthenticated, (req, res) => {
     const status = {};
     Object.keys(bots).forEach(botKey => {
         const client = bots[botKey].client;
@@ -230,7 +230,7 @@ app.get('/all-connection-status', isAuthenticated, (req, res) => {
 });
 
 // Rota para verificar o status de um bot específico (protegida)
-app.get('/check-status/:bot', isAuthenticated, (req, res) => {
+app.get('/check-status/:bot', isDashboardAuthenticated, (req, res) => {
     const botKey = req.params.bot;
     if (bots[botKey]) {
         const client = bots[botKey].client;
@@ -242,12 +242,40 @@ app.get('/check-status/:bot', isAuthenticated, (req, res) => {
 });
 
 // Nova rota para pegar os contadores atuais (protegida)
-app.get('/atendimentos', isAuthenticated, (req, res) => {
+app.get('/atendimentos', isDashboardAuthenticated, (req, res) => {
     res.json(atendimentoCount);
 });
 
-// Rota para buscar o total de usuários
-app.get('/total-users', isAuthenticated, async(req, res) => {
+app.post('/dashboard-update-password', isDashboardAuthenticated, async(req, res) => {
+    const { newPassword } = req.body;
+    if (!newPassword) {
+        return res.status(400).json({ error: 'Senha não informada.' });
+    }
+    try {
+        // Atualiza a senha do usuário da dashboard
+        await pool.execute('UPDATE users SET password = ? WHERE username = ?', [newPassword, 'pabloAdmin']);
+        res.json({ success: true });
+    } catch (error) {
+        res.status(500).json({ error: 'Erro ao atualizar senha.' });
+    }
+});
+
+// Rotas da dashboard (exemplo)
+app.get('/users', isDashboardAuthenticated, async(req, res) => {
+    try {
+        const [rows] = await pool.execute('SELECT id, username, email, whatsapp FROM users WHERE username != ?', ['pabloAdmin']);
+        res.json(rows);
+    } catch (error) {
+        console.error('Erro ao buscar usuários:', error);
+        res.status(500).json({ error: 'Erro ao buscar usuários' });
+    }
+});
+
+app.get('/server-status', isDashboardAuthenticated, (req, res) => {
+    res.json({ status: 'online' });
+});
+
+app.get('/total-users', isDashboardAuthenticated, async(req, res) => {
     try {
         const [rows] = await pool.execute('SELECT COUNT(*) AS total FROM users');
         const totalUsers = rows[0].total;
@@ -258,19 +286,8 @@ app.get('/total-users', isAuthenticated, async(req, res) => {
     }
 });
 
-// Rota para buscar usuários do banco de dados
-app.get('/users', isAuthenticated, async(req, res) => {
-    try {
-        const [rows] = await pool.execute('SELECT id, username, email, whatsapp FROM users');
-        res.json(rows);
-    } catch (error) {
-        console.error('Erro ao buscar usuários:', error);
-        res.status(500).json({ error: 'Erro ao buscar usuários' });
-    }
-});
-
 // Rota para buscar usuários do banco de dados com base em uma consulta
-app.get('/users/search', isAuthenticated, async(req, res) => {
+app.get('/users/search', isDashboardAuthenticated, async(req, res) => {
     const query = req.query.query;
 
     if (!query) {
@@ -282,7 +299,7 @@ app.get('/users/search', isAuthenticated, async(req, res) => {
         const [rows] = await pool.execute(
             `SELECT id, username, email, whatsapp 
              FROM users 
-             WHERE LOWER(username) LIKE ? OR whatsapp LIKE ?`, [`%${query.toLowerCase()}%`, `%${query}%`]
+             WHERE (LOWER(username) LIKE ? OR whatsapp LIKE ?) AND username != ?`, [`%${query.toLowerCase()}%`, `%${query}%`, 'pabloAdmin']
         );
 
         res.json(rows);
@@ -293,7 +310,7 @@ app.get('/users/search', isAuthenticated, async(req, res) => {
 });
 
 // Rota para adicionar um novo usuário
-app.post('/users', isAuthenticated, async(req, res) => {
+app.post('/users', isDashboardAuthenticated, async(req, res) => {
     const { username, email, whatsapp, password } = req.body;
 
     if (!username || !email || !whatsapp || !password) {
@@ -306,7 +323,7 @@ app.post('/users', isAuthenticated, async(req, res) => {
         );
 
         // Emitir evento para atualizar o total de usuários
-        const [rows] = await pool.execute('SELECT COUNT(*) AS total FROM users');
+        const [rows] = await pool.execute('SELECT COUNT(*) AS total FROM users WHERE username != ?', ['pabloAdmin']);
         io.emit('user-added', { totalUsers: rows[0].total });
 
         res.status(201).json({ message: 'Usuário criado com sucesso!', userId: result.insertId });
@@ -317,7 +334,7 @@ app.post('/users', isAuthenticated, async(req, res) => {
 });
 
 // Rota para excluir um usuário
-app.delete('/users/:id', isAuthenticated, async(req, res) => {
+app.delete('/users/:id', isDashboardAuthenticated, async(req, res) => {
     const userId = req.params.id;
 
     try {
@@ -339,12 +356,12 @@ app.delete('/users/:id', isAuthenticated, async(req, res) => {
 });
 
 // Rota para verificar o status do servidor
-app.get('/server-status', (req, res) => {
+app.get('/server-status', isDashboardAuthenticated, (req, res) => {
     res.json({ status: 'online' });
 });
 
 // Rota para obter o total de usuários (protegida)
-app.get('/users/count', isAuthenticated, async(req, res) => {
+app.get('/users/count', isDashboardAuthenticated, async(req, res) => {
     try {
         const [rows] = await pool.execute('SELECT COUNT(*) AS total FROM users');
         res.status(200).json({ totalUsers: rows[0].total });
@@ -355,7 +372,7 @@ app.get('/users/count', isAuthenticated, async(req, res) => {
 });
 
 // Rota para buscar um usuário específico (incluindo a senha)
-app.get('/users/:id', isAuthenticated, async(req, res) => {
+app.get('/users/:id', isDashboardAuthenticated, async(req, res) => {
     const userId = req.params.id;
     try {
         const [rows] = await pool.execute('SELECT id, username, email, whatsapp, password FROM users WHERE id = ?', [userId]);
@@ -371,7 +388,7 @@ app.get('/users/:id', isAuthenticated, async(req, res) => {
 });
 
 // Rota para atualizar um usuário
-app.put('/users/:id', isAuthenticated, async(req, res) => {
+app.put('/users/:id', isDashboardAuthenticated, async(req, res) => {
     const userId = req.params.id;
     const { username, email, whatsapp, password } = req.body;
 

@@ -1292,10 +1292,7 @@
         }
         
         .icon-container:hover {
-            background-color: rgba(255, 255, 255, 0.1);
-            /* Cor de fundo ao passar o mouse */
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            /* Sombra ao passar o mouse */
+            transform: scale(1.10);
         }
         
         .icon-container:active {
@@ -1590,14 +1587,14 @@
                 }
             });
         });
-
-        // Redirecionar para /login ao clicar no icon-container
         document.addEventListener('DOMContentLoaded', () => {
+            // ...existing code...
 
+            // Redireciona para o index ao clicar no ícone superior esquerdo
             const dashboardIcon = document.getElementById('dashboardIcon');
             if (dashboardIcon) {
                 dashboardIcon.addEventListener('click', () => {
-                    window.location.href = '/login';
+                    window.location.href = '/';
                 });
             }
         });

@@ -1843,20 +1843,49 @@
             animation: spin 0.5s ease-in-out;
         }
         
-        .dashboard-button {
-            display: inline-block;
-            padding: 10px 20px;
-            background-color: var(--primary);
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            font-size: 16px;
-            font-weight: bold;
-            transition: background-color 0.3s ease;
+        .dashboard-btn {
+            position: fixed;
+            right: 15px;
+            bottom: 170px;
+            /* Acima do WhatsApp e Info */
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #128C7E;
+            /* Cor do WhatsApp/dash */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            z-index: 999;
+            transition: all 0.3s ease;
         }
         
-        .dashboard-button:hover {
-            background-color: var(--primary-dark);
+        .dashboard-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+            background-color: #25D366;
+        }
+        
+        .dashboard-icon {
+            width: 24px;
+            height: 24px;
+            fill: white;
+        }
+        
+        .hidden {
+            opacity: 0;
+            transform: translateY(40px);
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+        
+        .visible {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+            transition: all 0.3s ease;
         }
     </style>
 </head>
@@ -1915,11 +1944,6 @@
         <div class="header">
             <h1>Bem-vindo ao WhatsApp Chatbot</h1>
             <p>Gerencie seus bots de forma eficiente.</p>
-        </div>
-
-        <!-- Botão para redirecionar para a Dashboard -->
-        <div class="dashboard-button-container">
-            <a href="/dashboard-login" class="dashboard-button">Ir para a Dashboard</a>
         </div>
     </div>
 
@@ -2320,6 +2344,7 @@
                 const themeIcon = document.querySelector('.theme-icon');
                 if (newTheme === 'dark') {
                     themeIcon.innerHTML = `
+
     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="12" cy="12" r="5"></circle>
         <line x1="12" y1="1" x2="12" y2="3"></line>
@@ -2910,30 +2935,39 @@
                 const toggleBtn = document.getElementById('toggleBtn');
                 const whatsappBtn = document.getElementById('whatsappBtn');
                 const infoButton = document.getElementById('infoButton');
+                const dashboardBtn = document.getElementById('dashboardBtn');
 
-                let buttonsVisible = false; // Estado inicial: botões escondidos
+                let buttonsVisible = false;
 
                 toggleBtn.addEventListener('click', () => {
-                    buttonsVisible = !buttonsVisible; // Alternar estado
+                    buttonsVisible = !buttonsVisible;
 
                     if (buttonsVisible) {
-                        // Mostrar botões com animação de baixo para cima
                         whatsappBtn.classList.remove('hidden');
                         whatsappBtn.classList.add('visible');
                         infoButton.classList.remove('hidden');
                         infoButton.classList.add('visible');
+                        dashboardBtn.classList.remove('hidden');
+                        dashboardBtn.classList.add('visible');
                     } else {
-                        // Esconder botões com animação para baixo
                         whatsappBtn.classList.remove('visible');
                         whatsappBtn.classList.add('hidden');
                         infoButton.classList.remove('visible');
                         infoButton.classList.add('hidden');
+                        dashboardBtn.classList.remove('visible');
+                        dashboardBtn.classList.add('hidden');
                     }
                 });
 
                 // Esconder os botões inicialmente
                 whatsappBtn.classList.add('hidden');
                 infoButton.classList.add('hidden');
+                dashboardBtn.classList.add('hidden');
+
+                // Clique no botão dashboard
+                dashboardBtn.addEventListener('click', () => {
+                    window.location.href = '/dashboard-login';
+                });
             });
         </script>
         <script>
@@ -3140,6 +3174,12 @@
             }
         </script>
 </body>
+<!-- Botão de Dashboard -->
+<div class="dashboard-btn hidden" id="dashboardBtn" title="Ir para a Dashboard">
+    <svg class="dashboard-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z" fill="white"/>
+    </svg>
+</div>
 
 <!-- Botão de WhatsApp -->
 <div class="whatsapp-btn hidden" id="whatsappBtn">

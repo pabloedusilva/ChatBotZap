@@ -2154,10 +2154,10 @@
         </div>
         <!-- Perfil do Usuário -->
         <div class="user-profile">
-            <div class="user-avatar">A</div>
+            <div class="user-avatar" id="userAvatar">A</div>
             <div class="user-info">
                 <div class="user-name">
-                    Admin
+                    <span id="userName">Admin</span>
                     <button class="change-password-btn" title="Alterar senha">
                         <i class="fas fa-pencil-alt"></i>
                     </button>
@@ -2394,6 +2394,13 @@
             <div class="modal-footer-password">
                 <button class="modal-btn-password save-btn-password" id="savePasswordBtn" disabled>Salvar</button>
             </div>
+        </div>
+    </div>
+
+    <!-- Modal de sucesso -->
+    <div id="passwordUpdatedModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <h2>Senha atualizada com sucesso!</h2>
         </div>
     </div>
 
@@ -3323,6 +3330,116 @@ userUpdatedModalOk.addEventListener('click', closeUserUpdatedModal);
                 }, 1200);
             });
         }
+
+        document.addEventListener('DOMContentLoaded', async() => {
+            try {
+                const response = await fetch('/dashboard-user');
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.username) {
+                        document.getElementById('userName').textContent = data.username;
+                        document.getElementById('userAvatar').textContent = data.username.charAt(0).toUpperCase();
+                    }
+                }
+            } catch (error) {
+                // Se der erro, mantém o padrão
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Elementos do modal
+            const changePasswordBtn = document.querySelector('.change-password-btn');
+            const passwordChangeModal = document.getElementById('passwordChangeModal');
+            const closePasswordModal = document.getElementById('closePasswordModal');
+            const newPasswordInput = document.getElementById('newPassword');
+            const confirmPasswordInput = document.getElementById('confirmPassword');
+            const savePasswordBtn = document.getElementById('savePasswordBtn');
+            const passwordError = document.getElementById('passwordError');
+
+            // Modal de sucesso (baseado nos outros modais da dashboard)
+            let passwordUpdatedModal = document.getElementById('passwordUpdatedModal');
+            if (!passwordUpdatedModal) {
+                passwordUpdatedModal = document.createElement('div');
+                passwordUpdatedModal.id = 'passwordUpdatedModal';
+                passwordUpdatedModal.className = 'modal-overlay-password';
+                passwordUpdatedModal.innerHTML = `
+            <div class="modal-password">
+                <div class="modal-header-password">
+                    <h2>Senha atualizada com sucesso!</h2>
+                </div>
+            </div>
+        `;
+                document.body.appendChild(passwordUpdatedModal);
+            }
+
+            // Abrir modal ao clicar no lápis
+            if (changePasswordBtn) {
+                changePasswordBtn.addEventListener('click', () => {
+                    passwordChangeModal.style.display = 'flex';
+                    newPasswordInput.value = '';
+                    confirmPasswordInput.value = '';
+                    savePasswordBtn.disabled = true;
+                    passwordError.style.display = 'none';
+                });
+            }
+
+            // Fechar modal
+            if (closePasswordModal) {
+                closePasswordModal.addEventListener('click', () => {
+                    passwordChangeModal.style.display = 'none';
+                });
+            }
+
+            // Fechar modal ao clicar fora
+            window.addEventListener('click', (event) => {
+                if (event.target === passwordChangeModal) {
+                    passwordChangeModal.style.display = 'none';
+                }
+                if (event.target === passwordUpdatedModal) {
+                    passwordUpdatedModal.style.display = 'none';
+                }
+            });
+
+            // Validação das senhas
+            function validatePasswords() {
+                const newPassword = newPasswordInput.value;
+                const confirmPassword = confirmPasswordInput.value;
+                const valid = newPassword && confirmPassword && newPassword === confirmPassword && newPassword.length >= 4;
+                savePasswordBtn.disabled = !valid;
+                passwordError.style.display = (newPassword && confirmPassword && newPassword !== confirmPassword) ? 'block' : 'none';
+            }
+            newPasswordInput.addEventListener('input', validatePasswords);
+            confirmPasswordInput.addEventListener('input', validatePasswords);
+
+            // Submeter alteração de senha
+            savePasswordBtn.addEventListener('click', async(e) => {
+                e.preventDefault();
+                savePasswordBtn.disabled = true;
+                try {
+                    const response = await fetch('/dashboard-update-password', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            newPassword: newPasswordInput.value
+                        })
+                    });
+                    if (response.ok) {
+                        passwordChangeModal.style.display = 'none';
+                        passwordUpdatedModal.style.display = 'flex';
+                        setTimeout(() => {
+                            passwordUpdatedModal.style.display = 'none';
+                        }, 2000);
+                    } else {
+                        alert('Erro ao atualizar senha.');
+                    }
+                } catch {
+                    alert('Erro ao atualizar senha.');
+                }
+                savePasswordBtn.disabled = false;
+            });
+        });
     </script>
 </body>
 

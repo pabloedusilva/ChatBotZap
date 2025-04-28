@@ -1244,66 +1244,6 @@
                 /* Posição final */
             }
         }
-        
-        .icon-container {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            /* Camada superior */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 50px;
-            height: 50px;
-            /* Fundo do ícone */
-            border-radius: 50%;
-            /* Bordas arredondadas */
-            cursor: pointer;
-            /* Indica que é clicável */
-        }
-        
-        .icon-container img {
-            width: 24px;
-            height: 24px;
-            object-fit: contain;
-        }
-        
-        .icon-container {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
-            /* Fundo do ícone */
-            border-radius: 50%;
-            /* Bordas arredondadas */
-            /* Sombra */
-            cursor: pointer;
-            /* Indica que é clicável */
-        }
-        
-        .icon-container img {
-            width: 24px;
-            height: 24px;
-            object-fit: contain;
-        }
-        
-        .icon-container:hover {
-            background-color: rgba(255, 255, 255, 0.1);
-            /* Cor de fundo ao passar o mouse */
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            /* Sombra ao passar o mouse */
-        }
-        
-        .icon-container:active {
-            transform: scale(0.95);
-            /* Efeito de clique */
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-            /* Sombra ao clicar */
-        }
         /* Remove os ícones de validação padrão do navegador */
         
         input[type="password"]::-webkit-validation-bubble,
@@ -1325,9 +1265,6 @@
     </div>
 
     <div class="login-container">
-        <div class="icon-container" id="dashboardIcon">
-            <img src="/public/icons/admin.svg" alt="Ícone Superior Esquerdo">
-        </div>
         <div class="login-header">
             <div class="brand-logo">
                 <div class="logo-circle">
@@ -1655,14 +1592,6 @@
                     closeModal(); // Fecha o modal
                 }
             });
-
-            // Adiciona funcionalidade ao ícone
-            const dashboardIcon = document.getElementById('dashboardIcon');
-            if (dashboardIcon) {
-                dashboardIcon.addEventListener('click', () => {
-                    window.location.href = '/dashboard-login';
-                });
-            }
         });
     </script>
 </body>
