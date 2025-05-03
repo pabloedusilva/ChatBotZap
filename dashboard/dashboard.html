@@ -1711,7 +1711,7 @@
             }
         }
         /* 
-        /* Responsivo apenas para o modal de saída */
+       /* Responsivo apenas para o modal de saída */
         
         @media (max-width: 576px) {
             #exitModalOverlay .exit-modal {
@@ -2191,6 +2191,7 @@
             gap: 6px;
             box-shadow: 0 2px 6px rgba(255, 193, 7, 0.07);
             animation: fadeInError 0.3s;
+            display: none;
         }
         
         .add-user-error i {
@@ -2266,18 +2267,6 @@
                 <i class="fas fa-robot"></i>
                 <span>Relatórios de Bots</span>
             </a>
-        </div>
-        <!-- Perfil do Usuário -->
-        <div class="user-profile">
-            <div class="user-avatar" id="userAvatar">A</div>
-            <div class="user-info">
-                <div class="user-name">
-                    <span id="userName">Admin</span>
-                    <button class="change-password-btn" title="Alterar senha">
-                        <i class="fas fa-pencil-alt"></i>
-                    </button>
-                </div>
-            </div>
         </div>
         <div class="sidebar-footer">
             <!-- Botão de Sair -->
@@ -3448,53 +3437,6 @@ userUpdatedModalOk.addEventListener('click', closeUserUpdatedModal);
         `;
         document.head.appendChild(style);
 
-        // Elementos do modal
-        const passwordChangeModal = document.getElementById('passwordChangeModal');
-        const closePasswordModal = document.getElementById('closePasswordModal');
-        const savePasswordBtn = document.getElementById('savePasswordBtn');
-        const newPassword = document.getElementById('newPassword');
-        const confirmPassword = document.getElementById('confirmPassword');
-        const passwordError = document.getElementById('passwordError');
-
-        // Abrir o modal ao clicar no ícone de lápis
-        const changePasswordBtn = document.querySelector('.change-password-btn');
-        changePasswordBtn.addEventListener('click', () => {
-            passwordChangeModal.classList.add('active');
-        });
-
-        // Fechar o modal
-        closePasswordModal.addEventListener('click', () => {
-            passwordChangeModal.classList.remove('active');
-            resetPasswordModal();
-        });
-
-        // Validar senhas
-        const validatePasswords = () => {
-            if (newPassword.value && confirmPassword.value) {
-                if (newPassword.value === confirmPassword.value) {
-                    passwordError.classList.remove('active');
-                    savePasswordBtn.disabled = false;
-                } else {
-                    passwordError.classList.add('active');
-                    savePasswordBtn.disabled = true;
-                }
-            } else {
-                savePasswordBtn.disabled = true;
-            }
-        };
-
-        // Resetar o modal
-        const resetPasswordModal = () => {
-            newPassword.value = '';
-            confirmPassword.value = '';
-            passwordError.classList.remove('active');
-            savePasswordBtn.disabled = true;
-        };
-
-        // Adicionar eventos de validação
-        newPassword.addEventListener('input', validatePasswords);
-        confirmPassword.addEventListener('input', validatePasswords);
-
         // Modal de Confirmação de Saída
         const exitButton = document.getElementById('exitButton');
         const exitModalOverlay = document.getElementById('exitModalOverlay');
@@ -3561,101 +3503,6 @@ userUpdatedModalOk.addEventListener('click', closeUserUpdatedModal);
             } catch (error) {
                 // Se der erro, mantém o padrão
             }
-        });
-
-        document.addEventListener('DOMContentLoaded', () => {
-            // Elementos do modal
-            const changePasswordBtn = document.querySelector('.change-password-btn');
-            const passwordChangeModal = document.getElementById('passwordChangeModal');
-            const closePasswordModal = document.getElementById('closePasswordModal');
-            const newPasswordInput = document.getElementById('newPassword');
-            const confirmPasswordInput = document.getElementById('confirmPassword');
-            const savePasswordBtn = document.getElementById('savePasswordBtn');
-            const passwordError = document.getElementById('passwordError');
-
-            // Modal de sucesso (baseado nos outros modais da dashboard)
-            let passwordUpdatedModal = document.getElementById('passwordUpdatedModal');
-            if (!passwordUpdatedModal) {
-                passwordUpdatedModal = document.createElement('div');
-                passwordUpdatedModal.id = 'passwordUpdatedModal';
-                passwordUpdatedModal.className = 'modal-overlay-password';
-                passwordUpdatedModal.innerHTML = `
-            <div class="modal-password">
-                <div class="modal-header-password">
-                    <h2>Senha atualizada com sucesso!</h2>
-                </div>
-            </div>
-        `;
-                document.body.appendChild(passwordUpdatedModal);
-            }
-
-            // Abrir modal ao clicar no lápis
-            if (changePasswordBtn) {
-                changePasswordBtn.addEventListener('click', () => {
-                    passwordChangeModal.style.display = 'flex';
-                    newPasswordInput.value = '';
-                    confirmPasswordInput.value = '';
-                    savePasswordBtn.disabled = true;
-                    passwordError.style.display = 'none';
-                });
-            }
-
-            // Fechar modal
-            if (closePasswordModal) {
-                closePasswordModal.addEventListener('click', () => {
-                    passwordChangeModal.style.display = 'none';
-                });
-            }
-
-            // Fechar modal ao clicar fora
-            window.addEventListener('click', (event) => {
-                if (event.target === passwordChangeModal) {
-                    passwordChangeModal.style.display = 'none';
-                }
-                if (event.target === passwordUpdatedModal) {
-                    passwordUpdatedModal.style.display = 'none';
-                }
-            });
-
-            // Validação das senhas
-            function validatePasswords() {
-                const newPassword = newPasswordInput.value;
-                const confirmPassword = confirmPasswordInput.value;
-                const valid = newPassword && confirmPassword && newPassword === confirmPassword && newPassword.length >= 4;
-                savePasswordBtn.disabled = !valid;
-                passwordError.style.display = (newPassword && confirmPassword && newPassword !== confirmPassword) ? 'block' : 'none';
-            }
-            newPasswordInput.addEventListener('input', validatePasswords);
-            confirmPasswordInput.addEventListener('input', validatePasswords);
-
-            // Submeter alteração de senha
-            savePasswordBtn.addEventListener('click', async(e) => {
-                e.preventDefault();
-                savePasswordBtn.disabled = true;
-                try {
-                    const response = await fetch('/dashboard-update-password', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            newPassword: newPasswordInput.value
-                        })
-                    });
-                    if (response.ok) {
-                        passwordChangeModal.style.display = 'none';
-                        passwordUpdatedModal.style.display = 'flex';
-                        setTimeout(() => {
-                            passwordUpdatedModal.style.display = 'none';
-                        }, 2000);
-                    } else {
-                        alert('Erro ao atualizar senha.');
-                    }
-                } catch {
-                    alert('Erro ao atualizar senha.');
-                }
-                savePasswordBtn.disabled = false;
-            });
         });
     </script>
 </body>
