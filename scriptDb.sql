@@ -16,6 +16,9 @@ CREATE TABLE users (
     last_login TIMESTAMP NULL
 );
 
+-- Adicionar a coluna role na tabela de usuários
+ALTER TABLE users ADD COLUMN role VARCHAR(20) DEFAULT 'user';
+
 -- Inserir o usuário admin com as credenciais fornecidas
 INSERT INTO users (username, password, email, whatsapp) VALUES 
 ('admin', 'admin123', 'admin@example.com', '+5511999999999');

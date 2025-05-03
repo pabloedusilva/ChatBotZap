@@ -305,7 +305,7 @@ app.get('/users/search', isDashboardAuthenticated, async(req, res) => {
 
 // Rota para adicionar um novo usuário
 app.post('/users', isDashboardAuthenticated, async(req, res) => {
-    const { username, email, whatsapp, password } = req.body;
+    const { username, email, whatsapp, password, role } = req.body;
 
     if (!username || !email || !whatsapp || !password) {
         return res.status(400).json({ error: 'Todos os campos são obrigatórios.' });
@@ -313,7 +313,7 @@ app.post('/users', isDashboardAuthenticated, async(req, res) => {
 
     try {
         const [result] = await pool.execute(
-            'INSERT INTO users (username, email, whatsapp, password) VALUES (?, ?, ?, ?)', [username, email, whatsapp, password]
+            'INSERT INTO users (username, email, whatsapp, password, role) VALUES (?, ?, ?, ?, ?)', [username, email, whatsapp, password, role || 'user']
         );
 
         // Emitir evento para atualizar o total de usuários

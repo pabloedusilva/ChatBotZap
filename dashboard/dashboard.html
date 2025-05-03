@@ -2368,6 +2368,14 @@
                     <label for="userWhatsApp">WhatsApp</label>
                 </div>
                 <div class="input-group">
+                    <i class="fas fa-user-shield input-icon"></i>
+                    <select id="userRole" style="width:100%;padding:14px 15px 14px 45px;border:1px solid var(--border);border-radius:12px;background-color:var(--input-bg);font-size:14px;color:var(--text-primary);">
+        <option value="user">Usuário Comum</option>
+        <option value="admin">Usuário Privilegiado</option>
+    </select>
+                    <label for="userRole" style="left:45px;top:-10px;font-size:11px;background:var(--card-bg);padding:0 5px;">Classificação</label>
+                </div>
+                <div class="input-group">
                     <i class="fas fa-lock input-icon"></i>
                     <input type="password" id="userPassword" placeholder="Senha">
                     <label for="userPassword">Senha</label>
@@ -2862,6 +2870,8 @@
         }
 
         // Salvar usuário
+        const userRole = document.getElementById('userRole');
+
         const saveUser = async() => {
             if (!addUserName.value || !userEmail.value || !userWhatsApp.value || !userPassword.value) {
                 alert('Por favor, preencha todos os campos obrigatórios.');
@@ -2872,7 +2882,8 @@
                 username: addUserName.value,
                 email: userEmail.value,
                 whatsapp: userWhatsApp.value,
-                password: userPassword.value
+                password: userPassword.value,
+                role: userRole.value // <-- Adicione esta linha
             };
 
             try {
@@ -2890,9 +2901,10 @@
                     // Atualizar a lista de usuários localmente
                     users.push({
                         id: result.userId,
-                        name: newUser.username,
+                        username: newUser.username,
                         email: newUser.email,
-                        whatsapp: newUser.whatsapp
+                        whatsapp: newUser.whatsapp,
+                        role: newUser.role // <-- Adicione esta linha
                     });
 
                     renderUsers(); // Atualiza a lista de usuários na interface
