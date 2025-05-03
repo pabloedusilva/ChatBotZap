@@ -263,7 +263,7 @@ app.post('/dashboard-update-password', isDashboardAuthenticated, async(req, res)
 // Rotas da dashboard (exemplo)
 app.get('/users', isDashboardAuthenticated, async(req, res) => {
     try {
-        const [rows] = await pool.execute('SELECT id, username, email, whatsapp FROM users WHERE username != ?', ['pabloAdmin']);
+        const [rows] = await pool.execute('SELECT id, username, email, whatsapp FROM users');
         res.json(rows);
     } catch (error) {
         console.error('Erro ao buscar usuários:', error);
@@ -295,11 +295,11 @@ app.get('/users/search', isDashboardAuthenticated, async(req, res) => {
     }
 
     try {
-        // Buscar usuários no banco de dados com base no nome ou telefone
+        // Remova o filtro do username
         const [rows] = await pool.execute(
             `SELECT id, username, email, whatsapp 
              FROM users 
-             WHERE (LOWER(username) LIKE ? OR whatsapp LIKE ?) AND username != ?`, [`%${query.toLowerCase()}%`, `%${query}%`, 'pabloAdmin']
+             WHERE LOWER(username) LIKE ? OR whatsapp LIKE ?`, [`%${query.toLowerCase()}%`, `%${query}%`]
         );
 
         res.json(rows);
