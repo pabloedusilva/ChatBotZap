@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="icon" href="/public/icons/favicon.png" type="image/png">
     <style>
          :root {
@@ -580,7 +581,7 @@
             top: 20px;
             left: 20px;
             z-index: 100;
-            background: var(--bg-primary);
+            background: none;
             border-radius: 50px;
             padding: 8px 15px;
             display: flex;
@@ -1366,7 +1367,7 @@
             position: fixed;
             bottom: 170px;
             /* Espaçamento acima do botão do WhatsApp */
-            right: 15px;
+            right: 30px;
             width: 90%;
             /* Responsivo: ocupa 90% da largura da tela */
             max-width: 350px;
@@ -1951,7 +1952,7 @@
         <div class="header">
             <div class="brand-logo">
                 <div class="logo-circle">
-                    <img src="/imagens/logo.png" alt="Logo da Empresa" class="company-logo">
+                    <img src="/public/imagens/logo.png" alt="Logo da Empresa" class="company-logo">
                 </div>
             </div>
             <p>Olá, Admin</p><br>
@@ -1980,7 +1981,7 @@
                     </div>
                     <!-- Botão de atualizar status -->
                     <button class="refresh-status-btn" onclick="refreshBotStatus('main')">
-                        <img src="icons/refresh.svg" alt="Atualizar Bot 1" class="refresh-icon">
+                        <img src="/public/icons/refresh.svg" alt="Atualizar Bot 1" class="refresh-icon">
                     </button>
                 </div>
                 <div class="bot-card-body">
@@ -2021,7 +2022,7 @@
                     </div>
                     <!-- Botão de atualizar status -->
                     <button class="refresh-status-btn" onclick="refreshBotStatus('appointment')">
-                        <img src="icons/refresh.svg" alt="Atualizar Bot 2" class="refresh-icon">
+                        <img src="/public/icons/refresh.svg" alt="Atualizar Bot 2" class="refresh-icon">
                     </button>
                 </div>
                 <div class="bot-card-body">
@@ -2062,7 +2063,7 @@
                     </div>
                     <!-- Botão de atualizar status -->
                     <button class="refresh-status-btn" onclick="refreshBotStatus('reschedule')">
-                        <img src="icons/refresh.svg" alt="Atualizar Bot 3" class="refresh-icon">
+                        <img src="/public/icons/refresh.svg" alt="Atualizar Bot 3" class="refresh-icon">
                     </button>
                 </div>
                 <div class="bot-card-body">
@@ -2165,48 +2166,10 @@
         </div>
 
         <!-- Botão do WhatsApp -->
-        <div class="whatsapp-btn" id="whatsappBtn">
-            <svg class="whatsapp-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                <path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1
-    10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222
-    0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72
-    359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2
-    130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6
-    184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6
-    21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3
-    1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2
-    -3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8
-    83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1
-    3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z" />
+        <div class="whatsapp-btn" id="whatsappBtn" title="Suporte WhatsApp">
+            <svg class="whatsapp-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                <path d="M16 3C9.373 3 4 8.373 4 15c0 2.65.867 5.1 2.34 7.09L4 29l7.18-2.31A12.94 12.94 0 0 0 16 27c6.627 0 12-5.373 12-12S22.627 3 16 3zm0 22.917c-2.25 0-4.417-.667-6.25-1.917l-.447-.283-4.25 1.367 1.383-4.133-.292-.457C5.083 18.083 4.5 16.567 4.5 15c0-6.351 5.149-11.5 11.5-11.5S27.5 8.649 27.5 15 22.351 26.5 16 26.5zm6.167-7.25c-.084-.142-.308-.225-.646-.392-.338-.167-2-.983-2.308-1.092-.308-.108-.533-.167-.758.167-.225.334-.867 1.092-1.067 1.317-.2.225-.392.25-.73.083-.338-.167-1.425-.525-2.713-1.675-1.003-.892-1.68-1.992-1.88-2.325-.2-.334-.021-.513.146-.675.15-.146.334-.379.5-.567.167-.188.225-.325.338-.542.113-.217.057-.408-.028-.567-.084-.158-.75-1.8-1.025-2.463-.271-.654-.546-.563-.75-.575-.204-.009-.438-.012-.672-.012-.234 0-.617.088-.938.438-.321.35-1.238 1.225-1.238 2.983 0 1.758 1.283 3.454 1.463 3.692.179.238 2.532 3.867 6.13 5.267.857.369 1.527.589 2.047.754.861.274 1.646.236 2.267.143.692-.104 2.132-.872 2.433-1.713.301-.841.301-1.563.21-1.713z" fill="#fff"/>
             </svg>
-        </div>
-        <!-- Janela de Chat -->
-        <div class="chat-window" id="chatWindow">
-            <div class="chat-header">
-                <div style="display: flex; align-items: center;">
-                    <img src="icons/suporte.svg" alt="Suporte" class="profile-img">
-                    <span>Suporte</span>
-                </div>
-                <button class="close-chat" id="closeChat">&times;</button>
-            </div>
-            <div class="chat-body" id="chatBody">
-                <div class="chat-message assistant">
-                    Olá! Como posso ajudar você hoje?
-                </div>
-            </div>
-            <div class="chat-footer">
-                <input type="text" class="chat-input" id="chatInput" placeholder="Digite sua mensagem...">
-
-                <button class="send-btn" id="sendBtn">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24
-    
-    24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke- linejoin="round">
-
-                        <line x1="22" y1="2" x2="11" y2="13"></line>
-                        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-                    </svg>
-                </button>
-            </div>
         </div>
 
         <div class="info-button" id="infoButton">
@@ -2232,7 +2195,7 @@
                     <p>Conectar seu bot ao WhatsApp é um processo simples e rápido. Siga os passos abaixo para estabelecer a conexão:</p>
 
                     <div class="image-container">
-                        <img src="/imagens/instrucoes.png" alt="Como conectar o bot" class="responsive-image">
+                        <img src="/public/imagens/instrucoes.png" alt="Como conectar o bot" class="responsive-image">
                     </div>
 
                     <div class="connection-steps">
@@ -2881,54 +2844,11 @@
                 });
             });
 
-            // Número de WhatsApp do suporte (formato: 5511999999999)
-            const whatsappNumber = '5531985079718'; // Altere para o número desejado
-            // Elementos do DOM
-            const whatsappBtn = document.getElementById('whatsappBtn');
-            const chatWindow = document.getElementById('chatWindow');
-            const closeChat = document.getElementById('closeChat');
-            const chatInput = document.getElementById('chatInput');
-            const sendBtn = document.getElementById('sendBtn');
-            const chatBody = document.getElementById('chatBody');
-            // Abrir/fechar o chat ao clicar no botão do WhatsApp
-            whatsappBtn.addEventListener('click', () => {
-                if (chatWindow.style.display === 'flex') {
-                    chatWindow.style.display = 'none';
-                } else {
-                    chatWindow.style.display = 'flex';
-                    chatInput.focus();
-                }
+            // Botão do WhatsApp agora apenas redireciona para o suporte
+            document.getElementById('whatsappBtn').addEventListener('click', function() {
+                // Altere o número abaixo para o número de suporte desejado
+                window.open('https://wa.me/5531985079718', '_blank');
             });
-            // Fechar o chat ao clicar no botão de fechar
-            closeChat.addEventListener('click', () => {
-                chatWindow.style.display = 'none';
-            });
-            // Função para redirecionar para o WhatsApp
-            function redirectToWhatsApp(message) {
-                const encodedMessage = encodeURIComponent(message);
-
-                const whatsappUrl = `https://api.whatsapp.com/send?phone=${whatsappNumber}
-&text=${encodedMessage}`;
-                window.open(whatsappUrl, '_blank');
-            }
-            // Enviar mensagem ao clicar no botão de enviar
-            sendBtn.addEventListener('click', sendMessage);
-            // Enviar mensagem ao pressionar Enter
-            chatInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    sendMessage();
-                }
-            });
-            // Função para enviar mensagem
-            function sendMessage() {
-                const message = chatInput.value.trim();
-                if (message) {
-                    // Redireciona diretamente para o WhatsApp
-                    redirectToWhatsApp(message);
-                    // Limpa o campo de input
-                    chatInput.value = '';
-                }
-            }
         </script>
         <script>
             document.addEventListener('DOMContentLoaded', () => {
@@ -3178,15 +3098,6 @@
 <div class="dashboard-btn hidden" id="dashboardBtn" title="Ir para a Dashboard">
     <svg class="dashboard-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
         <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z" fill="white"/>
-    </svg>
-</div>
-
-<!-- Botão de WhatsApp -->
-<div class="whatsapp-btn hidden" id="whatsappBtn">
-    <svg class="whatsapp-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-        <path
-            d="M16.988 15.936l-2.292-.49a.96.96 0 0 0-.91.248l-.728.744c-3.12-1.656-5.064-3.6-6.72-6.72l.744-.728a.96.96 0 0 0 .248-.91l-.49-2.292a.96.96 0 0 0-1.008-.744L4.008 5.064a.96.96 0 0 0-.744 1.008c.12 4.392 2.064 8.4 5.28 11.616 3.216 3.216 7.224 5.16 11.616 5.28a.96.96 0 0 0 1.008-.744l1.008-3.528a.96.96 0 0 0-.744-1.008z">
-        </path>
     </svg>
 </div>
 

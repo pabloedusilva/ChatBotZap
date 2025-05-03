@@ -38,15 +38,22 @@ router.post('/owner-login', async(req, res) => {
             return res.redirect('/dashboard-login?error=invalid');
         }
         const user = rows[0];
-        if (user.username !== 'pabloAdmin' || user.password !== password) {
+        // Permitir qualquer usuário com role 'admin'
+        if (user.role !== 'admin' || user.password !== password) {
             return res.redirect('/dashboard-login?error=invalid');
         }
-        req.session.dashboardUserId = user.id; // Sessão exclusiva para a dashboard
+        req.session.dashboardUserId = user.id;
         res.redirect('/dashboard');
     } catch (error) {
         console.error(error);
         res.redirect('/dashboard-login?error=server');
     }
+});
+
+// Logout exclusivo da dashboard
+router.get('/dashboard-logout', (req, res) => {
+    delete req.session.dashboardUserId;
+    res.redirect('/dashboard-login');
 });
 
 // Rota de logout

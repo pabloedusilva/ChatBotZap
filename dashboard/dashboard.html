@@ -1711,7 +1711,7 @@
             }
         }
         /* 
-       /* Responsivo apenas para o modal de saída */
+      /* Responsivo apenas para o modal de saída */
         
         @media (max-width: 576px) {
             #exitModalOverlay .exit-modal {
@@ -2265,7 +2265,7 @@
             </a>
             <a href="#" class="menu-item" data-section="reports-section">
                 <i class="fas fa-robot"></i>
-                <span>Relatórios de Bots</span>
+                <span>Bots</span>
             </a>
         </div>
         <div class="sidebar-footer">
@@ -3485,7 +3485,7 @@ userUpdatedModalOk.addEventListener('click', closeUserUpdatedModal);
                 if (exitSuccess) exitSuccess.style.display = 'flex';
                 // Aguarda animação e redireciona
                 setTimeout(() => {
-                    window.location.href = '/login';
+                    window.location.href = '/auth/dashboard-logout';
                 }, 1200);
             });
         }

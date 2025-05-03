@@ -185,7 +185,7 @@ Object.keys(bots).forEach(botKey => {
                 bot.qrCodeData = await qrcode.toDataURL(qr);
                 console.log(`Novo QR Code do ${bot.name} gerado`);
                 io.emit('qrcode', { bot: botKey, qrcode: bot.qrCodeData });
-            }, 13000); // 13 segundos
+            }, 15000); // 15 segundos
         } catch (err) {
             console.error(`Erro ao gerar QR Code para ${bot.name}:`, err);
         }
