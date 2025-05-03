@@ -2157,6 +2157,25 @@
             border-top-right-radius: 8px;
             margin-top: 18px;
         }
+        /* Destaque para o label "Classificação" no modal de adicionar usuário */
+        
+        #userRole+label,
+        label[for="userRole"] {
+            position: absolute;
+            left: 4px;
+            top: -10px;
+            font-size: 11px;
+            background: var(--card-bg, #fff);
+            padding: 0 5px;
+            color: var(--primary, #128C7E);
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            border-radius: 6px;
+            pointer-events: none;
+            z-index: 2;
+            margin-bottom: 18px;
+            display: inline-block;
+        }
     </style>
 </head>
 
@@ -2369,11 +2388,11 @@
                 </div>
                 <div class="input-group">
                     <i class="fas fa-user-shield input-icon"></i>
-                    <select id="userRole" style="width:100%;padding:14px 15px 14px 45px;border:1px solid var(--border);border-radius:12px;background-color:var(--input-bg);font-size:14px;color:var(--text-primary);">
+                    <select id="userRole" style="width:100%;padding:14px 15px 14px 45px;border:1px solid var(--primaryr);border-radius:12px;background-color:var(--input-bg);font-size:14px;color:var(--text-primary);">
         <option value="user">Usuário Comum</option>
         <option value="admin">Usuário Privilegiado</option>
     </select>
-                    <label for="userRole" style="left:45px;top:-10px;font-size:11px;background:var(--card-bg);padding:0 5px;">Classificação</label>
+                    <label for="userRole">Classificação</label>
                 </div>
                 <div class="input-group">
                     <i class="fas fa-lock input-icon"></i>
