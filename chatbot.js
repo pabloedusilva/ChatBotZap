@@ -312,12 +312,20 @@ app.post('/users', isDashboardAuthenticated, async(req, res) => {
     }
 
     try {
+        // Verifica se já existe usuário com mesmo nome, email ou whatsapp
+        const [existing] = await pool.execute(
+            'SELECT * FROM users WHERE username = ? OR email = ? OR whatsapp = ?', [username, email, whatsapp]
+        );
+        if (existing.length > 0) {
+            return res.status(409).json({ error: 'Já existe um usuário com este nome, e-mail ou WhatsApp.' });
+        }
+
         const [result] = await pool.execute(
             'INSERT INTO users (username, email, whatsapp, password, role) VALUES (?, ?, ?, ?, ?)', [username, email, whatsapp, password, role || 'user']
         );
 
         // Emitir evento para atualizar o total de usuários
-        const [rows] = await pool.execute('SELECT COUNT(*) AS total FROM users WHERE username != ?', ['pabloAdmin']);
+        const [rows] = await pool.execute('SELECT COUNT(*) AS total FROM users');
         io.emit('user-added', { totalUsers: rows[0].total });
 
         res.status(201).json({ message: 'Usuário criado com sucesso!', userId: result.insertId });

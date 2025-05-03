@@ -2176,6 +2176,38 @@
             margin-bottom: 18px;
             display: inline-block;
         }
+        
+        .add-user-error {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeeba;
+            border-radius: 6px;
+            padding: 6px 12px;
+            margin-bottom: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 2px 6px rgba(255, 193, 7, 0.07);
+            animation: fadeInError 0.3s;
+        }
+        
+        .add-user-error i {
+            color: #ffc107;
+            font-size: 15px;
+        }
+        
+        @keyframes fadeInError {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
     </style>
 </head>
 
@@ -2401,6 +2433,7 @@
                 </div>
             </div>
             <div class="modal-footer">
+                <div id="addUserError" class="add-user-error" style="display:none;"></div>
                 <button class="modal-btn cancel-btn" id="cancelBtn">Cancelar</button>
                 <button class="modal-btn save-btn" id="saveBtn">Salvar</button>
             </div>
@@ -2889,20 +2922,22 @@
         }
 
         // Salvar usuário
-        const userRole = document.getElementById('userRole');
+        const addUserError = document.getElementById('addUserError');
 
         const saveUser = async() => {
             if (!addUserName.value || !userEmail.value || !userWhatsApp.value || !userPassword.value) {
-                alert('Por favor, preencha todos os campos obrigatórios.');
+                addUserError.innerHTML = `<i class="fas fa-exclamation-triangle"></i> Por favor, preencha todos os campos obrigatórios.`;
+                addUserError.style.display = 'flex';
                 return;
             }
+            addUserError.style.display = 'none';
 
             const newUser = {
                 username: addUserName.value,
                 email: userEmail.value,
                 whatsapp: userWhatsApp.value,
                 password: userPassword.value,
-                role: userRole.value // <-- Adicione esta linha
+                role: userRole.value
             };
 
             try {
@@ -2917,24 +2952,25 @@
                 if (response.ok) {
                     const result = await response.json();
 
-                    // Atualizar a lista de usuários localmente
                     users.push({
                         id: result.userId,
                         username: newUser.username,
                         email: newUser.email,
                         whatsapp: newUser.whatsapp,
-                        role: newUser.role // <-- Adicione esta linha
+                        role: newUser.role
                     });
 
-                    renderUsers(); // Atualiza a lista de usuários na interface
-                    closeModals(); // Fecha o modal de adição de usuário
-                    userAddedModal.classList.add('active'); // Exibe o modal de confirmação
+                    renderUsers();
+                    closeModals();
+                    userAddedModal.classList.add('active');
                 } else {
                     const error = await response.json();
-                    console.error('Erro ao salvar usuário:', error.error || 'Erro ao salvar o usuário.');
+                    addUserError.innerHTML = `<i class="fas fa-exclamation-triangle"></i> ${error.error || 'Erro ao salvar o usuário.'}`;
+                    addUserError.style.display = 'flex';
                 }
             } catch (error) {
-                console.error('Erro ao salvar usuário:', error);
+                addUserError.innerHTML = `<i class="fas fa-exclamation-triangle"></i> Erro ao salvar o usuário.`;
+                addUserError.style.display = 'flex';
             }
         };
 
