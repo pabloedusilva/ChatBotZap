@@ -2093,6 +2093,70 @@
             transform: translateY(-3px);
             box-shadow: 0 8px 25px rgba(18, 140, 126, 0.4);
         }
+        /* Destaques usuários da dashboard */
+        
+        .user-item.admin {
+            color: #d2691e;
+            font-weight: bold;
+        }
+        
+        .badge-admin {
+            background: gold;
+            color: #333;
+            border-radius: 4px;
+            padding: 2px 6px;
+            margin-left: 8px;
+            font-size: 0.85em;
+        }
+        
+        .table-row.admin-row {
+            background: #fff9c4 !important;
+            /* Amarelo claro */
+        }
+        /* Letras pretas na linha amarela apenas no modo escuro */
+        
+        [data-theme="dark"] .table-row.admin-row,
+        [data-theme="dark"] .table-row.admin-row * {
+            color: #111 !important;
+        }
+        /* Botões de ação e seus ícones permanecem brancos no modo escuro */
+        
+        [data-theme="dark"] .table-row.admin-row .action-buttons button,
+        [data-theme="dark"] .table-row.admin-row .action-buttons button *,
+        [data-theme="dark"] .table-row.admin-row .action-buttons .fa-edit,
+        [data-theme="dark"] .table-row.admin-row .action-buttons .fa-trash {
+            color: #fff !important;
+        }
+        /* Separar usuários privilegiados de usuários comuns */
+        
+        .user-separator {
+            grid-column: 1 / -1;
+            font-weight: bold;
+            font-size: 15px;
+            padding: 12px 20px;
+            background: #f5f5f5;
+            color: #666;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .privileged-separator {
+            background: #fffde7;
+            color: #bfa100;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+            margin-top: 10px;
+        }
+        
+        .normal-separator {
+            background: #f5f5f5;
+            color: #666;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+            margin-top: 18px;
+        }
     </style>
 </head>
 
@@ -2892,55 +2956,98 @@
 
         // Filter users by name or phone
         const filterUsers = async() => {
-                const searchTerm = searchInput.value.trim().toLowerCase();
+            const searchTerm = searchInput.value.trim().toLowerCase();
 
-                if (searchTerm.length === 0) {
-                    renderUsers(); // Recarregar todos os usuários se o campo estiver vazio
-                    return;
-                }
+            if (searchTerm.length === 0) {
+                renderUsers(); // Recarregar todos os usuários se o campo estiver vazio
+                return;
+            }
 
-                try {
-                    // Fazer uma requisição ao backend para buscar usuários
-                    const response = await fetch(`/users/search?query=${encodeURIComponent(searchTerm)}`);
-                    const filteredUsers = await response.json();
+            try {
+                // Fazer uma requisição ao backend para buscar usuários
+                const response = await fetch(`/users/search?query=${encodeURIComponent(searchTerm)}`);
+                const filteredUsers = await response.json();
 
-                    // Renderizar os usuários filtrados
-                    if (filteredUsers.length > 0) {
-                        usersList.innerHTML = `
-                        <div class="table-header">
-                            <div>Usuário</div>
-                            <div>E-mail</div>
-                            <div>WhatsApp</div>
-                            <div>Ações</div>
-                        </div>
-                        ${filteredUsers.map(user => `
-                            <div class="table-row" data-id="${user.id}">
-                                <div class="user-info">
-                                    <div class="user-avatar">${user.username.charAt(0).toUpperCase()}</div>
-                                    <div class="user-name">${user.username}</div>
-                                </div>
-                                <div class="user-email">${user.email}</div>
-                                <div class="user-phone">${user.whatsapp}</div>
-                                <div class="action-buttons">
-                                    <button class="edit-btn" onclick="openEditUserModal('${user.id}')">
-                                        <i class="fas fa-edit"></i> Editar
-                                    </button>
-                                    <button class="delete-btn" onclick="openDeleteConfirm('${user.id}')">
-                                        <i class="fas fa-trash"></i> Excluir
-                                    </button>
-                                </div>
-                            </div>
-                        `).join('')}
-                    `;
+                // Renderizar os usuários filtrados
+                if (filteredUsers.length > 0) {
+                    // Separe os usuários por role
+                    const privileged = filteredUsers.filter(u => u.role === 'admin');
+                    const normal = filteredUsers.filter(u => u.role !== 'admin');
+
+                    let html = `
+        <div class="table-header">
+            <div>Usuário</div>
+            <div>E-mail</div>
+            <div>WhatsApp</div>
+            <div>Ações</div>
+        </div>
+    `;
+
+                    if (privileged.length > 0) {
+                        html += `
+            <div class="user-separator privileged-separator">
+                <i class="fas fa-star"></i> Usuários Privilegiados
+            </div>
+        `;
+                        html += privileged.map(user => `
+            <div class="table-row admin-row" data-id="${user.id}">
+                <div class="user-info">
+                    <div class="user-avatar">${user.username.charAt(0).toUpperCase()}</div>
+                    <div class="user-name">
+                        ${user.username}
+                        <span class="badge-admin">Privilegiado</span>
+                    </div>
+                </div>
+                <div class="user-email">${user.email}</div>
+                <div class="user-phone">${user.whatsapp}</div>
+                <div class="action-buttons">
+                    <button class="edit-btn" onclick="openEditUserModal('${user.id}')">
+                        <i class="fas fa-edit"></i> Editar
+                    </button>
+                    <button class="delete-btn" onclick="openDeleteConfirm('${user.id}')">
+                        <i class="fas fa-trash"></i> Excluir
+                    </button>
+                </div>
+            </div>
+        `).join('');
+                    }
+
+                    if (normal.length > 0) {
+                        html += `
+            <div class="user-separator normal-separator">
+                <i class="fas fa-user"></i> Usuários Comuns
+            </div>
+        `;
+                        html += normal.map(user => `
+            <div class="table-row" data-id="${user.id}">
+                <div class="user-info">
+                    <div class="user-avatar">${user.username.charAt(0).toUpperCase()}</div>
+                    <div class="user-name">${user.username}</div>
+                </div>
+                <div class="user-email">${user.email}</div>
+                <div class="user-phone">${user.whatsapp}</div>
+                <div class="action-buttons">
+                    <button class="edit-btn" onclick="openEditUserModal('${user.id}')">
+                        <i class="fas fa-edit"></i> Editar
+                    </button>
+                    <button class="delete-btn" onclick="openDeleteConfirm('${user.id}')">
+                        <i class="fas fa-trash"></i> Excluir
+                    </button>
+                </div>
+            </div>
+        `).join('');
+                    }
+
+                    usersList.innerHTML = html;
                 } else {
                     usersList.innerHTML = `
-                        <div class="empty-state">
-                            <div class="empty-icon">
-                                <i class="fas fa-users"></i>
-                            </div>
-                            <div class="empty-text">Nenhum usuário encontrado</div>
-                        </div>
-                    `;
+        <div class="empty-state">
+            <div class="empty-icon">
+                <i class="fas fa-users"></i>
+            </div>
+            <div class="empty-text">Nenhum usuário encontrado</div>
+        </div>
+    `;
                 }
             } catch (error) {
                 console.error('Erro ao buscar usuários:', error);
@@ -2948,57 +3055,101 @@
         };
 
         // Render users list
-        const renderUsers = async () => {
-    try {
-        const response = await fetch('/users');
-        users = await response.json(); // <-- Atualiza o array global!
+        const renderUsers = async() => {
+            try {
+                const response = await fetch('/users');
+                users = await response.json();
 
-                    if (users.length === 0) {
-                        usersList.innerHTML = `
-                        <div class="empty-state">
-                            <div class="empty-icon">
-                                <i class="fas fa-users"></i>
-                            </div>
-                            <div class="empty-text">Nenhum usuário cadastrado</div>
-                        </div>
-                    `;
+                if (users.length === 0) {
+                    usersList.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="empty-text">Nenhum usuário cadastrado</div>
+                </div>
+            `;
+                } else {
+                    // Separe os usuários por role
+                    const privileged = users.filter(u => u.role === 'admin');
+                    const normal = users.filter(u => u.role !== 'admin');
 
-                    } else {
-                        usersList.innerHTML = `
-                        <div class="table-header">
-                            <div>Usuário</div>
-                            <div>E-mail</div>
-                            <div>WhatsApp</div>
-                            <div>Ações</div>
-                        </div>
-                        ${users.map(user => `
-                            <div class="table-row" data-id="${user.id}">
-                                <div class="user-info">
-                                    <div class="user-avatar">${user.username.charAt(0).toUpperCase()}</div>
-                                    <div class="user-name">${user.username}</div>
-                                </div>
-                                <div class="user-email">${user.email}</div>
-                                <div class="user-phone">${user.whatsapp}</div>
-                                <div class="action-buttons">
-                                    <button class="edit-btn" onclick="openEditUserModal('${user.id}')">
-                                        <i class="fas fa-edit"></i> Editar
-                                    </button>
-                                    <button class="delete-btn" onclick="openDeleteConfirm('${user.id}')">
-                                        <i class="fas fa-trash"></i> Excluir
-                                    </button>
-                                </div>
+                    let html = `
+                <div class="table-header">
+                    <div>Usuário</div>
+                    <div>E-mail</div>
+                    <div>WhatsApp</div>
+                    <div>Ações</div>
+                </div>
+            `;
+
+                    // Adicione separador para privilegiados, se houver
+                    if (privileged.length > 0) {
+                        html += `
+                    <div class="user-separator privileged-separator">
+                        <i class="fas fa-star"></i> Usuários Privilegiados
+                    </div>
+                `;
+                        html += privileged.map(user => `
+                    <div class="table-row admin-row" data-id="${user.id}">
+                        <div class="user-info">
+                            <div class="user-avatar">${user.username.charAt(0).toUpperCase()}</div>
+                            <div class="user-name">
+                                ${user.username}
+                                <span class="badge-admin">Privilegiado</span>
                             </div>
-                        `).join('')}
-                    `;
+                        </div>
+                        <div class="user-email">${user.email}</div>
+                        <div class="user-phone">${user.whatsapp}</div>
+                        <div class="action-buttons">
+                            <button class="edit-btn" onclick="openEditUserModal('${user.id}')">
+                                <i class="fas fa-edit"></i> Editar
+                            </button>
+                            <button class="delete-btn" onclick="openDeleteConfirm('${user.id}')">
+                                <i class="fas fa-trash"></i> Excluir
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
                     }
-                } catch (error) {
-                    console.error('Erro ao renderizar usuários:', error);
+
+                    // Adicione separador para comuns, se houver
+                    if (normal.length > 0) {
+                        html += `
+                    <div class="user-separator normal-separator">
+                        <i class="fas fa-user"></i> Usuários Comuns
+                    </div>
+                `;
+                        html += normal.map(user => `
+                    <div class="table-row" data-id="${user.id}">
+                        <div class="user-info">
+                            <div class="user-avatar">${user.username.charAt(0).toUpperCase()}</div>
+                            <div class="user-name">${user.username}</div>
+                        </div>
+                        <div class="user-email">${user.email}</div>
+                        <div class="user-phone">${user.whatsapp}</div>
+                        <div class="action-buttons">
+                            <button class="edit-btn" onclick="openEditUserModal('${user.id}')">
+                                <i class="fas fa-edit"></i> Editar
+                            </button>
+                            <button class="delete-btn" onclick="openDeleteConfirm('${user.id}')">
+                                <i class="fas fa-trash"></i> Excluir
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+                    }
+
+                    usersList.innerHTML = html;
                 }
+            } catch (error) {
+                console.error('Erro ao renderizar usuários:', error);
+            }
         };
 
         // Render bots list as cards
         const renderBots = () => {
-            botsList.innerHTML = bots.map(bot => `
+                botsList.innerHTML = bots.map(bot => `
                 <div class="bot-card">
                     <div class="bot-card-header">
                         <div class="bot-card-title">
