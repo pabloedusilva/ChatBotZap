@@ -20,9 +20,9 @@ CREATE TABLE users (
 ALTER TABLE users ADD COLUMN role VARCHAR(20) DEFAULT 'user';
 
 -- Inserir o usuário admin com as credenciais fornecidas
-INSERT INTO users (username, password, email, whatsapp) VALUES 
-('admin', 'admin123', 'admin@example.com', '+5511999999999');
+INSERT INTO users (username, password, email, whatsapp, role) VALUES 
+('admin', 'admin123', 'admin@example.com', '+5511999999999', 'admin');
 
 -- Usuário exclusivo para dashboard
-INSERT INTO users (username, password, email, whatsapp) VALUES 
-('pabloAdmin', 'administrador', 'dashboard@example.com', '+5511999999998');
+INSERT INTO users (username, password, email, whatsapp, role) VALUES 
+('pabloAdmin', 'administrador', 'dashboard@example.com', '+5511999999998', 'admin');
