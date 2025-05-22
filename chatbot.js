@@ -89,9 +89,13 @@ app.use((req, res, next) => {
 });
 
 // Configuração dos clientes WhatsApp (manter código original)
-const mainClient = new Client({ puppeteer: { headless: true }, name: 'main-bot' });
-const appointmentClient = new Client({ puppeteer: { headless: true }, name: 'appointment-bot' });
-const rescheduleClient = new Client({ puppeteer: { headless: true }, name: 'reschedule-bot' });
+// const mainClient = new Client({ puppeteer: { headless: true }, name: 'main-bot' });
+// const appointmentClient = new Client({ puppeteer: { headless: true }, name: 'appointment-bot' });
+// const rescheduleClient = new Client({ puppeteer: { headless: true }, name: 'reschedule-bot' });
+
+const mainClient = new Client({ puppeteer: { headless: true, ignoreHTTPSErrors: true }, name: 'main-bot' });
+const appointmentClient = new Client({ puppeteer: { headless: true, ignoreHTTPSErrors: true }, name: 'appointment-bot' });
+const rescheduleClient = new Client({ puppeteer: { headless: true, ignoreHTTPSErrors: true }, name: 'reschedule-bot' });
 
 // Objetos para armazenar estados dos bots (manter código original)
 const bots = {
