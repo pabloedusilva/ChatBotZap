@@ -258,6 +258,26 @@ ChatBotZap_Pro/
 
 ---
 
+## Contribuição, Modificações e Licença
+
+Este projeto é de código aberto para consulta e uso, porém **modificações, adaptações ou redistribuição** só são permitidas mediante autorização prévia do desenvolvedor responsável.
+
+- **Como contribuir ou sugerir melhorias:**
+  - Abra uma _issue_ detalhando sua sugestão, dúvida ou problema encontrado.
+  - Para propor alterações diretas, entre em contato com o desenvolvedor pelo WhatsApp ou utilize o sistema de issues do repositório.
+  - Todas as modificações devem ser previamente autorizadas para garantir a integridade, segurança e evolução controlada do sistema.
+
+- **Contato para autorização:**
+  - WhatsApp: [(31) 98507-9718](https://wa.me/5531985079718)
+  - E-mail: pablo.silva.edu@gmail.com
+  - Desenvolvedor: Pablo
+
+**Atenção:**
+- Alterações não autorizadas podem ser removidas ou desconsideradas.
+- O uso comercial, redistribuição ou integração com outros sistemas requerem consentimento formal.
+
+---
+
 ## Contato e Suporte
 
 - WhatsApp: [(31) 98507-9718](https://wa.me/5531985079718)
