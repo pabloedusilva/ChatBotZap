@@ -269,6 +269,7 @@ Este projeto é de código aberto para consulta e uso, porém **modificações, 
 
 - **Contato para autorização:**
   - WhatsApp: [(31) 98507-9718](https://wa.me/5531985079718)
+  - E-mail: pablo.silva.edu@gmail.com
   - Desenvolvedor: Pablo
 
 **Atenção:**
@@ -280,6 +281,7 @@ Este projeto é de código aberto para consulta e uso, porém **modificações, 
 ## Contato e Suporte
 
 - WhatsApp: [(31) 98507-9718](https://wa.me/5531985079718)
+- E-mail: pablo.silva.edu@gmail.com
 - Desenvolvedor: Pablo
 - Ano: 2025
 
