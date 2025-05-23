@@ -34,7 +34,6 @@ ChatBotZap_Pro/
 ├── connection_logs.txt       # Logs de conexões dos bots
 ├── package.json              # Dependências e scripts do projeto
 ├── README.md                 # Documentação principal
-├── README1.md                # (Este arquivo) Documentação detalhada extra
 ├── scriptDb.sql              # Script SQL para criação do banco de dados
 ├── dashboard/
 │   ├── dashboard-login.html  # Tela de login do painel administrativo
