@@ -1,4 +1,4 @@
-# WhatsApp Chatbot - Documentação Técnica Completa e Avançada
+# WhatsApp Chatbot PRO
 
 ---
 
@@ -34,6 +34,7 @@ ChatBotZap_Pro/
 ├── connection_logs.txt       # Logs de conexões dos bots
 ├── package.json              # Dependências e scripts do projeto
 ├── README.md                 # Documentação principal
+├── README1.md                # (Este arquivo) Documentação detalhada extra
 ├── scriptDb.sql              # Script SQL para criação do banco de dados
 ├── dashboard/
 │   ├── dashboard-login.html  # Tela de login do painel administrativo
@@ -254,6 +255,25 @@ ChatBotZap_Pro/
 - Código modular e comentado
 - Fácil manutenção e expansão
 - Pronto para integração com IA (ex: GPT, Gemini)
+
+---
+
+## Contribuição, Modificações e Licença
+
+Este projeto é de código aberto para consulta e uso, porém **modificações, adaptações ou redistribuição** só são permitidas mediante autorização prévia do desenvolvedor responsável.
+
+- **Como contribuir ou sugerir melhorias:**
+  - Abra uma _issue_ detalhando sua sugestão, dúvida ou problema encontrado.
+  - Para propor alterações diretas, entre em contato com o desenvolvedor pelo WhatsApp ou utilize o sistema de issues do repositório.
+  - Todas as modificações devem ser previamente autorizadas para garantir a integridade, segurança e evolução controlada do sistema.
+
+- **Contato para autorização:**
+  - WhatsApp: [(31) 98507-9718](https://wa.me/5531985079718)
+  - Desenvolvedor: Pablo
+
+**Atenção:**
+- Alterações não autorizadas podem ser removidas ou desconsideradas.
+- O uso comercial, redistribuição ou integração com outros sistemas requerem consentimento formal.
 
 ---
 
