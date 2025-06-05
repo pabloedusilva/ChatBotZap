@@ -301,6 +301,31 @@ ChatBotZap_Pro/
 3. Pode buscar, adicionar, editar ou remover usuários.
 4. Modais de confirmação e feedback são exibidos para cada ação.
 
+### Galeria
+
+- **Index**
+![image](https://github.com/user-attachments/assets/7619fefa-2913-4926-a6cb-6b82630e05ba)
+![image](https://github.com/user-attachments/assets/517c287c-54df-4747-a31f-29893fd2303c)
+![image](https://github.com/user-attachments/assets/8fbd8bb8-6257-41f9-b096-11dea61e6ce1)
+![image](https://github.com/user-attachments/assets/c58087c6-58c5-46fc-8e0a-cc2b54f6efbd)
+![image](https://github.com/user-attachments/assets/970d3235-a27a-46fe-bda5-63b4d18ab3e2) 
+![image](https://github.com/user-attachments/assets/956f20f3-a7ed-48c9-8ed2-b5272093ace7)
+![image](https://github.com/user-attachments/assets/0a6e029b-0e5e-4998-9e26-2632a357f4a8)
+
+---
+
+- **Dashboard**
+![image](https://github.com/user-attachments/assets/303bdc48-0bc4-49b5-88cd-393b3ddddd24)
+![image](https://github.com/user-attachments/assets/cfa4b877-18ed-4c78-ba2a-91209f860131)
+![image](https://github.com/user-attachments/assets/ccb30211-d735-4a51-af56-f46b90f7e7ec)
+![image](https://github.com/user-attachments/assets/2f7e1a74-6822-4f16-ae45-a9d927a22f0c)
+![image](https://github.com/user-attachments/assets/ad22088a-d52e-4335-a33a-ba2ed099f1e9)
+![image](https://github.com/user-attachments/assets/c80f615b-6213-4d3f-b1df-cbc30f360be6)
+![image](https://github.com/user-attachments/assets/d3d4656e-9514-4465-b3db-dbfa286a7038)
+![image](https://github.com/user-attachments/assets/d042627d-2a66-4c9f-a767-28f3d079f5c7)
+![image](https://github.com/user-attachments/assets/933f1a48-38bd-4ad0-9498-538eaeca210e)
+![image](https://github.com/user-attachments/assets/7b25e430-def2-4a54-9c2d-afdacea421fd)
+
 ---
 
 ## Contato e Suporte
