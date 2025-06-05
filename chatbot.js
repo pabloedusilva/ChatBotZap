@@ -70,6 +70,10 @@ app.get('/dashboard', isDashboardAuthenticated, (req, res) => {
 // Bloquear acesso direto a arquivos estáticos protegidos
 app.use('/public', isAuthenticated, express.static(path.join(__dirname, 'public')));
 
+// Servir arquivos estáticos da dashboard (css e js)
+app.use('/dashboard/css', express.static(path.join(__dirname, 'dashboard', 'css')));
+app.use('/dashboard/js', express.static(path.join(__dirname, 'dashboard', 'js')));
+
 // Middleware para proteger rotas
 app.use((req, res, next) => {
     // Lista de rotas que não precisam de autenticação
