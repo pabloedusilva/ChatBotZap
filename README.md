@@ -1,24 +1,6 @@
-<h1 align="center">
-  <img src="https://readme-typing-svg.herokuapp.com/?font=Righteous&size=35&center=true&vCenter=true&width=500&height=70&duration=4000&lines=Projeto;+ChatBot!;&color=47c200" />
-</h1>
-
-<div align="center">
-  <a href="https://instagram.com/p4blozz__" target="_blank">
-    <img src="https://img.shields.io/badge/Instagram-E4405F?style=for-the-badge&logo=instagram&logoColor=white" alt="Instagram" />
-  </a>
-  <a href="mailto:pablo.silva.edu@gmail.com" target="_blank">
-    <img src="https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white" alt="Gmail" />
-  </a>
-</div>
-
-<div align="center">
-  <img src="https://github.com/user-attachments/assets/d7701a4c-8396-4a0b-a1fe-b4bef23da2a4" alt="ChatBot" width="200"/>
-</div>
-
----
+# WhatsApp Chatbot Pro
 
 ## Índice
-
 1. [Visão Geral](#visão-geral)
 2. [Árvore de Arquivos do Projeto](#árvore-de-arquivos-do-projeto)
 3. [Tecnologias Utilizadas](#tecnologias-utilizadas)
@@ -28,16 +10,22 @@
 7. [Frontend: Interface, Responsividade e Animações](#frontend-interface-responsividade-e-animações)
 8. [Banco de Dados: Estrutura e Scripts](#banco-de-dados-estrutura-e-scripts)
 9. [Segurança e Boas Práticas](#segurança-e-boas-práticas)
-10. [Logs e Monitoramento](#logs-e-monitoramento)
-11. [Deploy, Ambiente e Troubleshooting](#deploy-ambiente-e-troubleshooting)
-12. [Diferenciais e Observações](#diferenciais-e-observações)
-13. [Contato e Suporte](#contato-e-suporte)
+10. [Deploy, Ambiente e Troubleshooting](#deploy-ambiente-e-troubleshooting)
+11. [Contato e Suporte](#contato-e-suporte)
 
 ---
 
 ## Visão Geral
 
-O **WhatsApp Chatbot** é uma plataforma web robusta para gestão de múltiplos bots de atendimento via WhatsApp, com autenticação segura, painel administrativo, integração em tempo real, contadores dinâmicos, logs detalhados, suporte a bots premium e interface moderna, responsiva e animada. Ideal para empresas que desejam automatizar e monitorar atendimentos, agendamentos e reagendamentos de clientes.
+O **WhatsApp Chatbot Pro** é uma plataforma web robusta para gestão de múltiplos bots de atendimento via WhatsApp, com autenticação segura, painel administrativo, integração em tempo real, contadores dinâmicos, logs detalhados, suporte a bots premium e interface moderna, responsiva e animada. Ideal para empresas que desejam automatizar e monitorar atendimentos, agendamentos e reagendamentos de clientes.
+
+**Principais diferenciais:**
+- Gerenciamento simultâneo de múltiplos bots (principal, agendamento, reagendamento)
+- Dashboard administrativo com controle total de usuários e bots
+- Comunicação em tempo real (Socket.IO) para status, contadores e eventos
+- Modais animados para QR Code, confirmação, edição, adição e feedback visual
+- Logs persistentes de conexão e eventos
+- Interface responsiva, com temas claro/escuro e navegação acessível
 
 ---
 
@@ -49,7 +37,6 @@ ChatBotZap_Pro/
 ├── connection_logs.txt       # Logs de conexões dos bots
 ├── package.json              # Dependências e scripts do projeto
 ├── README.md                 # Documentação principal
-├── README1.md                # (Este arquivo) Documentação detalhada extra
 ├── scriptDb.sql              # Script SQL para criação do banco de dados
 ├── dashboard/
 │   ├── dashboard-login.html  # Tela de login do painel administrativo
@@ -62,8 +49,12 @@ ChatBotZap_Pro/
 ├── public/
 │   ├── index.html            # Dashboard principal do usuário
 │   ├── login.html            # Tela de login do usuário
+│   ├── css/
+│   │   └── index.css         # Estilos principais
 │   ├── icons/                # Ícones SVG/PNG usados na interface
-│   └── imagens/              # Imagens do sistema (logos, instruções)
+│   ├── imagens/              # Imagens do sistema (logos, instruções)
+│   └── js/
+│       └── index.js          # Lógica do frontend (status, tema, modais)
 ├── routes/
 │   └── auth.js               # Rotas de autenticação
 ```
@@ -87,51 +78,56 @@ ChatBotZap_Pro/
 ## Funcionalidades Detalhadas
 
 ### 1. Autenticação e Sessão
-- Login seguro para usuários e administradores
+- Login seguro para usuários comuns e administradores (dashboard)
 - Hash de senha com bcrypt
-- Sessão persistente em MySQL
-- Middleware para proteção de rotas
-- Logout seguro e destruição de sessão
-- Mensagens de erro dinâmicas e modais de suporte
+- Sessão persistente em MySQL (express-session + express-mysql-session)
+- Middleware para proteção de rotas e diferenciação de perfis
+- Logout seguro, com modal de confirmação e destruição de sessão
+- Mensagens de erro dinâmicas, feedback visual e modais de suporte
 
 ### 2. Gerenciamento de Bots
 - Três bots distintos: principal, agendamento, reagendamento
-- Cada bot com QR Code próprio para conexão
-- Status de conexão em tempo real (Socket.IO)
-- Contadores de atendimentos únicos por bot
-- Cards com indicadores visuais (conectado/desconectado)
-- Logs de conexão em arquivo e terminal
+- Cada bot possui QR Code próprio para conexão via WhatsApp
+- Status de conexão em tempo real (Socket.IO), com indicadores visuais (conectado/desconectado)
+- Contadores de atendimentos únicos por bot, atualizados instantaneamente
+- Cards de bots com métricas: tempo de atividade, mensagens enviadas/recebidas, histórico de conexão
+- Logs de conexão em arquivo (`connection_logs.txt`) e terminal
+- Relatórios de eventos e histórico de cada bot
 
 ### 3. Painel Administrativo (dashboard.html)
-- Listagem de usuários e bots
-- Ações administrativas: adicionar, editar, remover usuários
-- Busca, filtros e relatórios
-- Cards de status, gráficos e contadores
-- Modais de confirmação e feedback visual
+- Listagem de usuários (com separação visual de administradores e usuários comuns)
+- Ações administrativas: adicionar, editar, remover usuários (com modais de confirmação)
+- Busca dinâmica por nome ou telefone, filtros e relatórios
+- Cards de status: total de usuários, status do servidor, métricas dos bots
+- Modais de confirmação, edição, adição e feedback visual (ex: usuário atualizado, excluído)
+- Gráficos e tabelas para visualização de dados
+- Troca de tema (claro/escuro) com persistência
+- Logout com modal animado
 
 ### 4. Interface do Usuário (index.html, login.html)
-- Design responsivo (mobile, tablet, desktop)
-- Animações: fade, slide, pulse, shimmer, scan, ripple
-- Modais para QR Code, informações, contato, confirmação
-- Temas claro/escuro com persistência (localStorage)
-- Navegação por teclado e acessibilidade
+- Cards de bots com status, contador, botões de ação (conectar, reiniciar, configurar)
+- Modais animados para QR Code, informações, contato e confirmação
+- Temas claro/escuro, animações CSS (fade, slide, pulse, shimmer, scan)
+- Responsividade total (media queries para <992px, <768px, <480px)
+- Navegação por teclado, foco visível, contraste e acessibilidade
 - Rodapé fixo com créditos
 
 ### 5. Logs e Monitoramento
-- connection_logs.txt: registro de conexões dos bots com data/hora
+- `connection_logs.txt`: registro de conexões dos bots com data/hora
 - Logs de erro e eventos no terminal
-- Contadores de atendimentos persistentes
+- Contadores de atendimentos persistentes, atualizados em tempo real
+- Relatórios de conexão e eventos disponíveis no dashboard
 
 ---
 
 ## Fluxo de Operação Completo
 
-1. **Login**: Usuário acessa /login ou /dashboard-login, insere credenciais, validação dinâmica, sessão criada.
-2. **Dashboard**: Visualização dos bots, status, contadores, ações rápidas.
+1. **Login**: Usuário acessa `/login` ou `/dashboard-login`, insere credenciais, validação dinâmica, sessão criada.
+2. **Dashboard**: Visualização dos bots, status, contadores, ações rápidas, métricas e histórico.
 3. **Conexão de Bots**: Modal QR Code, escaneamento via WhatsApp, status atualizado em tempo real.
 4. **Atendimentos**: Cada novo contato incrementa contador do bot correspondente, atualização instantânea.
-5. **Administração**: Gerenciamento de usuários, relatórios, logs.
-6. **Logout**: Botão "Sair", modal de confirmação, destruição de sessão.
+5. **Administração**: Gerenciamento de usuários, relatórios, logs, adição/edição/exclusão de usuários.
+6. **Logout**: Botão "Sair", modal de confirmação, destruição de sessão e feedback visual.
 
 ---
 
@@ -145,25 +141,35 @@ ChatBotZap_Pro/
 
 ### Rotas HTTP
 - `POST /auth/login`: Login do usuário
-- `GET /auth/logout`: Logout
+- `POST /auth/owner-login`: Login do administrador (dashboard)
+- `GET /auth/logout`: Logout do usuário
+- `GET /auth/dashboard-logout`: Logout do admin
 - `GET /`: Dashboard principal (protegido)
 - `GET /login`: Tela de login
 - `GET /dashboard-login`: Login do painel admin
 - `GET /dashboard`: Painel admin (protegido)
-- `GET /qrcode/:bot`: QR Code do bot
-- `GET /check-status/:bot`: Status de conexão do bot
-- `GET /atendimentos`: Contadores de atendimentos
+- `GET /users`: Listagem de usuários (dashboard)
+- `POST /users`: Adicionar usuário
+- `PUT /users/:id`: Editar usuário
+- `DELETE /users/:id`: Remover usuário
+- `GET /users/search`: Busca dinâmica de usuários
+- `GET /users/count` e `/total-users`: Total de usuários
+- `GET /server-status`: Status do servidor
+- `GET /all-connection-status`: Status de todos os bots
+- `GET /check-status/:bot`: Status de um bot específico
+- `GET /atendimentos`: Contadores de atendimentos por bot
 
 ### Middlewares
 - `isAuthenticated`: Protege rotas do usuário
 - `isDashboardAuthenticated`: Protege rotas do admin
 
 ### Integração WhatsApp
-- Três instâncias de Client (main, appointment, reschedule)
+- Instância principal de Client (main-bot)
 - Eventos: ready, qr, message, authenticated, disconnected
 - Geração de QR Code (qrcode)
 - Resposta automática a mensagens
 - Simulação de digitação
+- Atualização de status e métricas em tempo real
 
 ### Sessão e Segurança
 - express-session + express-mysql-session
@@ -188,10 +194,13 @@ ChatBotZap_Pro/
 - Animações de entrada/saída
 
 ### dashboard.html
-- Listagem de usuários e bots
-- Busca, filtros, relatórios
-- Modais de confirmação, edição, adição
-- Cards de status, gráficos, tabelas
+- Listagem de usuários e bots, com separação visual de administradores e usuários comuns
+- Busca dinâmica, filtros, relatórios e exportação
+- Modais de confirmação, edição, adição, alteração de senha e feedback visual
+- Cards de status: total de usuários, status do servidor, métricas dos bots
+- Gráficos, tabelas e timeline de eventos
+- Troca de tema (claro/escuro) com persistência
+- Logout com modal animado e feedback
 
 ---
 
@@ -204,6 +213,7 @@ ChatBotZap_Pro/
 | username    | VARCHAR(50)  | Nome de usuário (único)            |
 | password    | VARCHAR(255) | Senha (hash bcrypt)                |
 | email       | VARCHAR(100) | Email do usuário                   |
+| role        | VARCHAR(20)  | 'admin' ou 'user'                  |
 | created_at  | TIMESTAMP    | Data de criação                    |
 | last_login  | TIMESTAMP    | Último login                       |
 
@@ -228,14 +238,6 @@ ChatBotZap_Pro/
 
 ---
 
-## Logs e Monitoramento
-
-- **connection_logs.txt**: Cada conexão de bot é registrada com data/hora
-- Logs de erro e eventos no terminal
-- Possibilidade de integração com ferramentas externas (ex: PM2, Loggly)
-
----
-
 ## Deploy, Ambiente e Troubleshooting
 
 ### Requisitos
@@ -250,7 +252,6 @@ ChatBotZap_Pro/
 4. Inicie o servidor: `npm start`
 5. Acesse: http://localhost:3000/login
 
-
 ### Troubleshooting
 - **Bot não conecta**: Verifique QR Code, conexão internet, sessão WhatsApp
 - **Erro de banco**: Cheque config.js, permissões, se o MySQL está rodando
@@ -259,37 +260,27 @@ ChatBotZap_Pro/
 
 ---
 
-## Diferenciais e Observações
+## Exemplos de Uso e Fluxos Visuais
 
-- Suporte a múltiplos bots simultâneos
-- Contadores de atendimentos únicos por bot
-- Logs detalhados de conexão
-- Interface moderna, responsiva e animada
-- Temas claro/escuro com persistência
-- Painel administrativo completo
-- Código modular e comentado
-- Fácil manutenção e expansão
-- Pronto para integração com IA (ex: GPT, Gemini)
+### Exemplo de fluxo de login e dashboard
+1. Usuário acessa `/login` ou `/dashboard-login`.
+2. Insere credenciais, recebe feedback visual imediato (sucesso/erro).
+3. Após login, é redirecionado para o dashboard correspondente ao perfil.
+4. Visualiza cards de bots, status, contadores e pode realizar ações rápidas.
+5. Administrador pode acessar a aba de usuários, adicionar/editar/remover usuários, visualizar relatórios e logs.
+6. Todas as ações críticas possuem modais de confirmação e feedback visual.
 
----
+### Exemplo de conexão de bot
+1. Clica em "Conectar Bot".
+2. Modal com QR Code é exibido.
+3. Escaneia com WhatsApp, status do bot é atualizado em tempo real.
+4. Contadores de atendimento são incrementados automaticamente a cada novo contato.
 
-## Contribuição, Modificações e Licença
-
-Este projeto é de código aberto para consulta e uso, porém **modificações, adaptações ou redistribuição** só são permitidas mediante autorização prévia do desenvolvedor responsável.
-
-- **Como contribuir ou sugerir melhorias:**
-  - Abra uma _issue_ detalhando sua sugestão, dúvida ou problema encontrado.
-  - Para propor alterações diretas, entre em contato com o desenvolvedor pelo WhatsApp ou utilize o sistema de issues do repositório.
-  - Todas as modificações devem ser previamente autorizadas para garantir a integridade, segurança e evolução controlada do sistema.
-
-- **Contato para autorização:**
-  - WhatsApp: [(31) 98507-9718](https://wa.me/5531985079718)
-  - E-mail: pablo.silva.edu@gmail.com
-  - Desenvolvedor: Pablo
-
-**Atenção:**
-- Alterações não autorizadas podem ser removidas ou desconsideradas.
-- O uso comercial, redistribuição ou integração com outros sistemas requerem consentimento formal.
+### Exemplo de gerenciamento de usuários
+1. Admin acessa a aba "Usuários" no dashboard.
+2. Visualiza lista separada de administradores e usuários comuns.
+3. Pode buscar, adicionar, editar ou remover usuários.
+4. Modais de confirmação e feedback são exibidos para cada ação.
 
 ---
 

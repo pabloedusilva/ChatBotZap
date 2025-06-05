@@ -187,7 +187,6 @@ Object.keys(bots).forEach(botKey => {
             // Configura a geração contínua de QR Codes a cada 15 segundos
             setInterval(async() => {
                 bot.qrCodeData = await qrcode.toDataURL(qr);
-                console.log(`Novo QR Code do ${bot.name} gerado`);
                 io.emit('qrcode', { bot: botKey, qrcode: bot.qrCodeData });
             }, 15000); // 15 segundos
         } catch (err) {
