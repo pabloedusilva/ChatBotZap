@@ -30,7 +30,7 @@
 8. [Banco de Dados: Estrutura e Scripts](#banco-de-dados-estrutura-e-scripts)
 9. [Segurança e Boas Práticas](#segurança-e-boas-práticas)
 10. [Deploy, Ambiente e Troubleshooting](#deploy-ambiente-e-troubleshooting)
-11. [Contato e Suporte](#contato-e-suporte)
+11. [Contato e Suporte](#Contato)
 
 ---
 
