@@ -328,13 +328,28 @@ ChatBotZap_Pro/
 
 ---
 
-## Contato e Suporte
+## Contato
 
-- WhatsApp: [(31) 98507-9718](https://wa.me/5531985079718)
-- E-mail: pablo.silva.edu@gmail.com
-- Desenvolvedor: Pablo
-- Ano: 2025
+**Pablo Eduardo Silva**  
+*Desenvolvedor Full Stack*
+
+- **GitHub**: [https://github.com/pabloedusilva](https://github.com/pabloedusilva)
+- **Email**: [pablo.silva.edu@gmail.com](mailto:pablo.silva.edu@gmail.com)
+- **LinkedIn**: [https://www.linkedin.com/in/pabloedusilva](https://www.linkedin.com/in/pabloedusilva)
 
 ---
 
-**Este documento foi gerado para garantir máxima compreensão, manutenção e evolução do projeto. Para dúvidas, sugestões ou melhorias, entre em contato!**
+### Suporte ao Projeto
+
+Se este projeto foi útil para você, considere:
+
+- ⭐ Dar uma estrela no repositório
+- 🐛 Reportar bugs e sugerir melhorias
+- 🔀 Contribuir com código
+- 📢 Compartilhar com outros desenvolvedores
+
+---
+
+**Última atualização**: 2025
+
+**ChatBotZap** - Desenvolvido com dedicação por Pablo Eduardo Silva
